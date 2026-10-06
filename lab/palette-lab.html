@@ -72,7 +72,7 @@ footer.foot { border-top: 1px solid var(--border); padding-top: 20px; color: var
 @media (max-width: 420px) { .palette { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .pal { display: grid; gap: 6px; min-width: 0; }
 .pal-swatch { height: 64px; border-radius: 8px; padding: 8px; display: flex; justify-content: space-between; align-items: flex-start; font: 600 12px var(--mono); }
-.pal-tag { font: 500 11px var(--font); padding: 1px 6px; border-radius: 9999px; background: rgb(255 255 255 / 55%); color: #303031; }
+.pal-tag { font: 500 11px var(--font); padding: 1px 6px; border-radius: 9999px; background: rgb(255 255 255 / 55%); color: #1F1F20; }
 .pal-name { color: var(--text-1); font-weight: 600; font-size: 13px; }
 .pal-inks { display: flex; gap: 6px; align-items: center; }
 .pal-inks i { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
@@ -275,7 +275,7 @@ footer.foot { border-top: 1px solid var(--border); padding-top: 20px; color: var
     }
     return dir < 0 ? "#000000" : "#FFFFFF";
   }
-  var DARK_TEXT = "#303031";
+  var DARK_TEXT = "#1F1F20";
   function onFill(fill) { return contrast(DARK_TEXT, fill) >= contrast("#FFFFFF", fill) ? DARK_TEXT : "#FFFFFF"; }
 
   /* ── 提案色票 ── */
