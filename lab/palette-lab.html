@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="zh-Hant">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>幾何色票實驗室</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap">
+<style>
+/* Layout：說明在上、示範在下；每個產品畫面並排亮色與暗色兩份，全部套用 DESIGN.md 的 UI 骨架 */
+:root, .frame[data-theme="light"] {
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --sunken: #F3F3F7;
+  --hover: #F3F3F7;
+  --active: #DCDBE6;
+  --border: #2D26501F;
+  --text-1: #303031;
+  --text-2: #4D4D4E;
+  --text-3: #6C6C6D;
+  --text-4: #8A8B8C;
+  --primary: #6E619C;
+  --primary-text: #6E619C;
+  --on-primary: #FFFFFF;
+  --pop-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+  --font: "Inter", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
+  --feat: "cv05", "cv06", "cv12", "cv13", "ss07";
+}
+.frame[data-theme="light"] { color-scheme: light; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141317; --surface: #141317; --sunken: #0B0B0E; --hover: #242329; --active: #35343B;
+    --border: #FFFFFF1A; --text-1: #F1F3F5; --text-2: #D1D1D2; --text-3: #A4A4A6; --text-4: #717173;
+    --primary-text: #9A8FC8;
+    --pop-shadow: 0 12px 24px rgb(0 0 0 / 50%), 0 0 0 1px rgb(255 255 255 / 8%);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"], .frame[data-theme="dark"] {
+  --bg: #141317; --surface: #141317; --sunken: #0B0B0E; --hover: #242329; --active: #35343B;
+  --border: #FFFFFF1A; --text-1: #F1F3F5; --text-2: #D1D1D2; --text-3: #A4A4A6; --text-4: #717173;
+  --primary-text: #9A8FC8;
+  --pop-shadow: 0 12px 24px rgb(0 0 0 / 50%), 0 0 0 1px rgb(255 255 255 / 8%);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--text-2); font: 400 14px/1.5 var(--font); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1400px; margin: 0 auto; padding-inline: 24px; padding-block: 40px 72px; display: grid; gap: 56px; }
+@media (max-width: 520px) { .wrap { padding-inline: 16px; gap: 44px; } }
+h1, h2, h3, h4, p { margin: 0; }
+h1 { font-size: 32px; font-weight: 500; line-height: 1.25; color: var(--text-1); text-wrap: balance; }
+h2 { font-size: 20px; font-weight: 580; line-height: 1.25; color: var(--text-1); text-wrap: balance; font-feature-settings: var(--feat); }
+.overline { font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-3); }
+.lead { max-width: 680px; font-size: 16px; }
+.caption { font-size: 12px; color: var(--text-3); }
+code, .num { font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums; }
+header.top, section { display: grid; gap: 20px; }
+header.top { gap: 12px; }
+.section-head { display: grid; gap: 8px; }
+.section-head p { max-width: 720px; }
+.notes { display: grid; gap: 6px; padding: 0; margin: 0; list-style: none; max-width: 820px; }
+.notes li { position: relative; padding-left: 14px; }
+.notes li::before { content: ""; position: absolute; left: 0; top: 9px; width: 4px; height: 4px; border-radius: 9999px; background: var(--text-4); }
+.notes strong { color: var(--text-1); font-weight: 600; }
+footer.foot { border-top: 1px solid var(--border); padding-top: 20px; color: var(--text-3); font-size: 13px; }
+
+/* ── 色票總覽 ── */
+.palette { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 980px) { .palette { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .palette { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.pal { display: grid; gap: 6px; min-width: 0; }
+.pal-swatch { height: 64px; border-radius: 8px; padding: 8px; display: flex; justify-content: space-between; align-items: flex-start; font: 600 12px var(--mono); }
+.pal-tag { font: 500 11px var(--font); padding: 1px 6px; border-radius: 9999px; background: rgb(255 255 255 / 55%); color: #303031; }
+.pal-name { color: var(--text-1); font-weight: 600; font-size: 13px; }
+.pal-inks { display: flex; gap: 6px; align-items: center; }
+.pal-inks i { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
+.roles { display: flex; flex-wrap: wrap; gap: 8px; }
+.role { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); font-size: 13px; color: var(--text-2); }
+.role b { color: var(--text-1); font-weight: 600; }
+.role .dot { width: 10px; height: 10px; }
+.readout { display: inline-flex; flex-wrap: wrap; gap: 6px 16px; padding: 8px 12px; border-radius: 8px; background: var(--sunken); color: var(--text-2); width: max-content; max-width: 100%; font-size: 13px; }
+.readout b { color: var(--text-1); font-weight: 600; }
+
+/* ── 並排框架 ── */
+.pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 620px), 1fr)); gap: 20px; }
+.pair-item { display: grid; gap: 8px; min-width: 0; align-content: start; }
+.frame { background: var(--bg); color: var(--text-2); border-radius: 8px; box-shadow: 0 0 0 1px rgb(128 128 128 / 35%); overflow: hidden; font-size: 14px; line-height: 1.5; }
+.frame-scroll { overflow-x: auto; }
+.app { min-width: 620px; }
+
+/* ── 產品畫面共用元件（DESIGN.md） ── */
+.nav { display: flex; align-items: center; gap: 12px; height: 52px; padding: 0 12px; border-bottom: 1px solid var(--border); background: var(--surface); }
+.brand { font-size: 18px; font-weight: 580; color: var(--text-1); font-feature-settings: var(--feat); }
+.nav-items { display: flex; gap: 2px; margin-left: auto; align-self: stretch; }
+.nav-items span { position: relative; display: flex; align-items: center; padding: 0 10px; font-size: 13px; font-weight: 500; color: var(--text-3); }
+.nav-items span.on { color: var(--text-1); }
+.nav-items span.on::after, .tabs span.on::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: -1px; height: 2px; border-radius: 9999px; background: var(--primary-text); }
+.icon-btn { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 4px; color: var(--text-3); }
+.avatar { width: 28px; height: 28px; border-radius: 9999px; display: grid; place-items: center; background: var(--active); color: var(--text-1); }
+.btn { height: 32px; padding: 0 12px; border-radius: 4px; font: 500 13px/1 var(--font); display: inline-flex; align-items: center; gap: 8px; border: 1px solid transparent; white-space: nowrap; }
+.btn.primary { background: var(--primary); color: var(--on-primary); }
+.btn.secondary { background: var(--surface); color: var(--text-3); border-color: var(--border); }
+.dot { width: 8px; height: 8px; border-radius: 9999px; display: inline-block; flex-shrink: 0; }
+.stat { display: inline-flex; align-items: center; gap: 6px; font-weight: 500; white-space: nowrap; }
+.grade { font-weight: 660; font-feature-settings: var(--feat); }
+.badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 13px; line-height: 1.4; white-space: nowrap; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* 畫面 A：選課 */
+.md { display: grid; grid-template-columns: 236px minmax(0, 1fr); }
+.md-list { border-right: 1px solid var(--border); padding: 12px; display: grid; gap: 8px; align-content: start; background: var(--surface); }
+.search { height: 32px; border: 1px solid var(--border); border-radius: 4px; display: flex; align-items: center; gap: 8px; padding: 0 10px; color: var(--text-4); font-size: 13px; }
+.ccard { border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: grid; gap: 2px; background: var(--surface); }
+.ccard.sel { border-color: var(--primary-text); }
+.ccard-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.ccard-title { font-size: 16px; font-weight: 660; color: var(--text-1); font-feature-settings: var(--feat); line-height: 1.3; }
+.ccard-desc { color: var(--text-2); font-size: 13px; }
+.ccard-meta { display: flex; gap: 10px; align-items: center; font-size: 12px; color: var(--text-3); margin-top: 6px; }
+.md-detail { display: grid; align-content: start; min-width: 0; background: var(--bg); }
+.dh { padding: 16px 16px 0; border-bottom: 1px solid var(--border); background: var(--surface); display: grid; gap: 14px; }
+.dh-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
+.h-detail { font-size: 24px; font-weight: 660; color: var(--text-1); font-feature-settings: var(--feat); line-height: 1.2; }
+.h-detail span { color: var(--text-3); }
+.meta { font-size: 13px; color: var(--text-3); margin-top: 6px; }
+.actions { display: flex; gap: 8px; }
+.tabs { display: flex; gap: 2px; }
+.tabs span { position: relative; padding: 0 10px 12px; font-size: 13px; font-weight: 500; color: var(--text-3); display: inline-flex; align-items: center; gap: 6px; }
+.tabs span.on { color: var(--text-1); }
+.count { font-size: 11px; padding: 0 6px; border-radius: 6px; background: var(--hover); color: var(--text-3); line-height: 1.6; }
+.dbody { padding: 16px; display: grid; gap: 14px; }
+.notice { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 8px; background: var(--sunken); color: var(--text-2); font-size: 13px; }
+.notice svg { flex-shrink: 0; margin-top: 2px; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+.tbl th { text-align: left; font-weight: 500; color: var(--text-3); font-size: 12px; padding: 0 8px 8px; border-bottom: 1px solid var(--border); }
+.tbl td { padding: 10px 8px; border-bottom: 1px solid var(--border); color: var(--text-1); white-space: nowrap; }
+.tbl td.mono { color: var(--text-2); font-size: 12px; }
+
+/* 畫面 B：課表 */
+.sc { display: grid; grid-template-columns: 196px minmax(0, 1fr); }
+.sc-side { border-right: 1px solid var(--border); padding: 12px 8px; display: grid; gap: 2px; align-content: start; background: var(--surface); }
+.side-h { padding: 4px 8px 8px; display: flex; justify-content: space-between; align-items: center; }
+.side-row { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 6px 8px; border-radius: 4px; font-size: 13px; color: var(--text-1); }
+.side-row span:nth-child(2) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.side-row.on { background: var(--hover); }
+.side-row .mono { color: var(--text-3); font-size: 12px; }
+.side-add { margin: 8px 8px 0; justify-content: center; }
+.week { --row: 30px; display: grid; grid-template-columns: 40px repeat(5, minmax(0, 1fr)); padding-bottom: 10px; background: var(--bg); }
+.week-head { padding: 10px 6px; font-size: 12px; font-weight: 500; color: var(--text-3); text-align: center; border-bottom: 1px solid var(--border); border-left: 1px solid var(--border); }
+.week-corner { border-bottom: 1px solid var(--border); }
+.week-times { position: relative; height: calc(var(--row) * 9); }
+.week-times span { position: absolute; right: 6px; transform: translateY(-50%); font: 10px var(--mono); color: var(--text-4); }
+.week-col { position: relative; height: calc(var(--row) * 9); border-left: 1px solid var(--border); background-image: repeating-linear-gradient(to bottom, var(--border) 0 1px, transparent 1px var(--row)); }
+.ev { position: absolute; left: 3px; right: 3px; border-radius: 4px; padding: 4px 6px; overflow: hidden; display: grid; align-content: start; }
+.ev b { font-size: 11px; font-weight: 600; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ev small { font: 10px var(--mono); opacity: 0.8; }
+
+/* 畫面 C：學分與統計 */
+.dash { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 16px; background: var(--bg); }
+.dcard { border: 1px solid var(--border); border-radius: 8px; padding: 16px; display: grid; gap: 12px; background: var(--surface); align-content: start; min-width: 0; }
+.dcard.wide { grid-column: 1 / -1; }
+.dcard-h { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.dcard-h h4 { font-size: 14px; font-weight: 500; color: var(--text-1); }
+.link { font-size: 13px; font-weight: 500; color: var(--primary-text); }
+.big { font-size: 28px; font-weight: 660; color: var(--text-1); font-feature-settings: var(--feat); line-height: 1; }
+.big small { font-size: 14px; color: var(--text-3); font-weight: 400; margin-left: 4px; }
+.stacked { display: flex; gap: 2px; height: 10px; }
+.stacked i { display: block; height: 100%; border-radius: 2px; }
+.legend { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px 12px; font-size: 12px; }
+.legend.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.legend div { display: flex; align-items: center; gap: 6px; min-width: 0; color: var(--text-2); }
+.legend div span:last-child { margin-left: auto; color: var(--text-3); font-family: var(--mono); }
+.legend i { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.chart svg { width: 100%; height: auto; display: block; }
+.chart text { fill: var(--text-3); font: 10px var(--mono); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* 狀態呈現方式 */
+.pat { padding: 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 16px; background: var(--bg); }
+@media (max-width: 560px) { .pat { grid-template-columns: minmax(0, 1fr); } }
+.pat-block { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.pat-block .overline { color: var(--text-3); }
+.toast { display: grid; grid-template-columns: 16px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); box-shadow: var(--pop-shadow); color: var(--text-1); font-size: 13px; }
+.text-btn { font: 500 13px/1 var(--font); color: var(--primary-text); padding: 6px; }
+.field { display: grid; gap: 6px; }
+.field label { font-size: 13px; font-weight: 500; color: var(--text-1); }
+.field .input { height: 32px; padding: 0 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface); color: var(--text-1); display: flex; align-items: center; font-size: 14px; }
+.field .help { font-size: 12px; display: inline-flex; align-items: center; gap: 6px; }
+.status-list { display: grid; gap: 6px; font-size: 13px; color: var(--text-2); }
+.status-list div { display: flex; align-items: center; gap: 8px; }
+.avoid { display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 10px; padding: 12px; border-radius: 8px; font-size: 13px; }
+.avoid b { display: block; color: var(--text-1); }
+.avoid-label { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--text-3); }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <span class="overline">DESIGN.md · 色彩延伸測試</span>
+    <h1>幾何色票實驗室</h1>
+    <p class="lead">把第二組主視覺色延伸成 8 色，放進 DESIGN.md 的產品畫面裡，同時比較亮色與暗色。畫面中的課程、課表與數字都是範例資料。</p>
+  </header>
+
+  <section id="overview" aria-labelledby="overview-title"></section>
+
+  <section aria-labelledby="screen-a-title">
+    <div class="section-head"><span class="overline">畫面 A · Master–Detail</span><h2 id="screen-a-title">選課：狀態出現在資料裡</h2>
+      <p>狀態色只用在圓點、成績字母與短文字。紫色只出現在選取的卡片、分頁底線和主要按鈕上。</p></div>
+    <div class="pair" data-screen="catalog"></div>
+  </section>
+
+  <section aria-labelledby="screen-b-title">
+    <div class="section-head"><span class="overline">畫面 B · Sidebar + Canvas</span><h2 id="screen-b-title">課表：8 個項目各有自己的顏色</h2>
+      <p>大面積色塊用原色，塊上的文字一律用深色字。相鄰的課程一冷一暖。</p></div>
+    <div class="pair" data-screen="schedule"></div>
+  </section>
+
+  <section aria-labelledby="screen-c-title">
+    <div class="section-head"><span class="overline">畫面 C · 資料頁</span><h2 id="screen-c-title">學分與統計：同一組顏色、三種色階</h2>
+      <p>進度條用原色填色，折線用深色階（細線需要 3:1），標籤用淡底加深色字。</p></div>
+    <div class="pair" data-screen="dashboard"></div>
+  </section>
+
+  <section aria-labelledby="screen-d-title">
+    <div class="section-head"><span class="overline">元件 · 回饋與提示</span><h2 id="screen-d-title">狀態該怎麼出現</h2>
+      <p>一般的工具與網站很少用「淡色底加同色外框」的提示框。改用中性表面加上彩色圖示，或直接用行內文字。</p></div>
+    <div class="pair" data-screen="patterns"></div>
+  </section>
+
+  <footer class="foot">頁面本身跟隨你的系統亮暗設定；每個產品畫面則固定並排顯示亮色與暗色兩份。</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ── 色彩數學（OKLCH + WCAG 對比） ── */
+  var toLin = function (v) { return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+  var toS = function (v) { return v <= 0.0031308 ? 12.92 * v : 1.055 * Math.pow(v, 1 / 2.4) - 0.055; };
+  function hexToRgb(h) { h = h.replace("#", "").slice(0, 6); return [0, 2, 4].map(function (i) { return parseInt(h.slice(i, i + 2), 16) / 255; }); }
+  function rgbToHex(rgb) { return "#" + rgb.map(function (v) { return Math.round(Math.min(1, Math.max(0, v)) * 255).toString(16).padStart(2, "0"); }).join("").toUpperCase(); }
+  function toOklch(hex) {
+    var c = hexToRgb(hex).map(toLin), r = c[0], g = c[1], b = c[2];
+    var l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+    var m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+    var s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+    var L = 0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s;
+    var A = 1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s;
+    var B = 0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s;
+    return { L: L, C: Math.hypot(A, B), H: (Math.atan2(B, A) * 180 / Math.PI + 360) % 360, a: A, b: B };
+  }
+  function oklchToRgb(L, C, H) {
+    var a = C * Math.cos(H * Math.PI / 180), b = C * Math.sin(H * Math.PI / 180);
+    var l = Math.pow(L + 0.3963377774 * a + 0.2158037573 * b, 3);
+    var m = Math.pow(L - 0.1055613458 * a - 0.0638541728 * b, 3);
+    var s = Math.pow(L - 0.0894841775 * a - 1.2914855480 * b, 3);
+    return [4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s, -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s, -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s].map(toS);
+  }
+  function fromOklch(L, C, H) {
+    var c = C, rgb = oklchToRgb(L, c, H);
+    while (rgb.some(function (v) { return v < -0.001 || v > 1.001; }) && c > 0) { c -= 0.002; rgb = oklchToRgb(L, c, H); }
+    return rgbToHex(rgb);
+  }
+  function lum(hex) { var c = hexToRgb(hex).map(toLin); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; }
+  function contrast(a, b) { var x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+  function mix(a, b, t) { var A = hexToRgb(a), B = hexToRgb(b); return rgbToHex(A.map(function (v, i) { return v * t + B[i] * (1 - t); })); }
+  function deltaE(x, y) { var p = toOklch(x), q = toOklch(y); return Math.hypot(p.L - q.L, p.a - q.a, p.b - q.b); }
+  function ink(base, bg, target) {
+    var q = toOklch(base), dir = lum(bg) < 0.4 ? 1 : -1, L = q.L;
+    for (var i = 0; i < 100; i++) {
+      var c = fromOklch(L, q.C, q.H);
+      if (contrast(c, bg) >= target) return c;
+      L += dir * 0.01;
+      if (L <= 0 || L >= 1) break;
+    }
+    return dir < 0 ? "#000000" : "#FFFFFF";
+  }
+  var DARK_TEXT = "#303031";
+  function onFill(fill) { return contrast(DARK_TEXT, fill) >= contrast("#FFFFFF", fill) ? DARK_TEXT : "#FFFFFF"; }
+
+  /* ── 提案色票 ── */
+  var P = {
+    lavender: { hex: "#9281D4", name: "薰衣草紫", src: "原色" },
+    coral: { hex: "#E17E6D", name: "珊瑚紅", src: "原色" },
+    mint: { hex: "#A4E9DB", name: "薄荷綠", src: "原色" },
+    yellow: { hex: "#E7C869", name: "芥末黃", src: "新增" },
+    sky: { hex: "#67B5E1", name: "天空藍", src: "新增" },
+    pink: { hex: "#E391B8", name: "莓果粉", src: "新增" },
+    green: { hex: "#5CC184", name: "草綠", src: "原色" },
+    tan: { hex: "#C5997A", name: "駝色", src: "原色" }
+  };
+  var ORDER = ["lavender", "coral", "mint", "yellow", "sky", "pink", "green", "tan"];
+  var STATUS = { success: "green", warning: "yellow", danger: "coral", info: "sky", highlight: "lavender" };
+  var ROLE_LABEL = { success: "成功", warning: "警告", danger: "危險", info: "資訊", highlight: "新功能" };
+  var SURF = { light: "#FFFFFF", dark: "#141317" };
+  function tone(key, theme) {
+    var base = P[key].hex, s = SURF[theme];
+    return { base: base, ink: ink(base, s, 4.5), line: ink(base, s, 3), tint: mix(base, s, theme === "dark" ? 0.22 : 0.16) };
+  }
+  function st(role, theme) { return tone(STATUS[role], theme); }
+  function catKey(i) { return ORDER[i % ORDER.length]; }
+
+  /* ── 範例資料 ── */
+  var COURSES = [
+    { name: "微積分（一）", units: 4, slots: [[0, 9, 11], [2, 9, 10]] },
+    { name: "普通物理", units: 3, slots: [[1, 10, 12], [3, 10, 11]] },
+    { name: "程式設計", units: 3, slots: [[0, 13, 15], [3, 13, 14]] },
+    { name: "線性代數", units: 3, slots: [[1, 13, 15]] },
+    { name: "經濟學原理", units: 3, slots: [[2, 10, 12]] },
+    { name: "英文寫作", units: 2, slots: [[4, 9, 11]] },
+    { name: "體育", units: 1, slots: [[4, 14, 16]] },
+    { name: "社團活動", units: 0, slots: [[2, 15, 17]] }
+  ];
+  var DAYS = ["一", "二", "三", "四", "五"];
+  var CREDITS = [["共同必修", 10], ["通識", 18], ["系必修", 36], ["系選修", 12], ["自由選修", 8], ["外語", 6], ["體育", 4], ["服務學習", 2]];
+  var TREND = [
+    { name: "微積分（一）", cap: 120, v: [60, 78, 90, 98, 104, 108, 111, 114, 116, 117, 118, 119, 120, 120] },
+    { name: "程式設計", cap: 80, v: [30, 41, 50, 58, 63, 67, 70, 72, 74, 75, 76, 77, 78, 78] },
+    { name: "經濟學原理", cap: 100, v: [20, 28, 35, 40, 46, 50, 53, 57, 60, 62, 63, 65, 66, 66] },
+    { name: "英文寫作", cap: 40, v: [10, 15, 22, 26, 30, 33, 35, 36, 38, 39, 40, 40, 40, 40] }
+  ];
+  var TAGS = ["必修", "想修", "已修", "通識", "實習", "期中考", "社團", "其他"];
+
+  var I = {
+    check: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>',
+    warn: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4 2.8 19.5h18.4Z"/><path d="M12 10v4"/><path d="M12 17h.01"/></svg>',
+    x: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6"/><path d="m15 9-6 6"/></svg>',
+    info: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>',
+    search: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+    sun: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+    moon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>',
+    user: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
+    plus: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+    bookmark: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4h12v17l-6-4-6 4Z"/></svg>'
+  };
+  function statusInline(role, text, theme) {
+    var t = st(role, theme);
+    return '<span class="stat" style="color:' + t.ink + '"><span class="dot" style="background:' + t.base + '"></span>' + text + "</span>";
+  }
+  function gradeColor(g, theme) { return st(g[0] === "A" ? "success" : g[0] === "B" ? "warning" : "danger", theme).ink; }
+  function nav(active, theme) {
+    return '<div class="nav"><span class="brand">選課助手</span><div class="nav-items">' +
+      ["目錄", "課表", "學分"].map(function (n) { return '<span class="' + (n === active ? "on" : "") + '">' + n + "</span>"; }).join("") +
+      '</div><span class="icon-btn">' + (theme === "light" ? I.sun : I.moon) + '</span><span class="avatar">' + I.user + "</span></div>";
+  }
+
+  /* ── 畫面 A：選課 ── */
+  function screenCatalog(theme) {
+    var cards = [
+      { n: "經濟學原理", d: "經濟系 · 3 學分", g: "A", s: ["success", "開放"], c: "66/100" },
+      { n: "程式設計", d: "資工系 · 3 學分", g: "B+", s: ["warning", "快滿"], c: "78/80", sel: true },
+      { n: "微積分（一）", d: "數學系 · 4 學分", g: "A-", s: ["danger", "額滿"], c: "120/120" },
+      { n: "英文寫作", d: "外文系 · 2 學分", g: "C+", s: ["info", "候補 12 人"], c: "40/40" }
+    ].map(function (c) {
+      return '<div class="ccard' + (c.sel ? " sel" : "") + '"><div class="ccard-top"><span class="ccard-title">' + c.n + '</span><span class="grade" style="color:' + gradeColor(c.g, theme) + '">' + c.g + "</span></div>" +
+        '<span class="ccard-desc">' + c.d + '</span><div class="ccard-meta">' + statusInline(c.s[0], c.s[1], theme) + '<span class="mono">' + c.c + "</span></div></div>";
+    }).join("");
+    var rows = [
+      ["01", "一 13:00–15:00", "78 / 80", ["warning", "快滿"]],
+      ["02", "三 10:00–12:00", "80 / 80", ["danger", "額滿"]],
+      ["03", "四 15:00–17:00", "41 / 80", ["success", "開放"]],
+      ["04", "五 09:00–11:00", "80 / 80", ["info", "候補 12 人"]]
+    ].map(function (r) {
+      return '<tr><td class="mono">' + r[0] + "</td><td>" + r[1] + '</td><td class="mono">' + r[2] + "</td><td>" + statusInline(r[3][0], r[3][1], theme) + "</td></tr>";
+    }).join("");
+    return '<div class="app">' + nav("目錄", theme) +
+      '<div class="md"><aside class="md-list"><div class="search">' + I.search + "搜尋 114-1 課程</div>" + cards + "</aside>" +
+      '<div class="md-detail"><div class="dh"><div class="dh-top"><div><h4 class="h-detail">程式設計 <span>#01</span></h4>' +
+      '<p class="meta">資工系 · 3 學分 · 必修 · 平均成績 <b class="grade" style="color:' + gradeColor("B+", theme) + '">B+</b></p></div>' +
+      '<div class="actions"><span class="btn secondary">' + I.bookmark + '收藏</span><span class="btn primary">' + I.plus + "加入課表</span></div></div>" +
+      '<div class="tabs"><span>概覽</span><span class="on">班別</span><span>評價<span class="count">128</span></span></div></div>' +
+      '<div class="dbody"><div class="notice"><span style="color:' + st("warning", theme).ink + '">' + I.warn + "</span><span>加選截止：9/20（五）23:59。額滿的班別可以登記候補。</span></div>" +
+      '<table class="tbl"><thead><tr><th>班別</th><th>時間</th><th>名額</th><th>狀態</th></tr></thead><tbody>' + rows + "</tbody></table></div></div></div></div>";
+  }
+
+  /* ── 畫面 B：課表 ── */
+  function screenSchedule(theme) {
+    var total = COURSES.reduce(function (t, c) { return t + c.units; }, 0);
+    var side = COURSES.map(function (c, i) {
+      return '<div class="side-row' + (i === 2 ? " on" : "") + '"><span class="dot" style="background:' + P[catKey(i)].hex + '"></span><span>' + c.name + '</span><span class="mono">' + (c.units ? c.units + " 學分" : "活動") + "</span></div>";
+    }).join("");
+    var times = "";
+    for (var h = 8; h <= 17; h++) times += '<span style="top:calc(var(--row) * ' + (h - 8) + ')">' + (h < 10 ? "0" : "") + h + "</span>";
+    var cols = DAYS.map(function (_, day) {
+      var evs = "";
+      COURSES.forEach(function (c, i) {
+        c.slots.forEach(function (sl) {
+          if (sl[0] !== day) return;
+          var hex = P[catKey(i)].hex;
+          evs += '<div class="ev" style="top:calc(var(--row) * ' + (sl[1] - 8) + " + 2px);height:calc(var(--row) * " + (sl[2] - sl[1]) + " - 4px);background:" + hex + ";color:" + onFill(hex) + '"><b>' + c.name + "</b><small>" + sl[1] + ":00</small></div>";
+        });
+      });
+      return '<div class="week-col">' + evs + "</div>";
+    }).join("");
+    return '<div class="app">' + nav("課表", theme) +
+      '<div class="sc"><aside class="sc-side"><div class="side-h"><span class="overline">114-1 · 8 項</span><span class="mono caption">' + total + " 學分</span></div>" + side +
+      '<span class="btn secondary side-add">' + I.plus + "新增事件</span></aside>" +
+      '<div class="week" role="img" aria-label="範例週課表"><div class="week-corner"></div>' + DAYS.map(function (d) { return '<div class="week-head">週' + d + "</div>"; }).join("") +
+      '<div class="week-times">' + times + "</div>" + cols + "</div></div></div>";
+  }
+
+  /* ── 畫面 C：學分與統計 ── */
+  function screenDashboard(theme) {
+    var s = SURF[theme];
+    var earned = CREDITS.reduce(function (t, c) { return t + c[1]; }, 0), need = 128;
+    var bar = CREDITS.map(function (c, i) { return '<i style="flex:' + c[1] + ";background:" + P[catKey(i)].hex + '" title="' + c[0] + " " + c[1] + ' 學分"></i>'; }).join("") +
+      '<i style="flex:' + (need - earned) + ';background:var(--sunken)" title="尚缺 ' + (need - earned) + ' 學分"></i>';
+    var creditLegend = CREDITS.map(function (c, i) { return '<div><i style="background:' + P[catKey(i)].hex + '"></i><span>' + c[0] + "</span><span>" + c[1] + "</span></div>"; }).join("");
+
+    var W = 300, H = 150, pl = 26, pr = 8, pt = 8, pb = 20, maxY = 120;
+    var x = function (i) { return pl + i * (W - pl - pr) / 13; };
+    var y = function (v) { return pt + (1 - v / maxY) * (H - pt - pb); };
+    var grid = [0, 40, 80, 120].map(function (v) { return '<line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + y(v) + '" y2="' + y(v) + '" stroke="var(--border)"/><text x="' + (pl - 4) + '" y="' + (y(v) + 3) + '" text-anchor="end">' + v + "</text>"; }).join("");
+    var xl = [[0, "第 1 天"], [13, "第 14 天"]].map(function (d, k) { return '<text x="' + x(d[0]) + '" y="' + (H - 4) + '" text-anchor="' + (k ? "end" : "start") + '">' + d[1] + "</text>"; }).join("");
+    var lines = TREND.map(function (t, i) {
+      var c = tone(catKey(i), theme).line;
+      return '<polyline points="' + t.v.map(function (v, j) { return x(j).toFixed(1) + "," + y(v).toFixed(1); }).join(" ") + '" fill="none" stroke="' + c + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="' + x(13) + '" cy="' + y(t.v[13]) + '" r="3" fill="' + c + '"/>';
+    }).join("");
+    var lineLegend = TREND.map(function (t, i) { return '<div><i style="background:' + tone(catKey(i), theme).line + '"></i><span>' + t.name + "</span><span>" + t.v[13] + "</span></div>"; }).join("");
+    var tags = TAGS.map(function (t, i) { var c = tone(catKey(i), theme); return '<span class="badge" style="background:' + c.tint + ";color:" + c.ink + '">' + t + "</span>"; }).join("");
+
+    return '<div class="app">' + nav("學分", theme) + '<div class="dash">' +
+      '<div class="dcard wide"><div class="dcard-h"><h4>畢業學分進度</h4><span class="link">查看明細</span></div>' +
+      '<div class="big">' + earned + "<small>/ " + need + " 學分</small></div>" +
+      '<div class="stacked" role="img" aria-label="已修 ' + earned + " 學分，共需 " + need + ' 學分">' + bar + "</div>" +
+      '<div class="legend">' + creditLegend + "</div></div>" +
+      '<div class="dcard"><div class="dcard-h"><h4>加退選人數</h4><span class="caption">14 天</span></div>' +
+      '<div class="chart"><svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="四門課的選課人數變化">' + grid + xl + lines + "</svg></div>" +
+      '<div class="legend two">' + lineLegend + "</div></div>" +
+      '<div class="dcard"><div class="dcard-h"><h4>收藏標籤</h4><span class="link">管理</span></div><div class="tags">' + tags + "</div></div>" +
+      "</div></div>";
+  }
+
+  /* ── 狀態呈現方式 ── */
+  function screenPatterns(theme) {
+    var ok = st("success", theme), bad = st("danger", theme), warn = st("warning", theme), info = st("info", theme);
+    var avoid = tone("sky", theme);
+    var avoidLine = mix(avoid.base, SURF[theme], theme === "dark" ? 0.45 : 0.4);
+    return '<div class="app" style="min-width:0"><div class="pat">' +
+      '<div class="pat-block"><span class="overline">Toast</span><div class="toast"><span style="color:' + ok.ink + '">' + I.check + '</span><span>已儲存收藏夾「想修的課」</span><span class="text-btn">復原</span></div></div>' +
+      '<div class="pat-block"><span class="overline">表單驗證</span><div class="field"><label>學校信箱</label><span class="input" style="border-color:' + bad.ink + '">student@school</span>' +
+        '<span class="help" style="color:' + bad.ink + '">' + I.x + "缺少網域結尾，例如 .edu.tw</span></div></div>" +
+      '<div class="pat-block"><span class="overline">中性公告列</span><div class="notice"><span style="color:' + info.ink + '">' + I.info + "</span><span>系統將於 9/18（三）02:00–04:00 維護，期間無法加退選。</span></div></div>" +
+      '<div class="pat-block"><span class="overline">系統狀態</span><div class="status-list">' +
+        '<div><span class="dot" style="background:' + ok.base + '"></span>選課系統正常</div>' +
+        '<div><span class="dot" style="background:' + warn.base + '"></span>成績查詢回應較慢</div>' +
+        '<div><span class="dot" style="background:' + info.base + '"></span>課程評價排定維護</div></div></div>' +
+      '<div class="pat-block" style="grid-column:1 / -1"><span class="avoid-label">' + I.x + "避免：淡色底加同色外框的提示框</span>" +
+        '<div class="avoid" style="background:' + avoid.tint + ";border:1px solid " + avoidLine + '"><span style="color:' + avoid.ink + '">' + I.info + "</span><span><b>加退選即將開始</b>第二階段加退選將於 9/16 09:00 開放。</span></div></div>" +
+      "</div></div>";
+  }
+
+  /* ── 色票總覽（跟隨頁面主題） ── */
+  function renderOverview() {
+    var pal = ORDER.map(function (k, i) {
+      var p = P[k], l = tone(k, "light"), d = tone(k, "dark");
+      return '<div class="pal"><div class="pal-swatch" style="background:' + p.hex + ";color:" + onFill(p.hex) + '"><span>' + (i + 1) + '</span><span class="pal-tag">' + p.src + "</span></div>" +
+        '<span class="pal-name">' + p.name + "</span><code>" + p.hex + "</code>" +
+        '<span class="pal-inks caption"><i style="background:' + l.ink + '"></i>亮 <i style="background:' + d.ink + '"></i>暗</span></div>';
+    }).join("");
+    var roles = Object.keys(STATUS).map(function (r) {
+      return '<span class="role"><span class="dot" style="background:' + P[STATUS[r]].hex + '"></span><b>' + ROLE_LABEL[r] + "</b>" + P[STATUS[r]].name + "</span>";
+    }).join("");
+    var pairs = [];
+    for (var a = 0; a < ORDER.length; a++) for (var b = a + 1; b < ORDER.length; b++) pairs.push([ORDER[a], ORDER[b], deltaE(P[ORDER[a]].hex, P[ORDER[b]].hex)]);
+    pairs.sort(function (p, q) { return p[2] - q[2]; });
+    var close = pairs.slice(0, 3).map(function (p) { return "<span>" + P[p[0]].name + " ↔ " + P[p[1]].name + ' <span class="num">' + p[2].toFixed(3) + "</span></span>"; }).join("");
+
+    document.getElementById("overview").innerHTML =
+      '<div class="section-head"><span class="overline">提案</span><h2 id="overview-title">8 色分類色與狀態對應</h2>' +
+      "<p>保留第二組的五個原色，再補上黃、藍、粉三個色相，明度與彩度對齊原本五色，讓 8 色看起來是同一組。排列順序冷暖交錯；色塊下方的小方塊是亮色與暗色模式下用於文字的深色階。</p></div>" +
+      '<div class="palette">' + pal + "</div>" +
+      '<div class="roles">' + roles + "</div>" +
+      '<div class="readout"><b>最容易混淆的三組</b>' + close + "</div>" +
+      '<ul class="notes">' +
+        "<li><strong>警告改用新增的芥末黃</strong>，不再用駝色。駝色回到分類色，只當資料色使用。</li>" +
+        "<li><strong>最接近的一組仍是珊瑚紅與駝色</strong>，這是原本五色就有的特性。排序時讓兩者相隔最遠（第 2 與第 8 色）。</li>" +
+        "<li><strong>薰衣草紫只當「新功能」提示</strong>，避免和主色紫混淆成「可以點擊」。</li>" +
+      "</ul>";
+  }
+
+  var SCREENS = { catalog: screenCatalog, schedule: screenSchedule, dashboard: screenDashboard, patterns: screenPatterns };
+  function renderScreens() {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-screen]"), function (el) {
+      var fn = SCREENS[el.getAttribute("data-screen")];
+      el.innerHTML = ["light", "dark"].map(function (t) {
+        return '<div class="pair-item"><span class="overline">' + (t === "light" ? "亮色" : "暗色") + '</span><div class="frame" data-theme="' + t + '"><div class="frame-scroll">' + fn(t) + "</div></div></div>";
+      }).join("");
+    });
+  }
+
+  function renderAll() { renderOverview(); }
+  var mq = window.matchMedia("(prefers-color-scheme: dark)");
+  if (mq.addEventListener) mq.addEventListener("change", renderAll);
+  new MutationObserver(renderAll).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  renderOverview();
+  renderScreens();
+})();
+</script>
