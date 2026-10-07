@@ -55,87 +55,97 @@ colors:
   text-secondary-dark: "#D1D1D2"
   text-tertiary-dark: "#A4A4A6"
   text-muted-dark: "#717173"
-  # ── 主視覺幾何色塊：只用於行銷頁與活動視覺，不用於 UI 元件、文字、圖表
-  shape-lavender: "#9281D4"
-  shape-mint: "#A4E9DB"
-  shape-coral: "#E17E6D"
-  shape-tan: "#C5997A"
-  shape-green: "#5CC184"
+  # ── 主視覺幾何色塊：取自參考海報原色（2 個高彩度＋3 個柔和色）；只用於行銷頁與活動視覺，不用於 UI 元件、文字、圖表
+  shape-lavender: "#8582C8"
+  shape-mint: "#82D3C3"
+  shape-coral: "#F45930"
+  shape-tan: "#D5AA89"
+  shape-green: "#06B070"
 typography:
   display:
-    fontFamily: Inter
-    fontSize: 48px
+    fontFamily: Inter, Noto Sans TC, system-ui, sans-serif
+    fontSize: 44px
     fontWeight: 600
-    lineHeight: 1.1
-  headline-lg:
-    fontFamily: Inter
-    fontSize: 32px
-    fontWeight: 500
     lineHeight: 1.25
+  headline-lg:
+    fontFamily: Inter, Noto Sans TC, system-ui, sans-serif
+    fontSize: 28px
+    fontWeight: 500
+    lineHeight: 1.35
   headline-md:
-    fontFamily: Inter
-    fontSize: 24px
-    fontWeight: 660
-    lineHeight: 1.2
+    fontFamily: Inter, Noto Sans TC, system-ui, sans-serif
+    fontSize: 22px
+    fontWeight: 600
+    lineHeight: 1.35
     fontFeature: '"cv05", "cv06", "cv12", "cv13", "ss07"'
   wordmark:
-    fontFamily: Inter
-    fontSize: 24px
-    fontWeight: 580
-    lineHeight: 1
+    fontFamily: Inter, Noto Sans TC, system-ui, sans-serif
+    fontSize: 18px
+    fontWeight: 600
+    lineHeight: 1.3
     fontFeature: '"cv05", "cv06", "cv12", "cv13", "ss07"'
   title-lg:
-    fontFamily: Inter
-    fontSize: 20px
-    fontWeight: 580
-    lineHeight: 1.25
-  title-md:
-    fontFamily: Inter
+    fontFamily: Inter, Noto Sans TC, system-ui, sans-serif
     fontSize: 18px
+    fontWeight: 600
+    lineHeight: 1.4
+  title-md:
+    fontFamily: Inter, Noto Sans TC, system-ui, sans-serif
+    fontSize: 17px
     fontWeight: 500
-    lineHeight: 1.25
+    lineHeight: 1.4
   title-sm:
-    fontFamily: Inter
+    fontFamily: Inter, Noto Sans TC, system-ui, sans-serif
     fontSize: 16px
-    fontWeight: 660
-    lineHeight: 1
+    fontWeight: 600
+    lineHeight: 1.4
     fontFeature: '"cv05", "cv06", "cv12", "cv13", "ss07"'
   body-lg:
-    fontFamily: Inter
+    fontFamily: Inter, Noto Sans TC, system-ui, sans-serif
     fontSize: 16px
     fontWeight: 400
-    lineHeight: 1.5
+    lineHeight: 1.6
   body-md:
-    fontFamily: Inter
+    fontFamily: Inter, Noto Sans TC, system-ui, sans-serif
+    fontSize: 15px
+    fontWeight: 400
+    lineHeight: 1.6
+  body-sm:
+    fontFamily: Inter, Noto Sans TC, system-ui, sans-serif
     fontSize: 14px
     fontWeight: 400
-    lineHeight: 1.5
-  body-sm:
-    fontFamily: Inter
-    fontSize: 13px
-    fontWeight: 400
-    lineHeight: 1.5
+    lineHeight: 1.6
   label-md:
-    fontFamily: Inter
+    fontFamily: Inter, Noto Sans TC, system-ui, sans-serif
     fontSize: 14px
     fontWeight: 500
-    lineHeight: 1.25
+    lineHeight: 1.4
+  control-lg:
+    fontFamily: Inter, Noto Sans TC, system-ui, sans-serif
+    fontSize: 15px
+    fontWeight: 500
+    lineHeight: 1
   control:
-    fontFamily: Inter
+    fontFamily: Inter, Noto Sans TC, system-ui, sans-serif
+    fontSize: 14px
+    fontWeight: 500
+    lineHeight: 1
+  control-sm:
+    fontFamily: Inter, Noto Sans TC, system-ui, sans-serif
     fontSize: 13px
     fontWeight: 500
     lineHeight: 1
   caption:
-    fontFamily: Inter
+    fontFamily: Inter, Noto Sans TC, system-ui, sans-serif
     fontSize: 12px
     fontWeight: 400
-    lineHeight: 1.25
+    lineHeight: 1.5
   overline:
-    fontFamily: Inter
-    fontSize: 11px
-    fontWeight: 600
-    lineHeight: 1
-    letterSpacing: 0.5px
+    fontFamily: Inter, Noto Sans TC, system-ui, sans-serif
+    fontSize: 12px
+    fontWeight: 500
+    lineHeight: 1.4
+    letterSpacing: 0.08em
 rounded:
   sm: 4px
   md: 6px
@@ -156,9 +166,9 @@ components:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.on-primary}"
     typography: "{typography.control}"
-    rounded: "{rounded.sm}"
-    height: 32px
-    padding: 0 12px
+    rounded: "{rounded.md}"
+    height: 36px
+    padding: 0 14px
   button-primary-hover:
     backgroundColor: "{colors.primary-hover}"
     textColor: "{colors.on-primary}"
@@ -167,11 +177,11 @@ components:
     textColor: "{colors.on-primary}"
   button-secondary:
     backgroundColor: "{colors.surface}"
-    textColor: "{colors.text-tertiary}"
+    textColor: "{colors.text-secondary}"
     typography: "{typography.control}"
-    rounded: "{rounded.sm}"
-    height: 32px
-    padding: 0 12px
+    rounded: "{rounded.md}"
+    height: 36px
+    padding: 0 14px
   button-secondary-hover:
     backgroundColor: "{colors.surface-hover}"
     textColor: "{colors.text-primary}"
@@ -182,31 +192,59 @@ components:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.primary}"
     typography: "{typography.control}"
-    rounded: "{rounded.sm}"
-    height: 32px
-    padding: 0 12px
+    rounded: "{rounded.md}"
+    height: 36px
+    padding: 0 14px
   button-danger:
     backgroundColor: "{colors.danger-text}"
     textColor: "{colors.on-primary}"
     typography: "{typography.control}"
-    rounded: "{rounded.sm}"
-    height: 32px
-    padding: 0 12px
+    rounded: "{rounded.md}"
+    height: 36px
+    padding: 0 14px
   button-danger-hover:
     backgroundColor: "{colors.danger-hover}"
     textColor: "{colors.on-primary}"
+  button-primary-lg:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.on-primary}"
+    typography: "{typography.control-lg}"
+    rounded: "{rounded.lg}"
+    height: 44px
+    padding: 0 18px
+  button-secondary-lg:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.text-secondary}"
+    typography: "{typography.control-lg}"
+    rounded: "{rounded.lg}"
+    height: 44px
+    padding: 0 18px
+  button-primary-sm:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.on-primary}"
+    typography: "{typography.control-sm}"
+    rounded: "{rounded.sm}"
+    height: 28px
+    padding: 0 10px
+  button-secondary-sm:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.text-secondary}"
+    typography: "{typography.control-sm}"
+    rounded: "{rounded.sm}"
+    height: 28px
+    padding: 0 10px
   icon-button:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.text-tertiary}"
-    rounded: "{rounded.sm}"
-    size: 32px
+    rounded: "{rounded.md}"
+    size: 36px
   input:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.text-primary}"
     typography: "{typography.body-md}"
-    rounded: "{rounded.sm}"
-    height: 32px
-    padding: 0 12px
+    rounded: "{rounded.md}"
+    height: 36px
+    padding: 0 14px
   card:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.text-secondary}"
@@ -240,11 +278,11 @@ components:
     padding: 4px 6px
   nav-item:
     backgroundColor: "{colors.surface}"
-    textColor: "{colors.text-tertiary}"
+    textColor: "{colors.text-secondary}"
     typography: "{typography.control}"
-    rounded: "{rounded.sm}"
-    height: 32px
-    padding: 0 12px
+    rounded: "{rounded.md}"
+    height: 36px
+    padding: 0 14px
   nav-item-hover:
     backgroundColor: "{colors.surface-hover}"
     textColor: "{colors.text-primary}"
@@ -257,7 +295,7 @@ components:
     textColor: "{colors.text-tertiary}"
     typography: "{typography.body-md}"
     rounded: "{rounded.md}"
-    height: 30px
+    height: 32px
     padding: 0 12px
   menu-item-hover:
     backgroundColor: "{colors.surface-hover}"
@@ -313,7 +351,7 @@ components:
    理由：畫面乾淨，層級一眼可辨，明暗模式都穩定。
 3. **用灰階做文字層級。** 四階文字色（primary → secondary → tertiary → muted）先於字級變化。
    理由：不必放大字也能區分重要性，版面保持緊湊。
-4. **控制項同高。** 按鈕、輸入框、導覽項目、圖示按鈕一律 32px 高。
+4. **控制項同高。** 按鈕、輸入框、導覽項目、圖示按鈕預設一律 36px 高（另有 28px 的小尺寸與 44px 的大尺寸）。
    理由：任意組合放在同一列都能自然對齊。
 5. **微動態。** 顏色變化 100ms，位移不超過 2px，縮放不小於 0.9。
    理由：介面跟手，但不表演、不讓人等待。
@@ -365,7 +403,7 @@ UI 骨架來自主視覺色票的五個顏色，其餘的階層都從這五色�
 | `highlight` / `highlight-text` | 新功能提示 | 只用於「NEW」這類弱提示 |
 | `data-1` … `data-8` | 分類資料色 | 課表色塊、圖表數列、使用者標籤，依序循環 |
 | `on-data` | 資料色塊上的文字 | 在 8 個資料色上都 ≥ 4.5:1 |
-| `shape-*` | 主視覺幾何色塊 | 只用於行銷頁與活動視覺，見 Layout › Marketing Page |
+| `shape-*` | 主視覺幾何色塊 | 取自參考海報原色，彩度比 `data-*` 高；只用於行銷頁與活動視覺，見 Layout › Marketing Page |
 
 ### 使用規則
 
@@ -418,7 +456,7 @@ UI 骨架來自主視覺色票的五個顏色，其餘的階層都從這五色�
 - **最接近的一組是珊瑚紅與駝色**（兩者都是暖色、明度接近），所以排在第 2 與第 8，讓它們相隔最遠。做大色塊沒問題，但在小圓點和細線上要留意。
 - **不要再加第 9 色。** 超過 8 項時，第 9 項以後歸為「其他」並用中性灰，或改用文字分組。
 - 分類色和狀態色共用部分色相。在課表、圖表這類情境裡，綠色色塊不代表「成功」；需要表達狀態時一定搭配文字。
-- **不要把 `shape-*` 主視覺色當成資料色或狀態色使用。** 兩者數值部分相同，但用途分開管理。
+- **不要把 `shape-*` 主視覺色當成資料色或狀態色使用。** 主視覺色取自海報原色，彩度比資料色高，兩者分開管理。
 
 ### 色階：一個顏色，四種用途
 
@@ -474,35 +512,45 @@ UI 骨架來自主視覺色票的五個顏色，其餘的階層都從這五色�
 
 ### 字體
 
-- **Inter（可變字體 InterVariable）**，後備字體為 `system-ui, sans-serif`。
-- 標題與 wordmark 開啟 OpenType 特性 `cv05 cv06 cv12 cv13 ss07`：帶尾鉤的小寫 l、簡化的 u、緊湊的 f 與 t、方形標點。這是讓 Inter 有自己個性的關鍵。
-- 善用可變字體的**中間字重**：580 用於 wordmark 與對話框標題，660 用於卡片與頁面標題。它們比標準字重更細緻，層級分明但不吵。
+- **英文與數字：Inter**（可變字體）。標題與 wordmark 開啟 OpenType 特性 `cv05 cv06 cv12 cv13 ss07`：帶尾鉤的小寫 l、簡化的 u、緊湊的 f 與 t、方形標點。
+- **中文：Noto Sans TC（思源黑體）可變字體**，字重範圍 100～900。
+- 字型順序固定為 `Inter, "Noto Sans TC", system-ui, sans-serif`：英文與數字先用 Inter，中文才使用 Noto Sans TC。
+- **一定要載入 Noto Sans TC，不要依賴系統字。** Windows 的微軟正黑體只有 300、400、700 三種粗細：設成 500 的中文會被畫成 400（看起來偏細），設成 580、600 會直接跳到 700（看起來偏粗）。Mac 的蘋方又是另一套粗細，跨平台不一致。
+- **用可變字體，不用固定字重。** 中文字體會依字元切成約 108 個分片，瀏覽器只下載頁面用到的分片。可變字體每個分片約是單一字重的 1.85 倍，所以只要用到 3 種以上粗細就比較省；這套系統會用到 400、500、600 三種。
+- **字重只用三種**：內文 400；標籤、導覽、按鈕 500；標題 600。
 
 ### 字級
 
-| Token | 規格 | 用途 |
+字級以中文為準。中文字面比英文大，所以 20px 以上的標題比英文習慣的尺寸小 10～15%；14px 以下的文字則不縮小，避免筆畫擠在一起。
+
+| Token | 規格（字級 / 字重 / 行高） | 用途 |
 |---|---|---|
-| `display` | 48 / 600 / 1.1 | 行銷頁 Hero 主標（手機縮為 32px） |
-| `headline-lg` | 32 / 500 / 1.25 | 行銷頁區塊標題 |
-| `headline-md` | 24 / 660 | 工具頁的詳細頁主標 |
-| `wordmark` | 24 / 580 | 產品名稱 logo 文字 |
-| `title-lg` | 20 / 580 | 對話框標題 |
-| `title-md` | 18 / 500 | 手風琴（Accordion）標題、小節標題 |
-| `title-sm` | 16 / 660 | 卡片標題 |
-| `body-lg` | 16 / 400 / 1.5 | 行銷頁段落、長文 |
-| `body-md` | 14 / 400 / 1.5 | **預設內文**、選單項目 |
-| `body-sm` | 13 / 400 / 1.5 | 密集介面文字：表格、卡片描述、標籤、公告列、Toast |
-| `label-md` | 14 / 500 | 欄位標籤、頁尾欄標題、分段控制 |
-| `control` | 13 / 500 / 1 | 按鈕、導覽項目、分頁 tab |
-| `caption` | 12 / 400 | 輔助說明、密集資料中的小字 |
-| `overline` | 11 / 600 / 全大寫 / 字距 0.5px | 選單分組標題 |
+| `display` | 44 / 600 / 1.25 | 行銷頁 Hero 主標（手機縮為 32px） |
+| `headline-lg` | 28 / 500 / 1.35 | 行銷頁區塊標題 |
+| `headline-md` | 22 / 600 / 1.35 | 工具頁的詳細頁主標 |
+| `wordmark` | 18 / 600 / 1.3 | 產品名稱 logo 文字，搭配 28px 的 logo 圖示 |
+| `title-lg` | 18 / 600 / 1.4 | 對話框標題 |
+| `title-md` | 17 / 500 / 1.4 | 手風琴（Accordion）標題、小節標題 |
+| `title-sm` | 16 / 600 / 1.4 | 卡片標題、步驟標題 |
+| `body-lg` | 16 / 400 / 1.6 | 行銷頁段落、Hero 說明文字 |
+| `body-md` | 15 / 400 / 1.6 | **預設內文**、區塊說明、選單項目 |
+| `body-sm` | 14 / 400 / 1.6 | 密集介面文字：表格、卡片描述、標籤、公告列、Toast |
+| `label-md` | 14 / 500 / 1.4 | 欄位標籤、頁尾欄標題、分段控制 |
+| `control-lg` | 15 / 500 / 1 | 大按鈕 |
+| `control` | 14 / 500 / 1 | 預設按鈕、導覽項目、分頁 tab |
+| `control-sm` | 13 / 500 / 1 | 小按鈕 |
+| `caption` | 12 / 400 / 1.5 | 只用於數字、時間、短標籤，例如「9/20 23:59」「78/80」 |
+| `overline` | 12 / 500 / 1.4，字距 0.08em | 眉標、選單分組標題 |
 
 ### 規則
 
-- 預設內文用 `body-md`（14px）。只有在閱讀型內容裡才用 `body-lg`。
-- 控制項文字一律用 `control`，行高設為 1，元件高度由元件本身決定。
+- **中文內文最小 14px**（`body-sm`）。`caption` 的 12px 只用於數字、時間與短標籤，不用於完整的句子。
+- **行高**：內文一律 1.6；標題 1.25～1.4；控制項 1。
+- 預設內文用 `body-md`；表格、卡片、Toast 這類密集介面用 `body-sm`；行銷頁段落與 Hero 說明用 `body-lg`。
+- 控制項文字依按鈕尺寸使用 `control-sm`、`control`、`control-lg`，行高 1，元件高度由元件本身決定。
+- **Hero 大標題（`display`）不加標點符號**，用換行斷句。例如寫成兩行「遇到校園問題」「讓學生會陪你處理」，不寫「遇到校園問題，讓學生會陪你處理。」。
 - 層級優先用**文字顏色與字重**區分，不要靠一直加大字級。
-- 全大寫只用在 `overline`，而且一定要搭配 0.5px 字距。
+- 眉標（`overline`）：中文沒有大小寫，用 0.08em 的字距營造標籤感；英文眉標可以全大寫。
 - 單行標題或描述超出寬度時用省略號截斷。段落最大寬度約 500～680px。
 - 觸控裝置上，輸入框字級至少 16px，避免 iOS 聚焦時自動放大畫面。
 
@@ -524,12 +572,23 @@ UI 骨架來自主視覺色票的五個顏色，其餘的階層都從這五色�
 | `4xl` | 48px | 行銷頁區塊的上下間距 |
 | `5xl` | 64px | 頁尾上下內距與欄距 |
 
+### 內容容器
+
+行銷頁、內容頁與表單頁的內容都放在同一個容器裡：
+
+- **最大寬度 1200px，置中。** 左右留白 40px（≤ 992px 為 24px，≤ 520px 為 16px）。
+- **共用一條左緣。** 導覽列的 wordmark、Hero 文字、每個區塊的標題、頁尾，全部對齊容器的左緣。不要讓各區塊自己決定左邊距。
+- **兩欄型區塊**：標題欄 280～320px，內容欄最大 680px，兩欄之間固定 64px。不要用「左右推開」（justify-between）的排法：在寬螢幕上，標題會貼著左邊、內容貼著右邊，中間空出一大片。
+- 背景色、分隔線、Hero 的色塊可以延伸到畫面邊緣，但文字與元件一律對齊容器。
+- 工具頁（Master–Detail、Sidebar + Canvas）不受這個容器限制，照各自的固定欄寬排列。
+
 ### 固定尺寸
 
 | 項目 | 尺寸 |
 |---|---|
-| 控制項高度（按鈕、輸入框、導覽項目） | 32px；觸控裝置的點擊範圍至少 44px |
-| 選單項目高度 | 30px |
+| 控制項高度（按鈕、輸入框、導覽項目、圖示按鈕） | 預設 36px；小 28px；大 44px。觸控裝置的點擊範圍至少 44px |
+| 選單項目高度 | 32px |
+| 內容容器最大寬度 | 1200px |
 | 圖示 | 16px（行內 meta 用 14px，導覽列用 18px） |
 | 標準側欄 / 清單欄 | 384px |
 | 篩選欄 | 360px |
@@ -565,8 +624,8 @@ UI 骨架來自主視覺色票的五個顏色，其餘的階層都從這五色�
 ```
 
 - **導覽列**
-  - 左側放 `wordmark`；右側依序放導覽項目、主題切換按鈕、主要 CTA（primary 按鈕）。
-  - 內距 12px，底部一條 1px `border`。
+  - 左側放 28px 的 logo 圖示加 `wordmark`；右側依序放導覽項目（`control`、`text-secondary`）、主題切換按鈕、主要 CTA（預設尺寸的 primary 按鈕）。
+  - 高度約 60px，內容對齊內容容器的左右緣，底部一條 1px `border`。
   - **選取指示**：在選取的項目下方畫一條 2px 的 `primary` 底線，位置剛好和導覽列底邊框重疊。
   - hover 時用一層 `surface-hover` 圓角底色淡入。
 - **≤ 992px**：導覽項目收進漢堡按鈕，點開後是全螢幕選單，連結用 24px / 500 的大字，從頁首高度下方開始排列。
@@ -615,23 +674,28 @@ UI 骨架來自主視覺色票的五個顏色，其餘的階層都從這五色�
 ### Pattern: Marketing Page（行銷頁）
 
 - **Hero**
-  - 高度接近一整個螢幕（`100svh − 頁首高度`），內容貼齊**左下角**，內距 48px（≤ 992px 時改為 24px）。
+  - 高度接近一整個螢幕（`100svh − 頁首高度`），文字貼齊**左下角**，並對齊內容容器的左緣。
   - 底色用 `background`（純白）。整個 Hero 用 `data-theme="light"` 固定為亮色，暗色模式也不變，確保色塊與文字的對比一致。
   - 主視覺是**大型幾何色塊**，顏色只取 `shape-*` 五色：
-    - 形狀：圓環、四角星、多邊形（例如八角形）、三角形、斜切的四邊形。
+    - **色彩結構是「2 個高彩度＋3 個柔和色」**：紅橙 `shape-coral` 和綠 `shape-green` 是畫面的主角；薄荷、紫、蜜桃負責襯托。不要把高彩度色調淡，否則五色的彩度擠在同一區間，整個畫面會灰濛、沒有精神。
+    - 形狀：圓環、四角星、多邊形（例如八角形）、三角形、斜切的四邊形、缺角的方形。
     - 平塗填色，不加外框、陰影或漸層。
-    - 每個構圖放 3～7 個色塊，大小不一、可以自由旋轉、可以互相重疊，也可以超出畫面邊緣被裁切。
-    - 同一個構圖可以重複使用同一色，但相鄰的色塊不要同色。
-  - 主標用 `display`、`text-primary`，可以手動斷行。文字可以和色塊交疊，但關鍵字不能被完全遮住。
-  - 色塊上的文字**一律用深色 `text-primary`，不用白字**。白字在五個色塊上的對比都低於 3.4:1（薄荷色只有 1.4:1）；深色字在色塊上為 4～9.6:1，足以用於大字級標題。內文字級不得放在色塊上。
-  - 可以選擇性地加上一層「重複排列的細體大字」作為底紋，與色塊交錯，重現海報式的排版質感。
+    - 每個構圖放 3～7 個色塊，可以自由旋轉、互相重疊。同一個構圖可以重複使用同一色，但相鄰的色塊不要同色。
+  - **構圖要分散穿插**：
+    - 色塊分布在整個畫面，不要全部擠在右半邊。
+    - 大小差距約 3 倍，至少 2 個色塊超出畫面邊緣被裁切。
+    - 一部分色塊放在文字後面、一部分放在文字前面，形成前後層次；放在前面的色塊不能遮住標題與按鈕。
+  - 主標用 `display`（44px / 600）、`text-primary`，**不加標點符號**，用換行斷句。
+  - 主標下方接 `body-lg` 說明（最大寬 500px），再接兩顆大按鈕：主要（primary）＋次要（secondary）。
+  - 色塊上的文字**一律用深色 `text-primary`，不用白字**。白字在五個色塊上的對比都低於 3.5:1；深色字在色塊上為 3.8～7.6:1，只夠用於大字級標題，內文字級不得放在色塊上。
+  - Hero 的動畫（MG 動態）另外設計，目前不在規格內。
   - ≤ 768px：色塊減少到 2～4 個，並移到標題周圍，不要壓在標題上。
 - **內容區塊**
-  - 統一內距：上下 48px、左右 40px。
+  - 放在內容容器裡，上下內距 48px。
   - 兩種版型交替使用：
     - **置中型**：標題、段落（最大寬 500px）、一個按鈕。
-    - **左右兩欄型**：左邊放標題和說明（最大寬 400px），右邊放內容（最大寬 680px），例如手風琴或 logo 列。
-  - ≤ 768px：兩欄改成單欄置中，並隱藏次要說明。
+    - **左右兩欄型**：照「內容容器」的兩欄規則：標題欄 280～320px，內容欄最大 680px，中間固定 64px。
+  - ≤ 768px：兩欄改成單欄，並隱藏次要說明。
 
 ### Pattern: Footer（頁尾）
 
@@ -665,9 +729,9 @@ UI 骨架來自主視覺色票的五個顏色，其餘的階層都從這五色�
 
 | Token | 用途 |
 |---|---|
-| `sm` 4px | 按鈕、輸入框、Badge、Tooltip、畫布色塊、骨架屏 |
-| `md` 6px | 選單內的項目、小型標籤按鈕 |
-| `lg` 8px | 卡片、對話框、下拉選單、面板 |
+| `sm` 4px | 小按鈕、Badge、Tooltip、畫布色塊、骨架屏 |
+| `md` 6px | 預設按鈕、輸入框、Select、選單內的項目 |
+| `lg` 8px | 大按鈕、卡片、對話框、下拉選單、面板 |
 | `full` | 分段控制、開關、狀態燈、「NEW」小膠囊 |
 
 - **原則**：越小、越可互動的元素，圓角越小；越大的容器，圓角越大；膠囊類的切換元件用全圓。
@@ -694,17 +758,26 @@ UI 骨架來自主視覺色票的五個顏色，其餘的階層都從這五色�
 | 變體 | 外觀 | 用途 |
 |---|---|---|
 | `primary` | 主色底、白字 | 每個區域最多一個的主要動作 |
-| `secondary` | 透明底、1px `border`、`text-tertiary` 字 | 一般的次要動作 |
+| `secondary` | 透明底、1px `border`、`text-secondary` 字 | 一般的次要動作 |
 | `tertiary` | 透明底、1px `border`、`primary` 字 | 想強調但不搶過 primary 的動作 |
-| `danger` | 把以上任一變體的主色換成 `danger` | 刪除、移除等破壞性動作 |
+| `danger` | 把以上任一變體的主色換成 `danger-text` | 刪除、移除等破壞性動作 |
 | `ghost` | 沒有外框也沒有底色 | 工具列、密集清單內 |
 
-- 共通規格：32px 高、左右內距 12px、圓角 `sm`、文字 `control`，圖示與文字間距 8px。
-- 只有圖示的按鈕用 `icon-button`，尺寸 32×32，外框樣式同 `secondary`。
+三種尺寸，圓角隨尺寸變大：
+
+| 尺寸 | 高度 | 左右內距 | 圓角 | 文字 | 用途 |
+|---|---|---|---|---|---|
+| `sm` | 28px | 10px | `sm` 4px | `control-sm` 13px | 表格裡的小按鈕、篩選標籤 |
+| `md`（預設） | 36px | 14px | `md` 6px | `control` 14px | 導覽列、對話框、一般操作 |
+| `lg` | 44px | 18px | `lg` 8px | `control-lg` 15px | Hero 主要行動、表單送出、手機版 |
+
+- 圖示與文字間距 8px。
+- 同一列的按鈕使用同一個尺寸。
+- 只有圖示的按鈕用 `icon-button`，尺寸與同列按鈕相同（預設 36×36），外框樣式同 `secondary`。
 
 ### Input / Select
 
-- **Input**：32px 高、1px `border`、圓角 `sm`、內距 0 12px、文字 `text-primary`、placeholder 用 `text-muted`。
+- **Input**：36px 高（與預設按鈕同高）、1px `border`、圓角 `md`、內距 0 12px、文字 `text-primary`、placeholder 用 `text-muted`。
 - **Select 觸發器**：外觀與 Input 相同。值未選時文字用 `text-muted`，選了之後用 `text-primary`。多選時可以換行長高，選項以 Badge 呈現。
 - **Select 選單**
   - 規格同 `menu`，最大高度 300px，項目之間間距 4px。
@@ -790,7 +863,7 @@ UI 骨架來自主視覺色票的五個顏色，其餘的階層都從這五色�
 
 - 8px 圓點用狀態**原色**，後面接 `body-sm`、字重 500 的狀態文字，文字用**文字階**。
 - 旁邊的數字用 `text-tertiary` 和等寬數字，例如 `78/80`。
-- 成績、分數這類數值本身可以上色：文字階、字重 660，例如 `B+` 用警告色。
+- 成績、分數這類數值本身可以上色：文字階、字重 600，例如 `B+` 用警告色。
 - 範例：開放（成功）、快滿（警告）、額滿（危險）、候補 12 人（資訊）。
 
 #### 2. Toast
@@ -813,11 +886,11 @@ UI 骨架來自主視覺色票的五個顏色，其餘的階層都從這五色�
 ┌──────────────────────────────┐   ← 外框改成危險色的文字階
 │ student@school               │
 └──────────────────────────────┘
-⊗ 缺少網域結尾，例如 .edu.tw       ← 12px，危險色的文字階
+⊗ 缺少網域結尾，例如 .edu.tw       ← body-sm，危險色的文字階
 ```
 
 - 錯誤時，輸入框的 1px 外框改成危險色的文字階。
-- 下方放 12px 說明文字，同樣用危險色的文字階，前面加一個 16px 的 ✕ 圖示。
+- 下方放 `body-sm` 說明文字，同樣用危險色的文字階，前面加一個 16px 的 ✕ 圖示。
 - 說明要講清楚「哪裡錯、怎麼修」，例如「缺少網域結尾，例如 .edu.tw」，不要只寫「格式錯誤」。
 - 輸入正確時通常不顯示任何提示。
 
@@ -868,7 +941,7 @@ UI 骨架來自主視覺色票的五個顏色，其餘的階層都從這五色�
 - **圖例**：10px 方形色塊，後面接 12px 文字，數值靠右並用等寬數字。
 - **課表色塊**
   - 規格同 `calendar-event` 元件：原色填色、圓角 `sm`、內距 4px 6px。
-  - 標題 11～12px、字重 600；時間用 10px 等寬字、80% 不透明度。
+  - 標題 12px、字重 600；時間用 11px 等寬數字、80% 不透明度。
   - 文字一律用 `on-data`，不用白字。
 - **使用者標籤**：用 Badge（淡底＋文字階）。
 
@@ -908,7 +981,8 @@ UI 骨架來自主視覺色票的五個顏色，其餘的階層都從這五色�
 
 - 讓每個區域最多只有一個 `primary` 按鈕。
 - 用 `border` 和四階文字色建立層級。
-- 讓同一列的控制項保持 32px 等高。
+- 讓同一列的控制項使用同一個尺寸（預設 36px）。
+- 行銷頁、內容頁的文字與元件都對齊內容容器的同一條左緣。
 - 讓工具頁保持安靜：紫色只出現在可互動與選取的地方，品牌表現留給行銷頁的幾何色塊。
 - 工具頁鎖定整頁捲動，讓每欄各自捲動。
 - 側欄使用固定寬度（360 或 384px），主區自適應。

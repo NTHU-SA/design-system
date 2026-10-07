@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="zh-Hant">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>主視覺與字體實驗室</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&family=Noto+Sans+TC:wght@100..900&display=swap">
+<style>
+/* Layout：單欄、每章 = 說明 + 對照示範；頁面本身用提案字體（Inter + Noto Sans TC），模擬畫面固定為亮色 */
+:root, [data-theme="light"].mock {
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --sunken: #F3F3F7;
+  --hover: #F3F3F7;
+  --active: #DCDBE6;
+  --border: #2D26501F;
+  --text-1: #303031;
+  --text-2: #4D4D4E;
+  --text-3: #6C6C6D;
+  --text-4: #8A8B8C;
+  --primary: #6E619C;
+  --primary-hover: #5D4F8B;
+  --primary-text: #6E619C;
+  --on-primary: #FFFFFF;
+  --seg-shadow: 0 3px 2px rgb(0 0 0 / 6%), 0 3px 8px rgb(0 0 0 / 15%), 0 0 1px rgb(0 0 0 / 4%);
+  --font-sys: "Inter", system-ui, sans-serif;
+  --font-noto: "Inter", "Noto Sans TC", system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
+  --feat: "cv05", "cv06", "cv12", "cv13", "ss07";
+  --paper: #F7F3EA;
+}
+[data-theme="light"].mock { color-scheme: light; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141317; --surface: #141317; --sunken: #0B0B0E; --hover: #242329; --active: #35343B;
+    --border: #FFFFFF1A; --text-1: #F1F3F5; --text-2: #D1D1D2; --text-3: #A4A4A6; --text-4: #717173;
+    --primary-hover: #796DA8; --primary-text: #9A8FC8;
+    --seg-shadow: 0 3px 2px rgb(0 0 0 / 20%), 0 3px 8px rgb(0 0 0 / 40%), 0 0 1px rgb(0 0 0 / 15%);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141317; --surface: #141317; --sunken: #0B0B0E; --hover: #242329; --active: #35343B;
+  --border: #FFFFFF1A; --text-1: #F1F3F5; --text-2: #D1D1D2; --text-3: #A4A4A6; --text-4: #717173;
+  --primary-hover: #796DA8; --primary-text: #9A8FC8;
+  --seg-shadow: 0 3px 2px rgb(0 0 0 / 20%), 0 3px 8px rgb(0 0 0 / 40%), 0 0 1px rgb(0 0 0 / 15%);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--text-2); font: 400 15px/1.6 var(--font-noto); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1280px; margin: 0 auto; padding-inline: 24px; padding-block: 40px 72px; display: grid; gap: 64px; }
+@media (max-width: 520px) { .wrap { padding-inline: 16px; gap: 48px; } }
+h1, h2, h3, h4, p { margin: 0; }
+.page-h1 { font-size: 30px; font-weight: 600; line-height: 1.3; color: var(--text-1); text-wrap: balance; }
+h2.sec { font-size: 22px; font-weight: 600; line-height: 1.35; color: var(--text-1); text-wrap: balance; }
+h3 { font-size: 16px; font-weight: 600; line-height: 1.4; color: var(--text-1); }
+.eyebrow { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: var(--text-3); }
+.lead { max-width: 720px; font-size: 16px; line-height: 1.6; }
+.caption { font-size: 12px; color: var(--text-3); line-height: 1.5; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+section, header.top { display: grid; gap: 20px; }
+header.top { gap: 12px; }
+.section-head { display: grid; gap: 8px; }
+.section-head p { max-width: 760px; }
+.notes { display: grid; gap: 6px; padding: 0; margin: 0; list-style: none; max-width: 860px; }
+.notes li { position: relative; padding-left: 14px; }
+.notes li::before { content: ""; position: absolute; left: 0; top: 11px; width: 4px; height: 4px; border-radius: 9999px; background: var(--text-4); }
+.notes strong { color: var(--text-1); font-weight: 600; }
+.card { border: 1px solid var(--border); border-radius: 8px; background: var(--surface); padding: 16px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 760px) { .grid-2 { grid-template-columns: minmax(0, 1fr); } }
+footer.foot { border-top: 1px solid var(--border); padding-top: 20px; color: var(--text-3); font-size: 13px; }
+
+/* 控制項 */
+.controls { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; }
+.ctl { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ctl-label { font-size: 13px; font-weight: 500; color: var(--text-3); }
+.seg { display: inline-flex; gap: 2px; padding: 3px; border-radius: 9999px; background: var(--hover); }
+.seg button { font: 500 13px/1 var(--font-noto); color: var(--text-3); background: transparent; border: 0; padding: 8px 12px; border-radius: 9999px; cursor: pointer; transition: color 100ms ease-in-out, background-color 100ms ease-in-out; }
+.seg button:hover { color: var(--text-1); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--text-1); box-shadow: var(--seg-shadow); }
+.seg button:focus-visible, .preset:focus-visible { outline: 2px solid var(--primary-text); outline-offset: 2px; }
+.presets { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.preset { font: 500 14px/1 var(--font-noto); height: 36px; padding: 0 14px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text-2); cursor: pointer; transition: background-color 100ms ease-in-out, color 100ms ease-in-out; }
+.preset:hover { background: var(--hover); color: var(--text-1); }
+.preset.primary { background: var(--primary); border-color: transparent; color: var(--on-primary); }
+.preset.primary:hover { background: var(--primary-hover); }
+
+/* 1. 字體 */
+.font-col h3 { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.weight-row { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: center; padding-block: 6px; border-top: 1px solid var(--border); }
+.weight-row:first-of-type { border-top: 0; }
+.weight-row .w { font: 12px var(--mono); color: var(--text-3); }
+.weight-row .sample { font-size: 22px; line-height: 1.3; color: var(--text-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ink { display: grid; grid-template-columns: 44px minmax(0, 1fr) 52px; gap: 12px; align-items: center; font-size: 12px; }
+.ink i { display: block; height: 8px; border-radius: 9999px; background: var(--primary-text); }
+.ink .track { background: var(--sunken); border-radius: 9999px; overflow: hidden; }
+.ink .mono { text-align: right; color: var(--text-3); }
+.ink .w { font: 12px var(--mono); color: var(--text-3); }
+
+/* 2. 字級 */
+.scale { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.scale-row { display: grid; grid-template-columns: 150px minmax(0, 1fr) minmax(0, 1fr); gap: 20px; padding: 14px 16px; border-top: 1px solid var(--border); align-items: center; }
+.scale-row:first-child { border-top: 0; }
+.scale-row.head { background: var(--sunken); padding-block: 8px; font-size: 12px; font-weight: 500; color: var(--text-3); }
+.scale-token { display: grid; gap: 2px; }
+.scale-token b { font: 600 13px var(--mono); color: var(--text-1); }
+.scale-token span { font: 11px var(--mono); color: var(--text-3); line-height: 1.5; }
+.spec { font: 11px var(--mono); color: var(--text-4); display: block; margin-top: 4px; }
+.cur, .pro { min-width: 0; color: var(--text-1); overflow-wrap: anywhere; }
+.cur { font-family: var(--font-sys); }
+.pro { font-family: var(--font-noto); }
+@media (max-width: 760px) {
+  .scale-row { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .scale-row.head { display: none; }
+  .cur::before, .pro::before { display: block; font: 500 11px var(--font-noto); color: var(--text-3); margin-bottom: 4px; }
+  .cur::before { content: "目前"; } .pro::before { content: "提案"; }
+}
+
+/* 3. 按鈕 */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid transparent; white-space: nowrap; font-family: var(--font-noto); font-weight: 500; line-height: 1; border-radius: var(--r, 6px); }
+.btn.primary { background: var(--primary); color: var(--on-primary); }
+.btn.secondary { background: var(--surface); color: var(--text-2); border-color: var(--border); }
+.btn.sm { height: 28px; padding: 0 10px; font-size: 13px; }
+.btn.now { height: 32px; padding: 0 12px; font-size: 13px; font-family: var(--font-sys); }
+.btn.md { height: 36px; padding: 0 14px; font-size: 14px; }
+.btn.lg { height: 44px; padding: 0 18px; font-size: 15px; }
+.btn svg { flex-shrink: 0; }
+.btn-table { display: grid; grid-template-columns: 120px repeat(2, auto) minmax(0, 1fr); gap: 14px 20px; align-items: center; }
+.btn-table .lbl { display: grid; gap: 2px; }
+.btn-table .lbl b { font-weight: 600; color: var(--text-1); font-size: 14px; }
+.btn-table .lbl span { font: 11px var(--mono); color: var(--text-3); }
+.btn-table .use { font-size: 13px; color: var(--text-3); }
+@media (max-width: 640px) { .btn-table { grid-template-columns: 96px auto auto; } .btn-table .use { display: none; } }
+.context { display: grid; gap: 12px; }
+.ctx-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+.ctx-row .ctx-name { font-size: 12px; font-weight: 500; color: var(--text-3); width: 72px; flex-shrink: 0; }
+.mini-nav { display: flex; align-items: center; gap: 4px; flex: 1; min-width: 0; flex-wrap: wrap; }
+.mini-nav .brand { font-size: 18px; font-weight: 600; color: var(--text-1); margin-right: auto; display: inline-flex; align-items: center; gap: 8px; }
+.mini-nav .item { font-size: 14px; font-weight: 500; color: var(--text-2); padding: 0 10px; }
+.logo { width: 28px; height: 28px; border-radius: 6px; background: var(--primary); display: grid; place-items: center; color: #FFFFFF; flex-shrink: 0; }
+
+/* 4. 模擬頁面 */
+.mock-wrap { border-radius: 8px; box-shadow: 0 0 0 1px rgb(128 128 128 / 35%); overflow: hidden; }
+.mock-scroll { overflow-x: auto; }
+.mock { min-width: 880px; background: var(--bg); color: var(--text-2); font-family: var(--ui-font); --ui-font: var(--font-noto); }
+.mock[data-ui="current"] { --ui-font: var(--font-sys); }
+.m-nav { display: flex; align-items: center; gap: 4px; height: 60px; padding: 0 40px; border-bottom: 1px solid var(--border); background: var(--surface); position: relative; z-index: 6; }
+.m-brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text-1); margin-right: auto; font-size: 18px; font-weight: 600; }
+.mock[data-ui="current"] .m-brand { font-size: 24px; font-weight: 580; font-feature-settings: var(--feat); }
+.mock[data-ui="current"] .m-nav { padding-left: 24px; }
+.m-item { font-size: 14px; font-weight: 500; color: var(--text-2); padding: 0 12px; }
+.mock[data-ui="current"] .m-item { font-size: 13px; color: var(--text-3); }
+.m-cta { margin-left: 12px; }
+.m-btn { display: inline-flex; align-items: center; gap: 8px; border: 1px solid transparent; font-weight: 500; line-height: 1; white-space: nowrap; font-family: var(--ui-font); }
+.m-btn.primary { background: var(--primary); color: var(--on-primary); }
+.m-btn.secondary { background: var(--surface); color: var(--text-2); border-color: var(--border); }
+.mock[data-ui="proposed"] .m-btn.md { height: 36px; padding: 0 14px; font-size: 14px; border-radius: 6px; }
+.mock[data-ui="proposed"] .m-btn.lg { height: 44px; padding: 0 18px; font-size: 15px; border-radius: 8px; }
+.mock[data-ui="current"] .m-btn { height: 32px; padding: 0 12px; font-size: 13px; border-radius: 4px; }
+.mock[data-ui="current"] .m-btn.secondary { color: var(--text-3); }
+
+.hero { position: relative; height: 660px; overflow: hidden; isolation: isolate; background: #FFFFFF; }
+.mock[data-paper="warm"] .hero { background: var(--paper); }
+.shape { position: absolute; display: block; transform: rotate(var(--rot, 0deg)); }
+.shape.back { z-index: 1; }
+.shape.front { z-index: 3; }
+.texture { position: absolute; inset: 52px 0 auto 0; z-index: 2; display: none; pointer-events: none; }
+.mock[data-texture="on"] .texture { display: grid; gap: 0; }
+.texture div { white-space: nowrap; font-family: var(--font-noto); font-weight: 200; font-size: 60px; line-height: 1.3; color: var(--text-1); letter-spacing: 0.02em; }
+.texture div:nth-child(2) { margin-left: -180px; }
+.texture div:nth-child(3) { margin-left: -60px; }
+.hero-copy { position: absolute; left: 40px; bottom: 44px; z-index: 5; display: grid; gap: 16px; max-width: 620px; }
+.mock[data-ui="current"] .hero-copy { left: 48px; }
+.h-eyebrow { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: var(--text-2); }
+.mock[data-ui="current"] .h-eyebrow { font-size: 14px; letter-spacing: 0; }
+.h-title { color: var(--text-1); font-family: var(--ui-font); text-wrap: balance; }
+.mock[data-title="bold"] .h-title { font-size: 44px; font-weight: 600; line-height: 1.25; }
+.mock[data-ui="current"][data-title="bold"] .h-title { font-size: 48px; line-height: 1.1; }
+.mock[data-title="light"] .h-title { font-family: var(--font-noto); font-size: 56px; font-weight: 300; line-height: 1.2; letter-spacing: 0.02em; }
+.mock[data-title="thin"] .h-title { font-family: var(--font-noto); font-size: 60px; font-weight: 200; line-height: 1.18; letter-spacing: 0.03em; }
+.h-lead { font-size: 16px; line-height: 1.6; color: var(--text-2); max-width: 500px; }
+.mock[data-ui="current"] .h-lead { line-height: 1.5; }
+.h-actions { display: flex; gap: 10px; margin-top: 4px; }
+
+.m-section { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 64px; padding: 56px 40px; border-top: 1px solid var(--border); background: var(--bg); }
+.mock[data-ui="current"] .m-section { grid-template-columns: 300px minmax(0, 1fr); padding: 48px 40px; }
+.m-h2 { color: var(--text-1); font-size: 28px; font-weight: 500; line-height: 1.35; }
+.mock[data-ui="current"] .m-h2 { font-size: 32px; line-height: 1.25; }
+.m-desc { margin-top: 8px; font-size: 15px; line-height: 1.6; color: var(--text-2); }
+.mock[data-ui="current"] .m-desc { font-size: 16px; line-height: 1.5; }
+.steps { display: grid; }
+.step { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 14px; padding: 14px 0; border-top: 1px solid var(--border); }
+.step:first-child { border-top: 0; padding-top: 0; }
+.step i { width: 28px; height: 28px; border-radius: 9999px; background: var(--sunken); display: grid; place-items: center; font: 600 12px var(--mono); color: var(--text-2); font-style: normal; }
+.step b { display: block; color: var(--text-1); font-size: 16px; font-weight: 600; line-height: 1.4; }
+.step span { font-size: 14px; line-height: 1.6; color: var(--text-3); }
+.mock[data-ui="current"] .step b { font-size: 14px; }
+.mock[data-ui="current"] .step span { font-size: 13px; line-height: 1.5; }
+
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) rotate(var(--rot, 0deg)); }
+  50% { transform: translate(var(--dx, 6px), var(--dy, -10px)) rotate(calc(var(--rot, 0deg) + var(--dr, 4deg))); }
+}
+.mock[data-motion="on"] .shape { animation: drift var(--dur, 12s) ease-in-out infinite; animation-delay: var(--delay, 0s); }
+@media (prefers-reduced-motion: reduce) { .mock[data-motion="on"] .shape { animation: none; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">DESIGN.md · 字體、按鈕與主視覺測試</span>
+    <h1 class="page-h1">主視覺與字體實驗室</h1>
+    <p class="lead">對照目前 DESIGN.md 做出來的網站與幾個修改提案。字體、字級、按鈕可以逐項比較；最下方的模擬頁面可以自由切換主視覺的色票、底色、標題字重、構圖與動態。</p>
+  </header>
+
+  <section aria-labelledby="font-title">
+    <div class="section-head"><span class="eyebrow">01 · 中文字體</span><h2 class="sec" id="font-title">為什麼中文看起來偏細</h2>
+      <p>目前的字體設定只有 Inter，中文會改用作業系統內建的字體。內建字體通常只有三種粗細，所以設成 500 的字會被畫成 400，設成 580 的字會直接跳到 700。下面的數字在你現在的瀏覽器上即時量測。</p></div>
+    <div class="grid-2" id="font-cols"></div>
+    <ul class="notes">
+      <li><strong>看左欄 400 和 500 是否一樣粗</strong>：一樣就代表系統字缺少 500，網站上所有「中等粗細」的中文都被畫成一般粗細。</li>
+      <li><strong>右欄每個字重都有差別</strong>：Noto Sans TC 是可變字體，100～900 之間的任何數值都能精確顯示，包括 DESIGN.md 用到的 580 和 660。</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="scale-title">
+    <div class="section-head"><span class="eyebrow">02 · 字級</span><h2 class="sec" id="scale-title">以中文為主的字級表</h2>
+      <p>中文字面比英文大，20px 以上的標題縮小約 10～15%；14px 以下的內文不縮，反而把 13px 調到 14px，並拉高行高。左欄是目前的系統字與字級，右欄是 Noto Sans TC 與提案字級。</p></div>
+    <div class="scale" id="scale"></div>
+  </section>
+
+  <section aria-labelledby="btn-title">
+    <div class="section-head"><span class="eyebrow">03 · 按鈕</span><h2 class="sec" id="btn-title">三種尺寸與圓角</h2>
+      <p>目前只有一種 32px 高、4px 圓角的按鈕。提案改成 28 / 36 / 44px 三種尺寸，可以切換圓角比較。</p></div>
+    <div class="controls" id="btn-controls"></div>
+    <div class="card"><div class="btn-table" id="btn-table"></div></div>
+    <div class="context" id="btn-context"></div>
+  </section>
+
+  <section aria-labelledby="hero-title">
+    <div class="section-head"><span class="eyebrow">04 · 主視覺</span><h2 class="sec" id="hero-title">模擬首頁</h2>
+      <p>「定案」是已寫入 DESIGN.md 的組合：海報取色、純白底、粗體標題、分散穿插。其他選項保留下來，方便之後比較。模擬頁面固定為亮色。</p></div>
+    <div class="presets"><button type="button" class="preset" data-preset="current">目前網站</button><button type="button" class="preset primary" data-preset="proposed">定案（已寫入 DESIGN.md）</button></div>
+    <div class="controls" id="hero-controls"></div>
+    <div class="mock-wrap"><div class="mock-scroll"><div class="mock" id="mock" data-theme="light"></div></div></div>
+    <ul class="notes">
+      <li><strong>色票</strong>：「海報取色」是直接從參考海報取樣的顏色，紅橙與綠的彩度明顯較高；「目前」是 DESIGN.md 的 <span class="mono">shape-*</span>。</li>
+      <li><strong>構圖</strong>：「集中右側」是目前網站的排法；「分散穿插」讓色塊分布到整個畫面，部分壓在文字上、部分在文字下。</li>
+      <li><strong>細體大字底紋</strong>建議搭配「分散穿插」一起看，這是參考海報最主要的特徵。</li>
+      <li>色塊上的文字一律是深色字，白字在這些色塊上的對比都不到 3.5:1。</li>
+    </ul>
+  </section>
+
+  <footer class="foot">頁面本身使用提案字體 Inter + Noto Sans TC（可變字體）。模擬頁面的「目前」選項使用 Inter + 系統字，還原目前網站的樣子。</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var ARROW = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>';
+  var BOOK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h6a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H4Z"/><path d="M20 5h-6a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h6Z"/></svg>';
+  var SUN = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+
+  function seg(action, label, opts, cur) {
+    return '<div class="ctl"><span class="ctl-label">' + label + '</span><div class="seg" role="group" aria-label="' + label + '">' +
+      opts.map(function (o) { return '<button type="button" data-action="' + action + '" data-value="' + o[0] + '" aria-pressed="' + (o[0] === cur) + '">' + o[1] + "</button>"; }).join("") + "</div></div>";
+  }
+
+  /* ── 01 字體 ── */
+  var SAMPLE = "處理流程　常見問題　幹部登入";
+  function inkOf(weight, stack) {
+    var c = document.createElement("canvas"); c.width = 460; c.height = 60;
+    var x = c.getContext("2d"); x.fillStyle = "#000"; x.textBaseline = "top";
+    x.font = weight + " 32px " + stack; x.fillText("處理流程常見問題", 0, 8);
+    var d = x.getImageData(0, 0, 460, 60).data, s = 0;
+    for (var i = 3; i < d.length; i += 4) s += d[i];
+    return Math.round(s / 255);
+  }
+  var WEIGHTS = [300, 400, 500, 600, 700];
+  function renderFonts(measured) {
+    var cols = [
+      { title: "系統字（目前網站）", stack: '"Inter", system-ui, sans-serif', css: "var(--font-sys)" },
+      { title: "Noto Sans TC（提案）", stack: '"Inter", "Noto Sans TC", system-ui, sans-serif', css: "var(--font-noto)" }
+    ];
+    $("font-cols").innerHTML = cols.map(function (col, ci) {
+      var inks = measured ? WEIGHTS.map(function (w) { return inkOf(w, col.stack); }) : null;
+      var max = inks ? Math.max.apply(null, inks) : 1;
+      var rows = WEIGHTS.map(function (w) {
+        return '<div class="weight-row"><span class="w">' + w + '</span><span class="sample" style="font-family:' + col.css + ";font-weight:" + w + '">' + SAMPLE + "</span></div>";
+      }).join("");
+      var bars = inks ? WEIGHTS.map(function (w, i) {
+        return '<div class="ink"><span class="w">' + w + '</span><span class="track"><i style="width:' + (inks[i] / max * 100).toFixed(1) + '%"></i></span><span class="mono">' + inks[i] + "</span></div>";
+      }).join("") : '<span class="caption">字體載入中…</span>';
+      return '<div class="card font-col"><h3>' + col.title + '<span class="caption">筆畫面積（越大越粗）</span></h3><div>' + rows + '</div><div style="display:grid;gap:6px">' + bars + "</div></div>";
+    }).join("");
+  }
+
+  /* ── 02 字級 ── */
+  var SCALE = [
+    ["wordmark", "24 / 580", "18 / 600", "學生申訴協力系統", { cur: "font-size:24px;font-weight:580;line-height:1.2", pro: "font-size:18px;font-weight:600;line-height:1.3" }],
+    ["display", "48 / 600 / 1.1", "44 / 600 / 1.25", "遇到校園問題<br>讓學生會陪你處理", { cur: "font-size:48px;font-weight:600;line-height:1.1", pro: "font-size:44px;font-weight:600;line-height:1.25" }],
+    ["headline-lg", "32 / 500 / 1.25", "28 / 500 / 1.35", "處理流程", { cur: "font-size:32px;font-weight:500;line-height:1.25", pro: "font-size:28px;font-weight:500;line-height:1.35" }],
+    ["headline-md", "24 / 660 / 1.2", "22 / 600 / 1.35", "程式設計 #01", { cur: "font-size:24px;font-weight:660;line-height:1.2", pro: "font-size:22px;font-weight:600;line-height:1.35" }],
+    ["title-lg", "20 / 580", "18 / 600 / 1.4", "確認送出申訴？", { cur: "font-size:20px;font-weight:580;line-height:1.25", pro: "font-size:18px;font-weight:600;line-height:1.4" }],
+    ["title-sm", "16 / 660", "16 / 600 / 1.4", "填寫申訴表單", { cur: "font-size:16px;font-weight:660;line-height:1.2", pro: "font-size:16px;font-weight:600;line-height:1.4" }],
+    ["body-lg", "16 / 400 / 1.5", "16 / 400 / 1.6", "填寫申訴表單後，你會收到案件編號與專屬查詢連結。學權幹部會在系統上回覆，你也可以隨時補充說明與檔案。", { cur: "font-size:16px;line-height:1.5", pro: "font-size:16px;line-height:1.6" }],
+    ["body-md", "14 / 400 / 1.5", "15 / 400 / 1.6", "系統會寄出確認信，裡面有案件編號與專屬查詢連結。學權幹部的回覆也會寄到你填寫的 email。", { cur: "font-size:14px;line-height:1.5", pro: "font-size:15px;line-height:1.6" }],
+    ["body-sm", "13 / 400 / 1.5", "14 / 400 / 1.6", "描述遇到的狀況與希望的處理方式，可以附上佐證檔案。", { cur: "font-size:13px;line-height:1.5", pro: "font-size:14px;line-height:1.6" }],
+    ["control", "13 / 500", "14 / 500", "處理流程　常見問題　幹部登入", { cur: "font-size:13px;font-weight:500;color:var(--text-3)", pro: "font-size:14px;font-weight:500;color:var(--text-2)" }],
+    ["caption", "12 / 400", "12 / 400 / 1.5", "9/20（五）23:59 · 78/80", { cur: "font-size:12px;color:var(--text-3)", pro: "font-size:12px;color:var(--text-3)" }],
+    ["overline", "11 / 600 / 全大寫", "12 / 500 / 字距 0.08em", "國立清華大學學生會", { cur: "font-size:11px;font-weight:600;letter-spacing:0.5px;color:var(--text-3)", pro: "font-size:12px;font-weight:500;letter-spacing:0.08em;color:var(--text-3)" }]
+  ];
+  function renderScale() {
+    $("scale").innerHTML = '<div class="scale-row head"><span>Token</span><span>目前（系統字）</span><span>提案（Noto Sans TC）</span></div>' +
+      SCALE.map(function (r) {
+        return '<div class="scale-row"><div class="scale-token"><b>' + r[0] + "</b><span>" + r[1] + " → " + r[2] + "</span></div>" +
+          '<div class="cur" style="' + r[4].cur + '">' + r[3] + '<span class="spec">' + r[1] + "</span></div>" +
+          '<div class="pro" style="' + r[4].pro + '">' + r[3] + '<span class="spec">' + r[2] + "</span></div></div>";
+      }).join("");
+  }
+
+  /* ── 03 按鈕 ── */
+  var btnState = { radius: "6" };
+  function renderButtons() {
+    $("btn-controls").innerHTML = seg("radius", "圓角", [["4", "4px（目前）"], ["6", "6px"], ["8", "8px"], ["step", "依尺寸 4 / 6 / 8"]], btnState.radius);
+    var r = function (size) { if (btnState.radius !== "step") return btnState.radius + "px"; return { sm: "4px", md: "6px", lg: "8px" }[size]; };
+    var row = function (name, spec, cls, size, use) {
+      var rad = size === "now" ? "4px" : r(size);
+      return '<div class="lbl"><b>' + name + "</b><span>" + spec + "</span></div>" +
+        '<span class="btn primary ' + cls + '" style="--r:' + rad + '">送出申訴</span>' +
+        '<span class="btn secondary ' + cls + '" style="--r:' + rad + '">了解處理流程</span><span class="use">' + use + "</span>";
+    };
+    $("btn-table").innerHTML =
+      row("目前", "32px · 13px · 4px", "now", "now", "唯一的尺寸") +
+      row("sm", "28px · 13px", "sm", "sm", "表格裡的小按鈕、篩選標籤") +
+      row("md", "36px · 14px", "md", "md", "預設：導覽列、對話框、一般操作") +
+      row("lg", "44px · 15px", "lg", "lg", "Hero 主要行動、表單送出、手機版");
+    $("btn-context").innerHTML =
+      '<div class="ctx-row"><span class="ctx-name">導覽列</span><div class="mini-nav"><span class="brand"><span class="logo">' + BOOK + '</span>學生申訴協力系統</span><span class="item">處理流程</span><span class="item">常見問題</span><span class="item">幹部登入</span><span class="btn primary md" style="--r:' + r("md") + '">送出申訴</span></div></div>' +
+      '<div class="ctx-row"><span class="ctx-name">Hero</span><span class="btn primary lg" style="--r:' + r("lg") + '">開始填寫申訴' + ARROW + '</span><span class="btn secondary lg" style="--r:' + r("lg") + '">了解處理流程</span></div>' +
+      '<div class="ctx-row"><span class="ctx-name">表單底部</span><span class="caption" style="flex:1;min-width:200px">送出前請再次確認內容；送出後可用 email 中的案件連結補充說明與檔案。</span><span class="btn primary lg" style="--r:' + r("lg") + '">送出申訴</span></div>';
+  }
+
+  /* ── 04 模擬首頁 ── */
+  var PAL = {
+    current: { purple: "#9281D4", mint: "#A4E9DB", red: "#E17E6D", tan: "#C5997A", green: "#5CC184" },
+    poster: { purple: "#8582C8", mint: "#82D3C3", red: "#F45930", tan: "#D5AA89", green: "#06B070" }
+  };
+  var SHAPES = {
+    ring: '<svg viewBox="0 0 100 100" width="100%" height="100%"><circle cx="50" cy="50" r="38" fill="none" stroke="COLOR" stroke-width="24"/></svg>',
+    star: '<svg viewBox="0 0 100 100" width="100%" height="100%"><path fill="COLOR" d="M50 0C54 34 66 46 100 50C66 54 54 66 50 100C46 66 34 54 0 50C34 46 46 34 50 0Z"/></svg>',
+    tri: '<svg viewBox="0 0 100 100" width="100%" height="100%"><path fill="COLOR" d="M8 92 50 4 96 78Z"/></svg>',
+    oct: '<svg viewBox="0 0 100 100" width="100%" height="100%"><path fill="COLOR" d="M30 2H70L98 30V70L70 98H30L2 70V30Z"/></svg>',
+    flag: '<svg viewBox="0 0 100 100" width="100%" height="100%"><path fill="COLOR" d="M0 0H100V64H58V100H0Z"/></svg>',
+    para: '<svg viewBox="0 0 100 60" width="100%" height="100%"><path fill="COLOR" d="M22 0H100L78 60H0Z"/></svg>'
+  };
+  // 目前網站的排法：全部集中右側、都在文字後面
+  var COMP_RIGHT = [
+    { s: "ring", c: "purple", z: "back", st: "right:-50px;top:-90px;width:400px;height:400px" },
+    { s: "tri", c: "tan", z: "back", st: "left:47%;top:28px;width:170px;height:170px", rot: -12 },
+    { s: "star", c: "mint", z: "back", st: "left:52%;top:250px;width:230px;height:230px", rot: 12 },
+    { s: "oct", c: "red", z: "back", st: "right:40px;top:300px;width:240px;height:240px", rot: 22 },
+    { s: "para", c: "green", z: "back", st: "right:-40px;bottom:-20px;width:300px;height:180px", rot: -6 }
+  ];
+  // 分散穿插：分布到整個畫面，部分在文字前、部分在文字後
+  var COMP_SPREAD = [
+    { s: "flag", c: "red", z: "front", st: "right:-40px;top:-50px;width:250px;height:250px", rot: 8 },
+    { s: "ring", c: "green", z: "back", st: "left:30%;top:120px;width:300px;height:300px" },
+    { s: "star", c: "mint", z: "front", st: "left:56%;top:40px;width:220px;height:220px", rot: -10 },
+    { s: "tri", c: "purple", z: "back", st: "right:9%;top:250px;width:220px;height:220px", rot: 18 },
+    { s: "oct", c: "tan", z: "back", st: "left:54%;bottom:-90px;width:270px;height:270px", rot: 10 },
+    { s: "para", c: "red", z: "front", st: "left:-40px;top:20px;width:190px;height:110px", rot: -18 },
+    { s: "star", c: "mint", z: "front", st: "right:-30px;bottom:30px;width:140px;height:140px", rot: 20 }
+  ];
+  var CURRENT = { ui: "current", palette: "current", paper: "white", title: "bold", comp: "right", texture: "off", motion: "off" };
+  var PROPOSED = { ui: "proposed", palette: "poster", paper: "white", title: "bold", comp: "spread", texture: "off", motion: "off" };
+  var hero = Object.assign({}, CURRENT);
+
+  function renderHeroControls() {
+    $("hero-controls").innerHTML =
+      seg("ui", "字體與元件", [["current", "目前"], ["proposed", "提案"]], hero.ui) +
+      seg("palette", "色票", [["current", "目前 shape"], ["poster", "海報取色"]], hero.palette) +
+      seg("paper", "底色", [["white", "純白"], ["warm", "暖白紙"]], hero.paper) +
+      seg("title", "標題", [["bold", "粗體 600"], ["light", "細體 300"], ["thin", "極細 200"]], hero.title) +
+      seg("comp", "構圖", [["right", "集中右側"], ["spread", "分散穿插"]], hero.comp) +
+      seg("texture", "細體大字底紋", [["off", "關"], ["on", "開"]], hero.texture) +
+      seg("motion", "動態", [["off", "關"], ["on", "慢速漂移"]], hero.motion);
+  }
+  function renderMock() {
+    var m = $("mock");
+    ["ui", "paper", "title", "texture", "motion"].forEach(function (k) { m.setAttribute("data-" + k, hero[k]); });
+    var pal = PAL[hero.palette];
+    var comp = hero.comp === "right" ? COMP_RIGHT : COMP_SPREAD;
+    var shapes = comp.map(function (sh, i) {
+      var motion = "--dur:" + (10 + (i % 4) * 2.5) + "s;--delay:" + (-i * 1.7) + "s;--dx:" + (i % 2 ? 8 : -6) + "px;--dy:" + (i % 3 ? -10 : 8) + "px;--dr:" + (i % 2 ? 4 : -3) + "deg;";
+      return '<span class="shape ' + sh.z + '" style="' + sh.st + ";--rot:" + (sh.rot || 0) + "deg;" + motion + '">' + SHAPES[sh.s].replace("COLOR", pal[sh.c]) + "</span>";
+    }).join("");
+    var tex = "陪你處理每一個校園問題　陪你處理每一個校園問題　陪你處理每一個校園問題";
+    var cta = hero.ui === "current" ? "" : " lg";
+    m.innerHTML =
+      '<div class="m-nav"><span class="m-brand"><span class="logo">' + BOOK + '</span>學生申訴協力系統</span>' +
+        '<span class="m-item">處理流程</span><span class="m-item">常見問題</span><span class="m-item">幹部登入</span>' +
+        '<span class="m-item" style="color:var(--text-3);display:inline-flex">' + SUN + '</span><span class="m-btn primary md m-cta">送出申訴</span></div>' +
+      '<div class="hero">' + shapes +
+        '<div class="texture" aria-hidden="true"><div>' + tex + "</div><div>" + tex + "</div><div>" + tex + "</div></div>" +
+        '<div class="hero-copy"><span class="h-eyebrow">國立清華大學學生會</span>' +
+          '<h3 class="h-title">遇到校園問題<br>讓學生會陪你處理</h3>' +
+          '<p class="h-lead">填寫申訴表單後，你會收到案件編號與專屬查詢連結。學權幹部會在系統上回覆，你也可以隨時補充說明與檔案。</p>' +
+          '<div class="h-actions"><span class="m-btn primary' + cta + '">開始填寫申訴' + ARROW + '</span><span class="m-btn secondary' + cta + '">了解處理流程</span></div></div>' +
+      "</div>" +
+      '<div class="m-section"><div><h4 class="m-h2">處理流程</h4><p class="m-desc">從送出到結案，幹部的正式回覆都會先經過部長審核，再寄送給你。</p></div>' +
+        '<div class="steps">' +
+          '<div class="step"><i>1</i><div><b>填寫申訴表單</b><span>描述遇到的狀況與希望的處理方式，可以附上佐證檔案。</span></div></div>' +
+          '<div class="step"><i>2</i><div><b>收到案件連結</b><span>系統把案件編號與專屬查詢連結寄到你的 email。</span></div></div>' +
+          '<div class="step"><i>3</i><div><b>學權幹部處理</b><span>幹部撰寫回覆並經部長審核後寄給你；過程中可以用連結補充說明與檔案。</span></div></div>' +
+        "</div></div>";
+  }
+
+  /* ── 互動 ── */
+  document.addEventListener("click", function (e) {
+    var p = e.target.closest("[data-preset]");
+    if (p) { hero = Object.assign({}, p.getAttribute("data-preset") === "current" ? CURRENT : PROPOSED); renderHeroControls(); renderMock(); return; }
+    var b = e.target.closest("[data-action]");
+    if (!b) return;
+    var a = b.getAttribute("data-action"), v = b.getAttribute("data-value");
+    if (a === "radius") { btnState.radius = v; renderButtons(); return; }
+    hero[a] = v; renderHeroControls(); renderMock();
+  });
+
+  renderFonts(false); renderScale(); renderButtons(); renderHeroControls(); renderMock();
+  var loads = WEIGHTS.map(function (w) { return document.fonts.load(w + ' 32px "Noto Sans TC"', "處理流程常見問題"); });
+  Promise.all(loads.concat([document.fonts.ready])).then(function () { renderFonts(true); }, function () { renderFonts(true); });
+})();
+</script>
