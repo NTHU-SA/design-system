@@ -213,17 +213,20 @@ details.data th { font-weight: 500; color: var(--text-3); }
       desc: "<b>A 圖表階：</b>色相與順序都不變，每色另外做一個給圖表用的階：明度拉進 0.64～0.68、彩度至少 0.105。對比與彩度都過了，但草綠和駝色在綠色盲下還是太像（差距 4.9）。" },
     B: { label: "B 換順序", order: [0, 1, 2, 7, 4, 3, 5, 6],
       desc: "<b>B 換順序：</b>用 A 的顏色，改排成色盲差距最大的順序（薰衣草紫 → 珊瑚紅 → 薄荷綠 → 駝色 → 天空藍 → 芥末黃 → 莓果粉 → 草綠）。最小差距提高到 6.5，只是勉強及格，一定要搭配標籤或間隔；而且打亂了原本的冷暖交錯。5040 種排法裡沒有任何一種能超過 8。" },
-    C: { label: "C 明暗交錯（建議）", fill: { light: ["#9180D3", "#D16F5F", "#2AA18F", "#B0922E", "#489CC9", "#AA5E83", "#3FA66B", "#A56633"], dark: ["#8877C9", "#B65747", "#219A89", "#A78922", "#3B90BC", "#A75B80", "#3FA66B", "#A26330"] },
-      desc: "<b>C 明暗交錯（建議）：</b>色相與冷暖交錯的順序都不變，只把莓果粉和駝色調深一階（暗色模式再加珊瑚紅），讓相鄰的綠色和暖色靠明暗分開。色盲最小差距 8.5（暗色 9.1），所有檢查都通過。駝色的圖表階會偏焦糖色。" }
+    C: { label: "C 明暗交錯", fill: { light: ["#9180D3", "#D16F5F", "#2AA18F", "#B0922E", "#489CC9", "#AA5E83", "#3FA66B", "#A56633"], dark: ["#8877C9", "#B65747", "#219A89", "#A78922", "#3B90BC", "#A75B80", "#3FA66B", "#A26330"] },
+      desc: "<b>C 明暗交錯：</b>色相與冷暖交錯的順序都不變，只把莓果粉和駝色調深一階（暗色模式再加珊瑚紅），讓相鄰的綠色和暖色靠明暗分開。檢查全部通過，暗色版很好看；但亮色版的暖色被壓暗後變成梅子、咖啡、橄欖色，整體灰濁。" },
+    D: { label: "D 暖亮冷深（建議）", fill: { light: ["#917FD6", "#D95C48", "#219A89", "#CCAB40", "#489CC9", "#D969A2", "#28774B", "#C78350"], dark: ["#8877C9", "#B65747", "#219A89", "#A78922", "#3B90BC", "#A75B80", "#3FA66B", "#A26330"] },
+      desc: "<b>D 暖亮冷深（建議）：</b>亮色版反過來調：暖色（珊瑚、芥末、莓果、駝色）保持明亮、不壓暗，改把草綠壓深成森林綠，靠明暗和相鄰的暖色分開；彩度控制在螢幕極限的 6～7 成，不會變濃烈。色盲最小差距 8.3。芥末黃為了不變橄欖色，白底對比只有 2.22:1，一定要搭配圖例或標籤。暗色版沿用 C。" }
   };
   OPTS.B.fill = { light: OPTS.B.order.map(function (i) { return OPTS.A.fill.light[i]; }), dark: OPTS.B.order.map(function (i) { return OPTS.A.fill.dark[i]; }) };
-  ["A", "B", "C"].forEach(function (k) { OPTS[k].line = OPTS[k].fill; });
+  ["A", "B", "C", "D"].forEach(function (k) { OPTS[k].line = OPTS[k].fill; });
   var METRICS = [
     { key: "current", name: "現行原色", sub: "長條、色塊", cvd: "1.8 / 1.8", nv: "14.5 / 14.5", con: "1.38 / 5.56", band: "fail", warm: true, verdict: ["fail", "適合有字的色塊與標籤，不適合當圖表的線與長條"] },
     { key: "current", name: "現行細線階", sub: "折線", sw: "line", cvd: "2.3 / 1.8", nv: "13.9 / 14.5", con: "3.00 / 5.56", band: "fail", warm: true, verdict: ["fail", "對比夠了，但薄荷、駝色太灰，草綠和駝色分不開"] },
     { key: "A", name: "A 圖表階", sub: "只調明度與彩度", cvd: "4.9 / 5.3", nv: "16.0 / 15.9", con: "3.00 / 4.87", band: "pass", warm: true, verdict: ["fail", "對比與彩度過了，草綠和駝色對色盲仍分不開"] },
     { key: "B", name: "B 換順序", sub: "A 的顏色重新排序", cvd: "6.5 / 6.2", nv: "17.8 / 17.8", con: "3.00 / 4.87", band: "pass", warm: false, verdict: ["warn", "勉強及格，必須搭配標籤或間隔；冷暖交錯被打亂"] },
-    { key: "C", name: "C 明暗交錯", sub: "建議", cvd: "8.5 / 9.1", nv: "16.0 / 15.9", con: "3.00 / 3.84", band: "pass", warm: true, verdict: ["pass", "全部通過；色相與順序不變，只調深 2～3 色"] }
+    { key: "C", name: "C 明暗交錯", sub: "壓暗暖色", cvd: "8.5 / 9.1", nv: "16.0 / 15.9", con: "3.00 / 3.84", band: "pass", warm: true, verdict: ["warn", "檢查全部通過，但亮色版的暖色被壓暗，看起來灰濁"] },
+    { key: "D", name: "D 暖亮冷深", sub: "建議；暗色沿用 C", cvd: "8.3 / 9.1", nv: "21.1 / 15.9", con: "2.22 / 3.84", band: "pass", warm: true, verdict: ["pass", "暖色保持明亮，只壓深草綠；芥末黃要靠圖例與標籤補對比"] }
   ];
   var RAMP = { light: ["#B8B3CF", "#9991BD", "#796EA5", "#5A4F81", "#39344D"], dark: ["#4E4866", "#6A618E", "#887CB5", "#A9A1CE", "#CECBE0"] };
   var state = { opt: "current", cvd: "none" };
@@ -445,7 +448,7 @@ details.data th { font-weight: 500; color: var(--text-3); }
   }
 
   function renderAll() {
-    seg("seg-opt", [["current", "現行原色"], ["A", "A 圖表階"], ["B", "B 換順序"], ["C", "C 明暗交錯（建議）"]], state.opt, "opt");
+    seg("seg-opt", [["current", "現行原色"], ["A", "A 圖表階"], ["B", "B 換順序"], ["C", "C 明暗交錯"], ["D", "D 暖亮冷深（建議）"]], state.opt, "opt");
     seg("seg-cvd", [["none", "一般"], ["deutan", "綠色盲"], ["protan", "紅色盲"]], state.cvd, "cvd");
     $("opt-desc").innerHTML = OPTS[state.opt].desc;
     $("sim").className = "sim" + (state.cvd === "none" ? "" : " " + state.cvd);
