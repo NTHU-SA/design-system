@@ -18,7 +18,7 @@
 .tasks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .task { border: 1px solid var(--border); border-radius: 8px; padding: 24px; display: grid; gap: 16px; align-content: space-between; background: var(--surface); }
 .task-text { display: grid; gap: 6px; }
-.task-icon { width: 44px; height: 44px; border-radius: 9999px; background: var(--shape-ink); color: var(--shape-glyph); display: grid; place-items: center; margin-bottom: 8px; }
+.task-icon { width: 44px; height: 44px; border-radius: 9999px; background: var(--text-1); color: var(--surface); display: grid; place-items: center; margin-bottom: 8px; }
 .task-text p { color: var(--text-2); }
 .task-cta { width: fit-content; }
 .lookup { display: grid; gap: 6px; }
@@ -176,13 +176,13 @@
 <script>
 (function () {
   "use strict";
-  // 品牌單色：炭黑約一半面積、紫只有代表形狀與一個圓；炭黑色塊帶白色圖示（學生會的各個系統）
+  // 品牌單色：炭黑約一半面積、紫只有代表形狀與一個圓；色塊內不放文字與圖示
   var SHAPES = [
     ["star", "--primary", 170, 170, 0], ["arch", "--shape-ink", 134, 168, 0], ["semi", "--shape-pale", 206, 103, 0],
-    ["circle", "--shape-ink", 108, 108, 0, "chat"], ["roundsq", "--shape-mist", 116, 116, 8], ["tri", "--shape-pale", 134, 124, 0],
-    ["quarter", "--shape-ink", 134, 134, 0], ["circle", "--shape-ink", 96, 96, 0, "door"], ["circle", "--primary", 86, 86, 0],
+    ["circle", "--shape-ink", 108, 108, 0], ["roundsq", "--shape-mist", 116, 116, 8], ["tri", "--shape-pale", 134, 124, 0],
+    ["quarter", "--shape-ink", 134, 134, 0], ["circle", "--shape-ink", 96, 96, 0], ["circle", "--primary", 86, 86, 0],
     ["dshape", "--shape-mist", 116, 116, 90], ["pill", "--shape-ink", 188, 76, 0], ["semi", "--shape-pale", 152, 76, 0],
-    ["circle", "--shape-ink", 98, 98, 0, "vote"], ["arch", "--shape-mist", 98, 124, 0]
+    ["circle", "--shape-ink", 98, 98, 0], ["arch", "--shape-mist", 98, 124, 0]
   ];
   document.addEventListener("DOMContentLoaded", function () {
     Site.pile(document.getElementById("footer-pile"), {

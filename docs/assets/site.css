@@ -1,4 +1,4 @@
-/* 學生申訴協力系統：示範網站共用樣式。token 對應 DESIGN.md；色票試用「品牌單色」：主視覺只用原始色票的炭黑、紫、淡紫灰，加上白色圖示 */
+/* 學生申訴協力系統：示範網站共用樣式。token 對應 DESIGN.md；主視覺用品牌單色：只用主視覺色票的炭黑、紫、霧紫、淡紫灰 */
 :root {
   color-scheme: light;
   --bg: #FFFFFF;
@@ -21,12 +21,11 @@
   --danger: #E17E6D; --danger-text: #B85A4A; --danger-hover: #A44839; --danger-tint: #FAEAE8;
   --info: #67B5E1; --info-text: #2C7DA7; --info-tint: #E7F3FA;
   --highlight: #9281D4; --highlight-text: #7A69BA; --highlight-tint: #EEEBF8;
-  /* 主視覺色塊：炭黑是主角（約一半面積），紫只占一成多，淡紫灰與霧紫負責襯托；炭黑色塊上放白色圖示 */
-  --shape-ink: #2D2D2D;
+  /* 主視覺色塊：炭黑是主角（約一半面積），紫只占一成左右，霧紫與淡紫灰負責襯托；色塊內不放文字與圖示 */
+  --shape-ink: #303031;
   --shape-mist: #ACA6C2;
   --shape-pale: #DCDBE6;
-  --shape-glyph: #FFFFFF;
-  --footer-bg: #2D2D2D;
+  --footer-bg: #303031;
   --footer-text: #F1F3F5;
   --footer-text-2: #D1D1D2;
   --footer-text-3: #A4A4A6;
@@ -59,11 +58,10 @@
   --danger-text: #E17E6D; --danger-tint: #412B2A;
   --info-text: #67B5E1; --info-tint: #263743;
   --highlight-text: #9281D4; --highlight-tint: #302B41;
-  /* 暗色模式：明暗對調，炭黑色塊變成淡紫灰、圖示變成炭黑 */
-  --shape-ink: #E0DDE8;
+  /* 暗色模式：明暗對調，炭黑色塊變成淡紫灰 */
+  --shape-ink: #DCDBE6;
   --shape-mist: #646076;
   --shape-pale: #3D3C43;
-  --shape-glyph: #2D2D2D;
   --footer-bg: #222224;
   --shadow-2: 0 12px 24px rgb(0 0 0 / 50%), 0 0 0 1px rgb(255 255 255 / 8%);
   --seg-shadow: 0 3px 2px rgb(0 0 0 / 20%), 0 3px 8px rgb(0 0 0 / 40%), 0 0 1px rgb(0 0 0 / 15%);
