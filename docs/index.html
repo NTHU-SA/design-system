@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="zh-Hant">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>學生申訴協力系統</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&family=Noto+Sans+TC:wght@100..900&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/site.js"></script>
+<style>
+/* 首頁：沒有 Hero。第一屏就是兩個任務入口，品牌感留給標題的四角星與頁尾的物理堆疊 */
+.intro { padding-block: 56px 64px; display: grid; gap: 32px; }
+.intro-head { display: grid; gap: 14px; max-width: 760px; }
+.intro-head .star { display: inline-block; width: 0.72em; height: 0.72em; margin-left: 0.18em; vertical-align: -0.02em; }
+.intro-head .body-lg { max-width: 560px; color: var(--text-2); }
+.tasks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.task { border: 1px solid var(--border); border-radius: 8px; padding: 24px; display: grid; gap: 16px; align-content: space-between; background: var(--surface); }
+.task-text { display: grid; gap: 6px; }
+.task-text p { color: var(--text-2); }
+.task-cta { width: fit-content; }
+.lookup { display: grid; gap: 6px; }
+.lookup-row { display: flex; gap: 8px; }
+.lookup-row .input { flex: 1; min-width: 0; height: 44px; font-family: var(--mono); letter-spacing: 0.04em; }
+.facts { display: flex; flex-wrap: wrap; gap: 10px 28px; font-size: 14px; color: var(--text-3); }
+.facts li { display: inline-flex; align-items: center; gap: 8px; }
+.facts svg { color: var(--text-3); }
+.steps { display: grid; }
+.step { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 16px; padding: 18px 0; border-top: 1px solid var(--border); }
+.step:first-child { border-top: 0; padding-top: 4px; }
+.step-no { width: 32px; height: 32px; border-radius: 9999px; background: var(--sunken); display: grid; place-items: center; font: 600 13px var(--mono); color: var(--text-2); }
+.step-body { display: grid; gap: 4px; }
+.step-body p { font-size: 14px; color: var(--text-3); }
+.step-time { font-size: 12px; color: var(--text-3); font-family: var(--mono); }
+.section-rule { border-top: 1px solid var(--border); }
+.closing { position: relative; border-top: 1px solid var(--border); }
+.closing-copy { position: absolute; z-index: 1; top: 56px; display: grid; gap: 12px; max-width: 420px; }
+.closing-copy p { color: var(--text-2); }
+.closing-copy .btn { width: fit-content; margin-top: 4px; }
+.footer-stage { height: 380px; }
+@media (max-width: 768px) {
+  .intro { padding-block: 32px 40px; gap: 24px; }
+  .tasks { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .task { padding: 20px; }
+  .task .task-cta { width: 100%; }
+  .facts { flex-direction: column; gap: 8px; }
+  .closing-copy { position: static; padding-top: 36px; }
+  .footer-stage { height: 220px; }
+}
+</style>
+
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="index.html"><span class="logo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h6a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H4Z"/><path d="M20 5h-6a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h6Z"/></svg></span><span>學生申訴協力系統</span></a>
+    <nav class="nav-links" aria-label="主要導覽">
+      <a class="nav-link" href="#flow">處理流程</a>
+      <a class="nav-link" href="#faq">常見問題</a>
+      <a class="nav-link" href="case.html">查詢案件</a>
+    </nav>
+    <div class="nav-actions">
+      <button type="button" class="btn icon-btn" data-theme-toggle></button>
+      <a class="btn btn-primary nav-cta" href="apply.html">送出申訴</a>
+      <button type="button" class="btn icon-btn menu-btn" data-menu-toggle aria-controls="mobile-menu"></button>
+    </div>
+  </div>
+</header>
+<div id="mobile-menu" class="mobile-menu" hidden>
+  <nav class="container" aria-label="手機版導覽">
+    <a class="big" href="#flow">處理流程</a>
+    <a class="big" href="#faq">常見問題</a>
+    <a class="big" href="case.html">查詢案件</a>
+    <a class="btn btn-primary btn-lg btn-block" href="apply.html">送出申訴</a>
+  </nav>
+</div>
+
+<main>
+  <section class="container intro" aria-labelledby="intro-title">
+    <div class="intro-head">
+      <span class="overline">國立清華大學學生會 · 學生權益部</span>
+      <h1 class="display" id="intro-title">遇到校園問題<br>讓學生會陪你處理<svg class="star" viewBox="0 0 100 100" aria-hidden="true"><path fill="var(--shape-red)" d="M50 0C54 34 66 46 100 50C66 54 54 66 50 100C46 66 34 54 0 50C34 46 46 34 50 0Z"/></svg></h1>
+      <p class="body-lg">宿舍、課程、獎助學金、校園安全，任何讓你權益受損的事都可以在這裡提出。學權幹部會在 3 個工作天內第一次回覆你。</p>
+    </div>
+    <div class="tasks">
+      <div class="task">
+        <div class="task-text">
+          <h2 class="title-lg">送出新申訴</h2>
+          <p>大約 5 分鐘，手機也能填。送出後會收到案件編號與專屬查詢連結，不需要註冊帳號。</p>
+        </div>
+        <a class="btn btn-primary btn-lg task-cta" href="apply.html">開始填寫申訴<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="task">
+        <div class="task-text">
+          <h2 class="title-lg">查詢案件進度</h2>
+          <p>輸入案件編號，或直接點確認信裡的連結。</p>
+        </div>
+        <form class="lookup" id="lookup" novalidate>
+          <label class="field-label" for="case-no" style="font-size:14px">案件編號</label>
+          <div class="lookup-row">
+            <input class="input" id="case-no" name="case" inputmode="text" autocapitalize="characters" autocomplete="off" placeholder="A-0912" value="A-0912" aria-describedby="case-err">
+            <button class="btn btn-secondary btn-lg" type="submit">查詢</button>
+          </div>
+          <p class="field-error" id="case-err" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/></svg><span>案件編號是「A-」加上 4 個數字，例如 A-0912</span></p>
+        </form>
+      </div>
+    </div>
+    <ul class="facts">
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 4.4 3.4 8.2 8 9 4.6-.8 8-4.6 8-9V6Z"/></svg>可以選擇不公開身分</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 15 5-5 4 4 3-3 6 6"/></svg>可以直接用手機拍照附上</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>進度與回覆都會寄到你的信箱</li>
+    </ul>
+  </section>
+
+  <div class="section-rule"></div>
+  <section class="container split" id="flow" aria-labelledby="flow-title">
+    <div class="split-head">
+      <h2 class="headline-lg" id="flow-title">處理流程</h2>
+      <p class="muted">從送出到結案，幹部的正式回覆都會先經過部長審核，再寄給你。</p>
+    </div>
+    <ol class="steps">
+      <li class="step"><span class="step-no">1</span><div class="step-body"><b class="title-sm">填寫申訴表單</b><p>描述遇到的狀況與希望的處理方式，可以附上照片或檔案。</p><span class="step-time">約 5 分鐘</span></div></li>
+      <li class="step"><span class="step-no">2</span><div class="step-body"><b class="title-sm">收到案件連結</b><p>系統把案件編號與專屬查詢連結寄到你的信箱，之後隨時可以補充說明。</p><span class="step-time">送出後立即</span></div></li>
+      <li class="step"><span class="step-no">3</span><div class="step-body"><b class="title-sm">學權幹部處理</b><p>幹部了解狀況、向相關單位反映，回覆經部長審核後寄給你。</p><span class="step-time">3 個工作天內第一次回覆</span></div></li>
+      <li class="step"><span class="step-no">4</span><div class="step-body"><b class="title-sm">結案</b><p>問題處理完成，或你確認不需要再協助時結案。結案後 30 天內都可以重新開啟。</p></div></li>
+    </ol>
+  </section>
+
+  <div class="section-rule"></div>
+  <section class="container split" id="faq" aria-labelledby="faq-title">
+    <div class="split-head">
+      <h2 class="headline-lg" id="faq-title">常見問題</h2>
+      <p class="muted">找不到答案的話，直接送出申訴也可以，幹部會回覆你。</p>
+    </div>
+    <div class="accordion">
+      <details class="acc-item" open><summary>學校會知道是我申訴的嗎？<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><p class="acc-body">填表時可以選擇「不公開我的身分」。幹部向校方反映時，只會說明狀況，不會提到你的姓名、學號或系級。</p></details>
+      <details class="acc-item"><summary>需要準備什麼資料？<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><p class="acc-body">只需要學校信箱與事情的經過。照片、截圖、往來信件可以讓幹部更快了解狀況，但不是必填。</p></details>
+      <details class="acc-item"><summary>多久會收到回覆？<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><p class="acc-body">送出後 3 個工作天內會收到第一次回覆。需要和校方來回溝通的案件，幹部會在每次有進展時通知你。</p></details>
+      <details class="acc-item"><summary>送出後可以補充或修改嗎？<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><p class="acc-body">可以。打開確認信裡的案件連結，就能補充說明、加上檔案，或回覆幹部的提問。</p></details>
+      <details class="acc-item"><summary>不是清大學生可以申訴嗎？<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><p class="acc-body">這個系統只受理在學學生的案件，需要用學校信箱收信。交換生與研究生都可以使用。</p></details>
+    </div>
+  </section>
+
+  <section class="closing" aria-labelledby="closing-title">
+    <div class="container" style="position:relative">
+      <div class="closing-copy">
+        <h2 class="headline-lg" id="closing-title">不確定算不算申訴</h2>
+        <p>先寫下來就好。幹部會幫你判斷該找哪個單位，你也可以選擇只讓學生會知道。</p>
+        <a class="btn btn-primary btn-lg" href="apply.html">開始填寫申訴</a>
+      </div>
+    </div>
+    <div class="pile footer-stage" id="footer-pile"></div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-main">
+    <div class="footer-brand">
+      <a class="brand" href="index.html"><span class="logo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h6a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H4Z"/><path d="M20 5h-6a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h6Z"/></svg></span><span>學生申訴協力系統</span></a>
+      <p>國立清華大學學生會學生權益部經營。每一件申訴都由幹部親自閱讀與回覆。</p>
+      <span class="sys-status"><i></i>系統正常運作</span>
+    </div>
+    <div class="footer-col"><h2>申訴服務</h2><a href="apply.html">送出申訴</a><a href="case.html">查詢案件</a><a href="#flow">處理流程</a><a href="#faq">常見問題</a></div>
+    <div class="footer-col"><h2>學生會</h2><a href="#">學生權益部</a><a href="#">隱私權政策</a><a href="#">聯絡我們</a></div>
+    <div class="footer-col"><h2>其他系統</h2><a href="#">空間借用</a><a href="#">學生會投票</a><a href="#">學生會資訊</a><a href="admin.html">幹部後台</a></div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© 2026 國立清華大學學生會</span>
+    <nav aria-label="法律資訊"><a href="#">隱私權政策</a><a href="#">使用條款</a></nav>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+<script>
+(function () {
+  "use strict";
+  // 申訴系統的代表形狀是四角星＋紅；同一個構圖只混用海報系（星、三角）與堆疊系
+  var SHAPES = [
+    ["star", "--shape-red", 170, 170, 0], ["arch", "--shape-teal", 134, 168, 0], ["semi", "--shape-gray", 206, 103, 0],
+    ["circle", "--primary", 108, 108, 0], ["roundsq", "--shape-gray", 116, 116, 8], ["tri", "--shape-teal", 134, 124, 0],
+    ["quarter", "--shape-red", 134, 134, 0], ["pill", "--shape-teal", 188, 76, 0], ["circle", "--shape-red", 86, 86, 0],
+    ["dshape", "--primary", 116, 116, 90], ["semi", "--shape-teal", 152, 76, 0], ["circle", "--shape-gray", 98, 98, 0],
+    ["arch", "--shape-red", 98, 124, 0], ["roundsq", "--primary", 90, 90, -6]
+  ];
+  document.addEventListener("DOMContentLoaded", function () {
+    Site.pile(document.getElementById("footer-pile"), {
+      shapes: SHAPES, start: "visible", minScale: 0.5,
+      left: function (W) { return W > 768 ? (Math.max(0, (W - 1200) / 2) + 500) / W : 0; },
+      max: function (W) { return W > 992 ? 14 : W > 520 ? 11 : 9; }
+    });
+    document.getElementById("lookup").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var input = document.getElementById("case-no"), err = document.getElementById("case-err");
+      var v = input.value.trim().toUpperCase().replace(/^A(\d)/, "A-$1");
+      var ok = /^A-\d{4}$/.test(v);
+      err.hidden = ok; input.setAttribute("aria-invalid", String(!ok));
+      if (ok) location.href = "case.html"; else input.focus();
+    });
+  });
+})();
+</script>

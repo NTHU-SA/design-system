@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="zh-Hant">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>填寫申訴</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&family=Noto+Sans+TC:wght@100..900&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/site.js"></script>
+<style>
+/* 填寫申訴：強度 3 頁首點綴＋分步驟表單。手機優先：一次一步、底部固定按鈕、44px 控制項、16px 輸入字 */
+.save-state { font-size: 13px; color: var(--text-3); display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.save-state svg { color: var(--success-text); }
+.apply { display: grid; grid-template-columns: 280px minmax(0, 680px); gap: 64px; padding-block: 40px 96px; align-items: start; }
+.stepnav { position: sticky; top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 32px); display: grid; gap: 4px; }
+.stepnav button { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; align-items: start; width: 100%; padding: 10px 12px; border: 0; border-radius: 8px; background: transparent; text-align: left; cursor: pointer; transition: background-color 100ms ease-in-out; }
+@media (hover: hover) { .stepnav button:hover:not(:disabled) { background: var(--hover); } }
+.stepnav button:disabled { cursor: default; }
+.stepnav .no { width: 28px; height: 28px; border-radius: 9999px; display: grid; place-items: center; font: 600 12px var(--mono); background: var(--sunken); color: var(--text-3); }
+.stepnav .txt { display: grid; gap: 2px; padding-top: 3px; }
+.stepnav .txt b { font-size: 15px; font-weight: 500; line-height: 1.4; color: var(--text-3); }
+.stepnav .txt span { font-size: 13px; line-height: 1.5; color: var(--text-3); }
+.stepnav [aria-current="step"] .no { background: var(--primary); color: var(--on-primary); }
+.stepnav [aria-current="step"] .txt b { color: var(--text-1); font-weight: 600; }
+.stepnav .done .no { background: var(--active); color: var(--text-1); }
+.stepnav .done .txt b { color: var(--text-1); }
+.progress { display: none; }
+.progress .container { width: 100%; }
+.panel { display: grid; gap: 28px; }
+.panel-head { display: grid; gap: 4px; }
+.panel-head h2 { outline: none; }
+.panel-head p { color: var(--text-3); font-size: 15px; }
+.group { display: grid; gap: 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.tile { position: relative; display: grid; gap: 2px; align-content: start; min-height: 76px; padding: 12px 36px 12px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); cursor: pointer; transition: background-color 100ms ease-in-out, border-color 100ms ease-in-out; }
+@media (hover: hover) { .tile:hover { background: var(--hover); } }
+.tile input { position: absolute; opacity: 0; pointer-events: none; }
+.tile b { font-size: 15px; font-weight: 500; line-height: 1.4; color: var(--text-1); }
+.tile span { font-size: 13px; line-height: 1.5; color: var(--text-3); }
+.tile::after { content: ""; position: absolute; top: 12px; right: 12px; width: 18px; height: 18px; border-radius: 9999px; border: 2px solid var(--border); box-sizing: border-box; }
+.tile:has(input:checked) { border-color: var(--primary-text); box-shadow: inset 0 0 0 1px var(--primary-text); }
+.tile:has(input:checked)::after { border: 0; background: var(--primary) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12 5 5 9-10'/%3E%3C/svg%3E") center / 12px no-repeat; }
+.tile:has(input:focus-visible) { outline: 2px solid var(--primary-text); outline-offset: 2px; }
+.tiles[aria-invalid="true"] .tile { border-color: var(--danger-text); }
+.file-remove { width: 32px; height: 32px; padding: 0; color: var(--text-3); }
+.actions { display: flex; gap: 10px; align-items: center; margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border); }
+.field:has(.field-error:not([hidden])) .field-hint.swap { display: none; }
+.actions .spacer { flex: 1; }
+.actions .back-icon { display: none; }
+.review { display: grid; gap: 0; border-top: 1px solid var(--border); }
+.review section { display: grid; gap: 10px; padding: 18px 0; border-bottom: 1px solid var(--border); }
+.review-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.review dl { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 8px 16px; font-size: 15px; }
+.review dt { color: var(--text-3); }
+.review dd { color: var(--text-1); white-space: pre-wrap; overflow-wrap: anywhere; }
+.review dd.empty { color: var(--text-4); }
+.done-panel { display: grid; gap: 24px; }
+.case-no { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 20px; border: 1px solid var(--border); border-radius: 8px; }
+.case-no b { display: block; font: 600 28px/1.2 var(--mono); color: var(--text-1); letter-spacing: 0.02em; }
+.next-list { display: grid; gap: 12px; counter-reset: n; }
+.next-list li { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 12px; counter-increment: n; font-size: 15px; color: var(--text-2); }
+.next-list li::before { content: counter(n); width: 24px; height: 24px; border-radius: 9999px; background: var(--sunken); display: grid; place-items: center; font: 600 12px var(--mono); color: var(--text-2); margin-top: 1px; }
+.done-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.slim-foot { border-top: 1px solid var(--border); padding-block: 20px max(24px, env(safe-area-inset-bottom, 0px)); font-size: 13px; color: var(--text-3); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.slim-foot a { color: inherit; }
+
+@media (max-width: 992px) {
+  .apply { grid-template-columns: minmax(0, 1fr); gap: 0; padding-block: 24px 0; }
+  .stepnav { display: none; }
+  .progress { display: grid; gap: 8px; position: sticky; top: calc(var(--header-h) + env(safe-area-inset-top, 0px)); z-index: 850; background: var(--surface); border-bottom: 1px solid var(--border); padding-block: 10px 12px; }
+  .progress-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 14px; }
+  .progress-row b { font-weight: 600; color: var(--text-1); }
+  .progress-row .mono { color: var(--text-3); font-size: 13px; }
+  .bars { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+  .bars i { height: 4px; border-radius: 9999px; background: var(--active); }
+  .bars i.on { background: var(--primary); }
+  .page-head .save-state { display: none; }
+  /* 底部固定按鈕列：跟著捲動停在畫面底部，鍵盤收起後仍在拇指範圍 */
+  .actions { position: sticky; bottom: 0; z-index: 5; margin-top: 8px; margin-inline: calc(-1 * var(--gutter)); padding: 12px max(var(--gutter), env(safe-area-inset-right, 0px)) max(12px, env(safe-area-inset-bottom, 0px)) max(var(--gutter), env(safe-area-inset-left, 0px)); background: var(--surface); }
+  .actions .spacer { display: none; }
+  .actions .next { flex: 1; }
+  .actions .back-text { display: none; }
+  .actions .back-icon { display: inline-flex; width: 44px; padding: 0; }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .panel { gap: 24px; padding-bottom: 24px; }
+  .review dl { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .review dd { margin-bottom: 8px; }
+  .slim-foot { display: none; }
+  .done-panel { padding-bottom: 48px; }
+  .done-actions .btn { flex: 1; }
+}
+@media (max-width: 360px) { .tiles { grid-template-columns: minmax(0, 1fr); } }
+</style>
+
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="index.html"><span class="logo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h6a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H4Z"/><path d="M20 5h-6a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h6Z"/></svg></span><span>學生申訴協力系統</span></a>
+    <nav class="nav-links" aria-label="主要導覽">
+      <a class="nav-link" href="index.html#flow">處理流程</a>
+      <a class="nav-link" href="index.html#faq">常見問題</a>
+      <a class="nav-link" href="case.html">查詢案件</a>
+    </nav>
+    <div class="nav-actions">
+      <button type="button" class="btn icon-btn" data-theme-toggle></button>
+      <button type="button" class="btn icon-btn menu-btn" data-menu-toggle aria-controls="mobile-menu"></button>
+    </div>
+  </div>
+</header>
+<div id="mobile-menu" class="mobile-menu" hidden>
+  <nav class="container" aria-label="手機版導覽">
+    <a class="big" href="index.html">首頁</a>
+    <a class="big" href="index.html#flow">處理流程</a>
+    <a class="big" href="index.html#faq">常見問題</a>
+    <a class="big" href="case.html">查詢案件</a>
+  </nav>
+</div>
+
+<div class="page-head">
+  <div class="container page-head-inner">
+    <div class="page-head-title">
+      <h1 class="headline-lg"><svg class="emblem" viewBox="0 0 100 100" aria-hidden="true"><path fill="var(--shape-red)" d="M50 0C54 34 66 46 100 50C66 54 54 66 50 100C46 66 34 54 0 50C34 46 46 34 50 0Z"/></svg>填寫申訴</h1>
+      <p class="muted">描述遇到的狀況與希望的處理方式。送出後會收到案件編號與專屬查詢連結，不需要註冊帳號。</p>
+    </div>
+    <span class="save-state" id="save-state" aria-live="polite"></span>
+  </div>
+</div>
+
+<div class="progress" id="progress" aria-hidden="true">
+  <div class="container" style="display:grid;gap:8px">
+    <div class="progress-row"><b id="progress-title">你的聯絡方式</b><span class="mono" id="progress-count">1 / 4</span></div>
+    <div class="bars"><i></i><i></i><i></i><i></i></div>
+  </div>
+</div>
+
+<main class="container apply">
+  <nav class="stepnav" id="stepnav" aria-label="填寫步驟"></nav>
+
+  <form id="form" novalidate>
+    <p class="sr-only" aria-live="polite" id="announce"></p>
+
+    <fieldset class="panel" data-step="1">
+      <div class="panel-head"><h2 class="title-lg" tabindex="-1">你的聯絡方式</h2><p>案件連結與幹部的回覆都會寄到這個信箱。</p></div>
+      <div class="field">
+        <label class="field-label" for="email">學校信箱</label>
+        <input class="input" id="email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" enterkeyhint="next" placeholder="name@gapp.nthu.edu.tw" aria-describedby="email-hint email-err">
+        <p class="field-hint swap" id="email-hint">一定要是學校信箱，結尾是 .edu.tw。</p>
+        <p class="field-error" id="email-err" hidden></p>
+      </div>
+      <div class="field">
+        <label class="field-label" for="nickname">怎麼稱呼你<span class="opt">選填</span></label>
+        <input class="input" id="nickname" name="nickname" autocomplete="nickname" enterkeyhint="next" placeholder="例如：小明、王同學">
+      </div>
+      <div class="field">
+        <label class="field-label" for="grade">系級<span class="opt">選填</span></label>
+        <select class="select" id="grade" name="grade">
+          <option value="">不提供</option>
+          <optgroup label="大學部"><option>大學部一年級</option><option>大學部二年級</option><option>大學部三年級</option><option>大學部四年級以上</option></optgroup>
+          <optgroup label="研究所"><option>碩士班</option><option>博士班</option></optgroup>
+          <option>交換生／訪問生</option>
+        </select>
+      </div>
+      <div class="group">
+        <label class="switch-row"><span class="switch-text"><b>不公開我的身分</b><span>幹部向校方反映時，不會提到你的稱呼、系級與信箱。</span></span><span class="switch"><input type="checkbox" id="anon" name="anon" role="switch"><i></i></span></label>
+        <label class="switch-row"><span class="switch-text"><b>有新回覆時寄信通知我</b><span>關掉的話，需要自己打開案件連結查看。</span></span><span class="switch"><input type="checkbox" id="notify" name="notify" role="switch" checked><i></i></span></label>
+      </div>
+    </fieldset>
+
+    <fieldset class="panel" data-step="2" hidden>
+      <div class="panel-head"><h2 class="title-lg" tabindex="-1">發生了什麼事</h2><p>寫得越具體，幹部越快知道該找哪個單位。</p></div>
+      <div class="field">
+        <span class="field-label" id="cat-label">申訴類別</span>
+        <div class="tiles" role="radiogroup" aria-labelledby="cat-label" aria-describedby="cat-err" id="cat">
+          <label class="tile"><input type="radio" name="cat" value="宿舍與生活"><b>宿舍與生活</b><span>住宿、網路、餐廳、門禁</span></label>
+          <label class="tile"><input type="radio" name="cat" value="課程與成績"><b>課程與成績</b><span>選課、評分、上課權益</span></label>
+          <label class="tile"><input type="radio" name="cat" value="獎助學金"><b>獎助學金</b><span>撥款、資格、審查</span></label>
+          <label class="tile"><input type="radio" name="cat" value="校園安全"><b>校園安全</b><span>騷擾、霸凌、設施危險</span></label>
+          <label class="tile"><input type="radio" name="cat" value="行政程序"><b>行政程序</b><span>證明文件、規定、流程</span></label>
+          <label class="tile"><input type="radio" name="cat" value="其他"><b>其他</b><span>不確定的也選這個</span></label>
+        </div>
+        <p class="field-error" id="cat-err" hidden></p>
+      </div>
+      <div class="field">
+        <div class="field-row"><label class="field-label" for="subject">主旨</label><span class="counter" id="subject-count">0 / 40</span></div>
+        <input class="input" id="subject" name="subject" maxlength="60" enterkeyhint="next" placeholder="例如：宿舍網路中斷超過一週" aria-describedby="subject-err">
+        <p class="field-error" id="subject-err" hidden></p>
+      </div>
+      <div class="field">
+        <div class="field-row"><label class="field-label" for="detail">發生經過</label><span class="counter" id="detail-count">0 / 1000</span></div>
+        <p class="field-hint" id="detail-hint">寫下時間、地點、經過，以及和誰有關。不確定的部分寫「不確定」就好。</p>
+        <textarea class="textarea" id="detail" name="detail" rows="5" aria-describedby="detail-hint detail-err" placeholder="例如：從 9/10 開始，清齋 3 樓的網路每天晚上斷線，已經向宿舍組報修兩次，都說會處理但沒有改善。"></textarea>
+        <p class="field-error" id="detail-err" hidden></p>
+      </div>
+      <div class="field">
+        <label class="field-label" for="date">發生日期<span class="opt">選填</span></label>
+        <input class="input" id="date" name="date" type="date" aria-describedby="date-err" style="max-width:240px">
+        <p class="field-error" id="date-err" hidden></p>
+      </div>
+      <div class="field">
+        <span class="field-label" id="files-label">照片或檔案<span class="opt">選填</span></span>
+        <label class="drop" for="files">
+          <span class="drop-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></span>
+          <span style="display:grid;gap:2px"><b style="font-size:15px;font-weight:500;color:var(--text-1)">加入照片或檔案</b><span class="caption" style="font-size:13px">可以直接拍照。照片或 PDF，最多 5 個，每個 10 MB 以內</span></span>
+          <input type="file" id="files" name="files" multiple accept="image/*,application/pdf" aria-labelledby="files-label" aria-describedby="files-err">
+        </label>
+        <div class="files" id="file-list"></div>
+        <p class="field-error" id="files-err" hidden></p>
+      </div>
+    </fieldset>
+
+    <fieldset class="panel" data-step="3" hidden>
+      <div class="panel-head"><h2 class="title-lg" tabindex="-1">希望怎麼處理</h2><p>幹部會照你的意願處理，之後也可以在案件頁改變想法。</p></div>
+      <div class="field">
+        <span class="field-label" id="help-label">希望學生會怎麼協助</span>
+        <div class="options stack" role="radiogroup" aria-labelledby="help-label" aria-describedby="help-err" id="help">
+          <label class="option"><input type="radio" name="help" value="協助向校方反映"><span class="mark radio"></span><span class="option-text"><span class="option-title">協助向校方反映</span><span class="option-desc">幹部整理你的狀況，正式向相關單位反映並追蹤進度。</span></span></label>
+          <label class="option"><input type="radio" name="help" value="陪你一起處理"><span class="mark radio"></span><span class="option-text"><span class="option-title">陪你一起處理</span><span class="option-desc">幹部陪你和相關單位溝通，例如一起開會或寫信。</span></span></label>
+          <label class="option"><input type="radio" name="help" value="先讓學生會知道"><span class="mark radio"></span><span class="option-text"><span class="option-title">先讓學生會知道</span><span class="option-desc">記錄下來作為統計與政策建議，不主動聯絡校方。</span></span></label>
+        </div>
+        <p class="field-error" id="help-err" hidden></p>
+      </div>
+      <div class="field">
+        <div class="field-row"><label class="field-label" for="hope">你希望的結果<span class="opt">選填</span></label><span class="counter" id="hope-count">0 / 300</span></div>
+        <textarea class="textarea" id="hope" name="hope" rows="3" style="min-height:96px" placeholder="例如：希望在期中考前恢復網路，並減免這個月的網路費。"></textarea>
+      </div>
+    </fieldset>
+
+    <fieldset class="panel" data-step="4" hidden>
+      <div class="panel-head"><h2 class="title-lg" tabindex="-1">確認送出</h2><p>送出後可以用案件連結補充說明，但不能修改已送出的內容。</p></div>
+      <div class="review" id="review"></div>
+      <label class="check-row" id="consent-row"><input type="checkbox" id="consent" name="consent" aria-describedby="consent-err"><span class="mark check"></span><span>我同意學權幹部閱讀我提供的內容與檔案，並在處理需要時聯絡相關單位。</span></label>
+      <p class="field-error" id="consent-err" hidden style="margin-top:-16px"></p>
+    </fieldset>
+
+    <div class="actions" id="actions">
+      <button type="button" class="btn btn-secondary btn-lg back-text" data-back>上一步</button>
+      <button type="button" class="btn btn-secondary btn-lg back-icon" data-back aria-label="上一步"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button>
+      <span class="spacer"></span>
+      <button type="submit" class="btn btn-primary btn-lg next" id="next">下一步</button>
+    </div>
+  </form>
+
+  <section class="done-panel" id="done" hidden aria-labelledby="done-title">
+    <div class="panel-head"><span class="overline" id="done-time"></span><h2 class="headline-md" id="done-title" tabindex="-1">申訴已送出</h2><p id="done-mail" style="font-size:16px;color:var(--text-2)"></p></div>
+    <div class="case-no"><div><span class="caption">案件編號（示範）</span><b>A-0913</b></div><button type="button" class="btn btn-secondary" id="copy-no">複製</button></div>
+    <div style="display:grid;gap:12px"><h3 class="title-sm">接下來</h3>
+      <ol class="next-list">
+        <li>確認信裡有案件連結。找不到的話，看看垃圾郵件匣。</li>
+        <li>學權幹部會在 3 個工作天內第一次回覆你。</li>
+        <li>想補充資料或照片，打開案件連結就可以加上。</li>
+      </ol>
+    </div>
+    <div class="done-actions"><a class="btn btn-primary btn-lg" href="case.html">查看案件</a><a class="btn btn-secondary btn-lg" href="index.html">回到首頁</a></div>
+  </section>
+</main>
+
+<footer class="container slim-foot"><span>© 2026 國立清華大學學生會</span><span><a href="#">隱私權政策</a></span></footer>
+
+<script src="assets/apply.js"></script>

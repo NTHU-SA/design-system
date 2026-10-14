@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-Hant">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>申訴案件後台</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&family=Noto+Sans+TC:wght@100..900&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/site.js"></script>
+<style>
+/* 幹部後台：強度 4，不用 Hero。一打開就是案件清單；品牌感只剩紫色與字體，狀態色是畫面上最鮮豔的東西 */
+.work { padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
+.site-header .work { max-width: none; }
+.toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-block: 16px; border-bottom: 1px solid var(--border); }
+.toolbar h1 { margin-right: 4px; }
+.toolbar .count { font-size: 13px; color: var(--text-3); margin-right: auto; }
+.seg { display: inline-flex; gap: 2px; padding: 3px; border-radius: 9999px; background: var(--hover); max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+.seg button { font: 500 14px/1 var(--font); color: var(--text-3); background: transparent; border: 0; padding: 7px 12px; border-radius: 9999px; cursor: pointer; white-space: nowrap; display: inline-flex; gap: 6px; align-items: center; transition: color 100ms ease-in-out; }
+.seg button span { font: 12px var(--mono); color: var(--text-3); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--text-1); box-shadow: var(--seg-shadow); }
+@media (hover: hover) { .seg button:hover { color: var(--text-1); } }
+.search { position: relative; width: 260px; }
+.search svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-3); pointer-events: none; }
+.search .input { padding-left: 34px; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { text-align: left; font-size: 12px; font-weight: 500; color: var(--text-3); padding: 10px 12px; border-bottom: 1px solid var(--border); background: var(--sunken); white-space: nowrap; }
+td { padding: 12px; border-bottom: 1px solid var(--border); color: var(--text-1); white-space: nowrap; }
+td.subject { white-space: normal; min-width: 240px; }
+td.subject a { color: var(--text-1); text-decoration: none; font-weight: 500; }
+td.mono, td .mono { color: var(--text-3); font-size: 13px; }
+tbody tr { cursor: pointer; transition: background-color 100ms ease-in-out; }
+@media (hover: hover) { tbody tr:hover { background: var(--hover); } }
+.who-chip { display: inline-flex; align-items: center; gap: 8px; color: var(--text-2); }
+.who-chip i { width: 22px; height: 22px; border-radius: 9999px; background: var(--active); display: grid; place-items: center; font-size: 11px; font-style: normal; font-weight: 600; color: var(--text-2); }
+.unassigned { color: var(--text-4); }
+.cards { display: none; }
+.empty { padding: 48px 0; text-align: center; color: var(--text-3); }
+@media (max-width: 768px) {
+  .toolbar { gap: 10px; padding-block: 12px; }
+  .toolbar .count { margin-right: 0; }
+  .toolbar h1 { margin-right: auto; }
+  .seg { order: 3; width: 100%; }
+  .seg button { padding: 7px 9px; gap: 4px; }
+  .search { order: 4; width: 100%; }
+  .table-wrap { display: none; }
+  .cards { display: grid; gap: 0; }
+  .card-row { display: grid; gap: 4px; padding: 14px 0; border-bottom: 1px solid var(--border); text-decoration: none; }
+  .card-top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+  .card-top b { font-size: 16px; font-weight: 600; color: var(--text-1); line-height: 1.4; }
+  .card-row .meta { font-size: 13px; color: var(--text-3); }
+}
+</style>
+
+<header class="site-header">
+  <div class="work nav">
+    <a class="brand" href="admin.html"><span class="logo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h6a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H4Z"/><path d="M20 5h-6a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h6Z"/></svg></span><span>申訴系統 · 幹部後台</span></a>
+    <nav class="nav-links" aria-label="後台導覽">
+      <a class="nav-link" href="admin.html" aria-current="page">案件</a>
+      <a class="nav-link" href="#">統計</a>
+      <a class="nav-link" href="#">設定</a>
+    </nav>
+    <div class="nav-actions">
+      <button type="button" class="btn icon-btn" data-theme-toggle></button>
+      <span class="avatar" aria-label="陳同學">陳</span>
+      <button type="button" class="btn icon-btn menu-btn" data-menu-toggle aria-controls="mobile-menu"></button>
+    </div>
+  </div>
+</header>
+<div id="mobile-menu" class="mobile-menu" hidden>
+  <nav class="container" aria-label="手機版導覽">
+    <a class="big" href="admin.html">案件</a>
+    <a class="big" href="#">統計</a>
+    <a class="big" href="#">設定</a>
+    <a class="big" href="index.html">回到申訴系統首頁</a>
+  </nav>
+</div>
+
+<main class="work">
+  <div class="toolbar">
+    <h1 class="title-lg">案件</h1>
+    <span class="count" id="count"></span>
+    <div class="seg" role="group" aria-label="依狀態篩選" id="seg"></div>
+    <label class="search"><span class="sr-only">搜尋編號或主旨</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input class="input" id="q" type="search" placeholder="搜尋編號或主旨" enterkeyhint="search"></label>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>編號</th><th>主旨</th><th>類別</th><th>狀態</th><th>負責幹部</th><th>最後更新</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <div class="cards" id="cards"></div>
+  <p class="empty" id="empty" hidden>沒有符合的案件。試試其他關鍵字，或切換到「全部」。</p>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  // 示範資料
+  var CASES = [
+    ["A-0921", "圖書館自習室冷氣故障", "宿舍與生活", "new", "", "10/14"],
+    ["A-0920", "期中考與系上必修活動撞期", "課程與成績", "new", "", "10/14"],
+    ["A-0918", "夜間校園路燈不亮", "校園安全", "late", "林", "10/09"],
+    ["A-0916", "助教評分標準不一致", "課程與成績", "doing", "陳", "10/12"],
+    ["A-0915", "獎學金申請結果遲未公布", "獎助學金", "review", "王", "10/13"],
+    ["A-0912", "宿舍網路中斷超過一週", "宿舍與生活", "doing", "陳", "10/12"],
+    ["A-0911", "選課系統送出失敗", "課程與成績", "closed", "林", "10/08"],
+    ["A-0909", "學生證補辦流程不清楚", "行政程序", "closed", "王", "10/05"],
+    ["A-0907", "獎學金撥款延遲", "獎助學金", "closed", "陳", "10/03"],
+    ["A-0905", "宿舍門禁時間更改未公告", "宿舍與生活", "closed", "林", "09/30"]
+  ];
+  var STATUS = { "new": ["warning", "新案件"], late: ["danger", "超過 3 天未回覆"], doing: ["info", "處理中"], review: ["muted", "等待部長審核"], closed: ["success", "已結案"] };
+  var FILTERS = [["all", "全部", function () { return true; }], ["todo", "待處理", function (c) { return c[3] === "new" || c[3] === "late"; }],
+    ["doing", "處理中", function (c) { return c[3] === "doing"; }], ["review", "待審核", function (c) { return c[3] === "review"; }], ["closed", "已結案", function (c) { return c[3] === "closed"; }]];
+  var cur = "todo";
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (ch) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]; }); }
+  function who(n) { return n ? '<span class="who-chip"><i>' + n + "</i>" + n + "同學</span>" : '<span class="unassigned">尚未指派</span>'; }
+  function stat(k) { return '<span class="stat ' + STATUS[k][0] + '">' + STATUS[k][1] + "</span>"; }
+  function render() {
+    var q = $("q").value.trim().toLowerCase();
+    var f = FILTERS.filter(function (x) { return x[0] === cur; })[0][2];
+    var list = CASES.filter(function (c) { return f(c) && (!q || (c[0] + c[1]).toLowerCase().indexOf(q) >= 0); });
+    $("seg").innerHTML = FILTERS.map(function (x) {
+      return '<button type="button" data-f="' + x[0] + '" aria-pressed="' + (x[0] === cur) + '">' + x[1] + "<span>" + CASES.filter(x[2]).length + "</span></button>";
+    }).join("");
+    $("count").textContent = "共 " + list.length + " 件";
+    $("rows").innerHTML = list.map(function (c) {
+      return '<tr data-href="case.html"><td class="mono">' + c[0] + '</td><td class="subject"><a href="case.html">' + esc(c[1]) + "</a></td><td>" + c[2] + "</td><td>" + stat(c[3]) + "</td><td>" + who(c[4]) + '</td><td class="mono">' + c[5] + "</td></tr>";
+    }).join("");
+    $("cards").innerHTML = list.map(function (c) {
+      return '<a class="card-row" href="case.html"><span class="card-top"><b>' + esc(c[1]) + "</b>" + stat(c[3]) + '</span><span class="meta"><span class="mono">' + c[0] + "</span> · " + c[2] + " · " + (c[4] ? c[4] + "同學" : "尚未指派") + " · " + c[5] + "</span></a>";
+    }).join("");
+    $("empty").hidden = list.length > 0;
+  }
+  document.addEventListener("DOMContentLoaded", function () {
+    render();
+    $("seg").addEventListener("click", function (e) { var b = e.target.closest("[data-f]"); if (b) { cur = b.getAttribute("data-f"); render(); } });
+    $("q").addEventListener("input", render);
+    $("rows").addEventListener("click", function (e) { var tr = e.target.closest("tr"); if (tr && !e.target.closest("a")) location.href = tr.getAttribute("data-href"); });
+  });
+})();
+</script>
