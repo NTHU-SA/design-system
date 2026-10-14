@@ -229,7 +229,7 @@ details.data th { font-weight: 500; color: var(--text-3); }
     { key: "D", name: "D 暖亮冷深", sub: "建議；暗色沿用 C", cvd: "8.3 / 9.1", nv: "21.1 / 15.9", con: "2.22 / 3.84", band: "pass", warm: true, verdict: ["pass", "暖色保持明亮，只壓深草綠；芥末黃要靠圖例與標籤補對比"] }
   ];
   var RAMP = { light: ["#B8B3CF", "#9991BD", "#796EA5", "#5A4F81", "#39344D"], dark: ["#4E4866", "#6A618E", "#887CB5", "#A9A1CE", "#CECBE0"] };
-  var state = { opt: "current", cvd: "none" };
+  var state = { opt: "D", cvd: "none" };
 
   function mode() { return root.getAttribute("data-theme") === "dark" ? "dark" : "light"; }
   function css(v) { return getComputedStyle(root).getPropertyValue(v).trim(); }
