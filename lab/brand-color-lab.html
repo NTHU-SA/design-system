@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="zh-Hant">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>品牌色票實驗室</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&family=Noto+Sans+TC:wght@100..900&display=swap">
+<style>
+/* Layout：1200px 單欄容器，每章 = 說明 + 實測數據 + 對照。整頁固定白底（依需求），不跟隨暗色模式，方便判斷新色票 */
+:root {
+  color-scheme: light;
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --sunken: #F3F3F7;
+  --hover: #F3F3F7;
+  --active: #DCDBE6;
+  --border: #2D26501F;
+  --text-1: #303031;
+  --text-2: #4D4D4E;
+  --text-3: #6C6C6D;
+  --text-4: #8A8B8C;
+  --chrome: #6E619C;
+  --on-dark: #F1F3F5;
+  --dark: #141317;
+  --seg-shadow: 0 3px 2px rgb(0 0 0 / 6%), 0 3px 8px rgb(0 0 0 / 15%), 0 0 1px rgb(0 0 0 / 4%);
+  --font: "Inter", "Noto Sans TC", system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
+  /* 試色區由 JS 改寫 */
+  --p: #676695; --p-hover: #565482; --p-active: #474471;
+  --success: #5CC184; --success-text: #16884F; --warning: #E7C869; --warning-text: #8D7102; --info: #67B5E1; --info-text: #2C7DA7;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--text-2); font: 400 15px/1.6 var(--font); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1248px; margin: 0 auto; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); padding-block: 40px 72px; display: grid; gap: 72px; }
+@media (max-width: 520px) { .wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); gap: 56px; } }
+h1, h2, h3, h4, p, ol, ul { margin: 0; }
+.page-h1 { font-size: 30px; font-weight: 600; line-height: 1.3; color: var(--text-1); text-wrap: balance; }
+h2.sec { font-size: 22px; font-weight: 600; line-height: 1.35; color: var(--text-1); text-wrap: balance; }
+h3 { font-size: 16px; font-weight: 600; line-height: 1.4; color: var(--text-1); }
+.eyebrow { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: var(--text-3); }
+.lead { max-width: 720px; font-size: 16px; }
+.caption { font-size: 12px; color: var(--text-3); line-height: 1.5; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+section, header.top { display: grid; gap: 20px; }
+header.top { gap: 12px; }
+.section-head { display: grid; gap: 8px; }
+.section-head p { max-width: 760px; }
+.notes { display: grid; gap: 6px; padding: 0; list-style: none; max-width: 860px; }
+.notes li { position: relative; padding-left: 14px; }
+.notes li::before { content: ""; position: absolute; left: 0; top: 11px; width: 4px; height: 4px; border-radius: 9999px; background: var(--text-4); }
+.notes strong, .steps strong { color: var(--text-1); font-weight: 600; }
+footer.foot { border-top: 1px solid var(--border); padding-top: 20px; color: var(--text-3); font-size: 13px; display: grid; gap: 4px; }
+
+/* 控制項 */
+.controls { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; }
+.ctl { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ctl-label { font-size: 13px; font-weight: 500; color: var(--text-3); }
+.seg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: 18px; background: var(--hover); }
+.seg button { font: 500 13px/1 var(--font); color: var(--text-3); background: transparent; border: 0; padding: 8px 12px; border-radius: 9999px; cursor: pointer; transition: color 100ms ease-in-out, background-color 100ms ease-in-out; }
+.seg button:hover { color: var(--text-1); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--text-1); box-shadow: var(--seg-shadow); }
+.seg button:focus-visible, .preset:focus-visible { outline: 2px solid var(--chrome); outline-offset: 2px; }
+.presets { display: flex; gap: 8px; flex-wrap: wrap; }
+.preset { font: 500 14px/1 var(--font); height: 36px; padding: 0 14px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text-2); cursor: pointer; transition: background-color 100ms ease-in-out, color 100ms ease-in-out; }
+.preset:hover { background: var(--hover); color: var(--text-1); }
+.preset[aria-pressed="true"] { border-color: var(--text-1); color: var(--text-1); }
+
+/* 01 參考圖 */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+.sw { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: grid; align-content: start; background: var(--surface); }
+.sw-chip { height: 88px; }
+.sw-chip.paper { box-shadow: inset 0 -1px 0 var(--border); }
+.sw-body { padding: 12px 14px 14px; display: grid; gap: 6px; }
+.sw-name { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.sw-name b { color: var(--text-1); font-weight: 600; }
+.sw-name span { font-size: 12px; color: var(--text-3); }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; font-size: 12px; line-height: 1.5; }
+.kv dt { color: var(--text-3); }
+.kv dd { margin: 0; color: var(--text-1); font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+.area { display: grid; gap: 8px; }
+.area-bar { display: flex; height: 28px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+.area-bar i { display: block; height: 100%; }
+.area-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--text-3); }
+.area-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.area-legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; box-shadow: inset 0 0 0 1px var(--border); }
+
+/* 02 濃烈 */
+.chroma { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.chroma-row { display: grid; grid-template-columns: 148px 64px minmax(0, 1fr) 48px; gap: 16px; align-items: center; padding: 10px 16px; border-top: 1px solid var(--border); font-size: 14px; }
+.chroma-row:first-child { border-top: 0; }
+.chroma-row.head { background: var(--sunken); padding-block: 8px; font-size: 12px; font-weight: 500; color: var(--text-3); }
+.chroma-row.group { background: var(--sunken); padding-block: 6px; font-size: 12px; font-weight: 600; color: var(--text-2); grid-template-columns: 1fr; }
+.chroma-name { display: inline-flex; align-items: center; gap: 8px; color: var(--text-1); min-width: 0; }
+.chroma-name i { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+.chroma-row .mono { color: var(--text-2); font-size: 13px; }
+.chroma-row .pct { text-align: right; }
+.track { position: relative; height: 10px; border-radius: 9999px; background: var(--sunken); overflow: hidden; }
+.track i { position: absolute; inset: 0 auto 0 0; border-radius: 9999px; }
+.track::after { content: ""; position: absolute; top: 0; bottom: 0; left: 80%; width: 1px; background: var(--text-4); opacity: 0.6; }
+@media (max-width: 640px) { .chroma-row { grid-template-columns: 112px 52px minmax(0, 1fr) 40px; gap: 10px; padding-inline: 12px; } }
+
+/* 03 推導 */
+.derive { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 40px; align-items: start; }
+@media (max-width: 900px) { .derive { grid-template-columns: minmax(0, 1fr); } }
+.steps { display: grid; gap: 16px; padding: 0; list-style: none; counter-reset: step; max-width: 680px; }
+.steps li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; counter-increment: step; }
+.steps li::before { content: counter(step); width: 28px; height: 28px; border-radius: 9999px; background: var(--sunken); display: grid; place-items: center; font: 600 12px var(--mono); color: var(--text-2); }
+.steps li > div { display: grid; gap: 4px; }
+.plot { border: 1px solid var(--border); border-radius: 8px; background: var(--surface); padding: 12px; display: grid; gap: 8px; }
+.plot svg { width: 100%; height: auto; display: block; }
+.plot text { font-family: var(--font); }
+.cands { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 16px; }
+.cand { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: grid; align-content: start; background: var(--surface); }
+.cand.pick { border-color: var(--text-1); }
+.cand-chip { height: 112px; display: flex; align-items: flex-end; justify-content: space-between; padding: 14px 16px; color: #FFFFFF; }
+.cand-chip b { font-size: 15px; font-weight: 500; }
+.cand-chip span { font: 12px var(--mono); opacity: 0.9; }
+.cand-body { padding: 14px 16px 16px; display: grid; gap: 10px; }
+.cand-title { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.cand-title h3 { font-size: 16px; }
+.tag { font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 4px; background: var(--sunken); color: var(--text-2); }
+.tag.pick { background: var(--text-1); color: #FFFFFF; }
+.scale { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.scale div { display: grid; gap: 4px; min-width: 0; }
+.scale i { height: 32px; border-radius: 4px; display: grid; place-items: center; font: 600 12px var(--font); font-style: normal; }
+.scale span { font-size: 11px; color: var(--text-3); line-height: 1.3; }
+.checks { display: grid; gap: 4px; font-size: 13px; }
+.checks div { display: flex; justify-content: space-between; gap: 12px; }
+.checks dt { color: var(--text-3); }
+.checks dd { margin: 0; font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--text-1); }
+.checks dd.bad { color: #B85A4A; }
+.cand-note { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+
+/* 04 試色 */
+.mock-wrap { border-radius: 8px; box-shadow: 0 0 0 1px rgb(128 128 128 / 35%); overflow: hidden; }
+.mock-scroll { overflow-x: auto; }
+.mock { min-width: 1200px; background: #FFFFFF; color: var(--text-2); }
+.m-nav { display: flex; align-items: center; gap: 4px; height: 60px; padding: 0 40px; border-bottom: 1px solid var(--border); background: #FFFFFF; }
+.m-brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text-1); margin-right: auto; font-size: 18px; font-weight: 600; }
+.logo { width: 28px; height: 28px; border-radius: 6px; background: var(--p); display: grid; place-items: center; color: #FFFFFF; flex-shrink: 0; }
+.m-item { position: relative; display: inline-flex; align-items: center; height: 60px; font-size: 14px; font-weight: 500; color: var(--text-2); padding: 0 12px; }
+.m-item.on { color: var(--text-1); }
+.m-item.on::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: -1px; height: 2px; background: var(--p); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid transparent; white-space: nowrap; font: 500 14px/1 var(--font); height: 36px; padding: 0 14px; border-radius: 6px; }
+.btn.lg { height: 44px; padding: 0 18px; font-size: 15px; border-radius: 8px; }
+.btn.primary { background: var(--p); color: #FFFFFF; }
+.btn.primary.is-hover { background: var(--p-hover); }
+.btn.secondary { background: #FFFFFF; color: var(--text-2); border-color: var(--border); }
+.m-cta { margin-left: 12px; }
+.banner { position: relative; height: 520px; overflow: hidden; background: #FFFFFF; }
+.banner svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.b-copy { position: absolute; left: 40px; bottom: 40px; display: grid; gap: 14px; max-width: 440px; }
+.b-eyebrow { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: var(--text-2); }
+.b-title { font-size: 44px; font-weight: 600; line-height: 1.25; color: var(--text-1); }
+.b-lead { font-size: 16px; line-height: 1.6; color: var(--text-2); }
+.b-actions { display: flex; gap: 10px; margin-top: 4px; }
+
+.ui { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 0; border-radius: 8px; box-shadow: 0 0 0 1px rgb(128 128 128 / 35%); overflow: hidden; background: #FFFFFF; }
+@media (max-width: 860px) { .ui { grid-template-columns: minmax(0, 1fr); } }
+.ui-col { padding: 24px; display: grid; gap: 18px; align-content: start; min-width: 0; }
+.ui-col + .ui-col { border-left: 1px solid var(--border); }
+@media (max-width: 860px) { .ui-col + .ui-col { border-left: 0; border-top: 1px solid var(--border); } }
+.ui-head { display: grid; gap: 4px; }
+.ui-head h4 { font-size: 18px; font-weight: 600; line-height: 1.4; color: var(--text-1); }
+.ui-head p { font-size: 14px; color: var(--text-3); }
+.field { display: grid; gap: 6px; }
+.field > label, .field > .flabel { font-size: 14px; font-weight: 500; line-height: 1.4; color: var(--text-1); }
+.input { height: 36px; border: 1px solid var(--border); border-radius: 6px; padding: 0 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 15px; color: var(--text-1); background: #FFFFFF; min-width: 0; }
+.input.focus { border-color: var(--p); }
+.input .caret { width: 1px; height: 18px; background: var(--text-1); margin-left: 1px; }
+.input svg { color: var(--text-3); flex-shrink: 0; }
+.choice { display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--text-1); }
+.radio { width: 16px; height: 16px; border-radius: 9999px; border: 2px solid var(--text-3); flex-shrink: 0; display: grid; place-items: center; }
+.radio.on { border-color: var(--p); }
+.radio.on::after { content: ""; width: 8px; height: 8px; border-radius: 9999px; background: var(--p); }
+.check { width: 16px; height: 16px; border-radius: 4px; border: 2px solid var(--text-3); flex-shrink: 0; display: grid; place-items: center; }
+.check.on { border: 0; background: var(--p); }
+.switch { width: 27px; height: 16px; border-radius: 9999px; background: var(--border); position: relative; flex-shrink: 0; }
+.switch.on { background: var(--p); }
+.switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 9999px; background: #FFFFFF; }
+.switch.on::after { left: 13px; }
+.ui-foot { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-top: 18px; border-top: 1px solid var(--border); }
+.ui-foot .link { margin-right: auto; }
+.link { color: var(--p); font-size: 14px; font-weight: 500; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); }
+.tab { position: relative; font-size: 14px; font-weight: 500; color: var(--text-3); padding: 8px 10px 10px; }
+.tab.on { color: var(--text-1); }
+.tab.on::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: -1px; height: 2px; border-radius: 2px; background: var(--p); }
+.case { border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; display: grid; gap: 4px; }
+.case.on { border-color: var(--p); }
+.case-top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.case b { font-size: 16px; font-weight: 600; color: var(--text-1); line-height: 1.4; }
+.case .meta { font-size: 13px; color: var(--text-3); font-family: var(--mono); }
+.stat { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; white-space: nowrap; }
+.stat i { width: 8px; height: 8px; border-radius: 9999px; display: inline-block; }
+.cases { display: grid; gap: 10px; }
+
+.tokens { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.tok-row { display: grid; grid-template-columns: 24px 190px 96px minmax(0, 1fr); gap: 14px; align-items: center; padding: 9px 16px; border-top: 1px solid var(--border); font-size: 14px; }
+.tok-row:first-child { border-top: 0; }
+.tok-row.head { background: var(--sunken); padding-block: 8px; font-size: 12px; font-weight: 500; color: var(--text-3); }
+.tok-row i { width: 20px; height: 20px; border-radius: 4px; box-shadow: inset 0 0 0 1px var(--border); }
+.tok-row code { font: 13px var(--mono); color: var(--text-1); }
+.tok-row .use { color: var(--text-3); font-size: 13px; }
+@media (max-width: 640px) { .tok-row { grid-template-columns: 20px minmax(0, 1fr) 80px; } .tok-row .use { grid-column: 2 / -1; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">DESIGN.md · 色票測試</span>
+    <h1 class="page-h1">品牌色票實驗室</h1>
+    <p class="lead">從參考海報量出色票的結構，找出現在的主視覺色為什麼顯得濃烈，再推導出這套色票底下的紫色。最後一章可以把新舊色票放進主視覺與表單畫面比較。整頁固定白底。</p>
+  </header>
+
+  <section aria-labelledby="ref-title">
+    <div class="section-head"><span class="eyebrow">參考圖</span><h2 class="sec" id="ref-title">參考圖量出來的結構</h2>
+      <p>參考圖每個像素都歸到最接近的顏色，算出五個顏色與各自的面積。數值用 OKLCH 表示：L 是明度，C 是鮮豔程度（彩度），h 是色相角度。</p></div>
+    <div class="swatches" id="ref-swatches"></div>
+    <div class="area">
+      <div class="area-bar" id="area-bar" role="img" aria-label="面積占比：紙 66.6%、灰 9.9%、青綠 9.7%、紅 8.8%、墨 5.0%"></div>
+      <div class="area-legend" id="area-legend"></div>
+    </div>
+    <ul class="notes">
+      <li><strong>只有兩個彩色，而且分工明確</strong>：紅色是唯一的鮮色，青綠是安靜的配角，彩度只有紅色的三分之一出頭。</li>
+      <li><strong>灰色也是色塊</strong>：色塊面積裡，灰、青綠、紅各占約三分之一。沒有彩度的灰把整體的鮮豔程度拉低。</li>
+      <li><strong>黑色只負責文字與箭頭</strong>，不當色塊用。</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="loud-title">
+    <div class="section-head"><span class="eyebrow">診斷</span><h2 class="sec" id="loud-title">現在的主視覺色為什麼顯得濃烈</h2>
+      <p>「相對彩度」是這個顏色的彩度，除以同樣明度、同樣色相下螢幕能顯示的最大彩度。越接近 100%，顏色就越貼著螢幕的極限，看起來越像螢光色。灰線標出 80%。</p></div>
+    <div class="chroma" id="chroma"></div>
+    <ul class="notes">
+      <li><strong>紅橙和參考圖的紅一樣鮮</strong>：兩者的彩度都是 0.198。差別在紅橙已經逼近螢幕的極限（88%），參考圖的紅只用到 79%。綠色更是 99%，幾乎是螢幕能顯示最鮮的綠。</li>
+      <li><strong>兩個鮮色互搶</strong>：現行有紅橙與綠兩個貼著極限的顏色，參考圖只有一個。</li>
+      <li><strong>整體太鮮、太雜</strong>：色塊的平均彩度，現行是 0.121，參考圖是 0.086，高了約 40%。現行用了 5 個色相，參考圖只有 2 個色相加上灰。</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="derive-title">
+    <div class="section-head"><span class="eyebrow">推導</span><h2 class="sec" id="derive-title">這套色票底下的紫色怎麼算</h2>
+      <p>紫色同時是介面上唯一的強調色，所以除了配色，還要過白字對比與暗色模式這兩關。</p></div>
+    <div class="derive">
+      <ol class="steps">
+        <li><div><strong>把參考色分層</strong><span>鮮色是紅（C 0.198）；沉穩色是青綠（C 0.073）；中性色是灰、墨、紙（C 接近 0）。</span></div></li>
+        <li><div><strong>紫色放進沉穩層，彩度跟青綠一樣</strong><span>主視覺裡的主角是紅色。紫色如果跟紅一樣鮮（右圖外圈的 ✕，<span class="mono">#705CE4</span>），畫面會有兩個主角，又回到現在「濃烈、雜」的問題。所以 C = 0.073。</span></div></li>
+        <li><div><strong>色相補進最大的空缺</strong><span>紅在 23°、青綠在 188°。色相環上最大的空缺是從 188° 繞到 23°（共 195°），正中間是 285°，剛好落在紫色。</span></div></li>
+        <li><div><strong>明度先對齊青綠，再為暗色模式修正</strong><span>明度跟青綠一樣（L 0.569）就是 B。B 的白字對比 4.57:1，剛好及格，但暗色模式的 hover 要「亮一階」，變亮之後白字只剩 3.87:1。把明度降回現行的 0.530 就是 C，整組 hover、active、暗色階的明度都和現行一樣，只換了彩度與色相。</span></div></li>
+      </ol>
+      <figure class="plot" style="margin:0">
+        <svg id="plot" viewBox="0 0 380 380" role="img" aria-label="色相與彩度圖：角度是色相，離中心越遠越鮮豔"></svg>
+        <figcaption class="caption">角度是色相 h，離中心的距離是彩度 C（依比例繪製）。虛線圈分別是青綠與紅的彩度。</figcaption>
+      </figure>
+    </div>
+    <div class="cands" id="cands"></div>
+  </section>
+
+  <section aria-labelledby="try-title">
+    <div class="section-head"><span class="eyebrow">試色</span><h2 class="sec" id="try-title">放進畫面比較</h2>
+      <p>上方是主視覺，下方是表單與清單。主視覺改成單層、放大、往上堆疊的構圖，只是為了看顏色；正式的 Hero 構圖之後另外調整。狀態色與資料色維持不變。</p></div>
+    <div class="presets" id="presets"></div>
+    <div class="controls" id="controls"></div>
+    <div class="mock-wrap"><div class="mock-scroll"><div class="mock" id="banner-mock"></div></div></div>
+    <div class="ui" id="ui"></div>
+    <div class="tokens" id="tokens"></div>
+    <ul class="notes">
+      <li><strong>灰色選項</strong>只影響參考色票的灰色色塊。「紫調灰」把彩度加到 0.021，和介面表面的紫調灰同一個方向。</li>
+      <li><strong>現行五色</strong>套在同一個構圖上，可以直接比較濃烈程度。</li>
+    </ul>
+  </section>
+
+  <footer class="foot">
+    <span>OKLCH 由 sRGB 換算。相對彩度 ＝ C ÷ 同明度、同色相下 sRGB 能顯示的最大彩度。對比為 WCAG 2 對比值。</span>
+    <span>面積：參考圖 1200×625 的每個像素歸到 OKLab 距離最近的顏色後計算。</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+
+  function seg(action, label, opts, cur) {
+    return '<div class="ctl"><span class="ctl-label">' + label + '</span><div class="seg" role="group" aria-label="' + label + '">' +
+      opts.map(function (o) { return '<button type="button" data-action="' + action + '" data-value="' + o[0] + '" aria-pressed="' + (o[0] === cur) + '">' + o[1] + "</button>"; }).join("") + "</div></div>";
+  }
+
+  /* ── 01 參考圖 ── */
+  var REF = [
+    { key: "paper", name: "紙", role: "底", hex: "#F7F5F6", L: 0.972, C: 0.002, h: null, area: 66.6, rel: null },
+    { key: "gray", name: "灰", role: "中性色塊", hex: "#C0C0C0", L: 0.808, C: 0.000, h: null, area: 9.9, rel: null },
+    { key: "teal", name: "青綠", role: "沉穩色", hex: "#3C857F", L: 0.569, C: 0.073, h: 188, area: 9.7, rel: 74 },
+    { key: "red", name: "紅", role: "鮮色", hex: "#EA484F", L: 0.634, C: 0.198, h: 23, area: 8.8, rel: 79 },
+    { key: "ink", name: "墨", role: "文字與箭頭", hex: "#020101", L: 0.072, C: 0.007, h: null, area: 5.0, rel: null }
+  ];
+  function renderRef() {
+    $("ref-swatches").innerHTML = REF.map(function (r) {
+      return '<div class="sw"><div class="sw-chip' + (r.key === "paper" ? " paper" : "") + '" style="background:' + r.hex + '"></div><div class="sw-body">' +
+        '<div class="sw-name"><b>' + r.name + "</b><span>" + r.role + "</span></div>" +
+        '<dl class="kv"><dt>色碼</dt><dd>' + r.hex + "</dd><dt>明度 L</dt><dd>" + r.L.toFixed(3) + "</dd><dt>彩度 C</dt><dd>" + r.C.toFixed(3) + "</dd><dt>色相 h</dt><dd>" + (r.h === null ? "—" : r.h + "°") + "</dd>" +
+        "<dt>面積</dt><dd>" + r.area.toFixed(1) + "%</dd><dt>相對彩度</dt><dd>" + (r.rel === null ? "—" : r.rel + "%") + "</dd></dl></div></div>";
+    }).join("");
+    $("area-bar").innerHTML = REF.map(function (r) { return '<i style="width:' + r.area + "%;background:" + r.hex + '"></i>'; }).join("");
+    $("area-legend").innerHTML = REF.map(function (r) { return '<span><i style="background:' + r.hex + '"></i>' + r.name + " " + r.area.toFixed(1) + "%</span>"; }).join("");
+  }
+
+  /* ── 02 濃烈 ── */
+  var CHROMA = [
+    ["參考圖"],
+    ["紅", "#EA484F", 0.198, 79], ["青綠", "#3C857F", 0.073, 74], ["灰", "#C0C0C0", 0, 0],
+    ["現行主視覺色 shape-*"],
+    ["紅橙 coral", "#F45930", 0.198, 88], ["綠 green", "#06B070", 0.154, 99], ["紫 lavender", "#8582C8", 0.104, 51], ["薄荷 mint", "#82D3C3", 0.083, 57], ["蜜桃 tan", "#D5AA89", 0.068, 41]
+  ];
+  function renderChroma() {
+    $("chroma").innerHTML = '<div class="chroma-row head"><span>顏色</span><span>彩度 C</span><span>相對彩度</span><span></span></div>' +
+      CHROMA.map(function (r) {
+        if (r.length === 1) return '<div class="chroma-row group">' + r[0] + "</div>";
+        return '<div class="chroma-row"><span class="chroma-name"><i style="background:' + r[1] + '"></i>' + r[0] + '</span><span class="mono">' + r[2].toFixed(3) + "</span>" +
+          '<span class="track"><i style="width:' + r[3] + "%;background:" + r[1] + '"></i></span><span class="mono pct">' + (r[3] ? r[3] + "%" : "—") + "</span></div>";
+      }).join("");
+  }
+
+  /* ── 03 推導 ── */
+  var CAND = {
+    A: { name: "A · 現行", hex: "#6E619C", L: 0.530, C: 0.092, h: 293, hover: "#5D4F8B", active: "#4D4076", textDark: "#9A8FC8", hoverDark: "#796DA8",
+      white: "5.45", hoverDarkWhite: "4.60", note: "彩度比青綠高 26%，色相偏紅一點。和新的紅、青綠放在一起時，是三個顏色裡最「搶」的那個沉穩色。" },
+    B: { name: "B · 照公式", hex: "#7271A1", L: 0.569, C: 0.073, h: 285, hover: "#615F8E", active: "#514F7C", textDark: "#9F9FD1", hoverDark: "#7E7DAD",
+      white: "4.57", hoverDarkWhite: "3.87", bad: true, note: "明度、彩度都和青綠一樣，色相在空缺正中間。比現行亮、灰、偏藍。白字只剩 0.07 的餘裕，暗色模式的 hover 無法再變亮。" },
+    C: { name: "C · 公式＋明度修正", pick: true, hex: "#676695", L: 0.530, C: 0.073, h: 285, hover: "#565482", active: "#474471", textDark: "#9393C4", hoverDark: "#7371A1",
+      white: "5.37", hoverDarkWhite: "4.56", note: "彩度與色相照公式，明度沿用現行。看起來是「現行的紫，灰一點、偏藍一點」。暗色 hover 剛好等於 B。" }
+  };
+  var CAND_KEYS = ["A", "B", "C"];
+  function renderCands() {
+    $("cands").innerHTML = CAND_KEYS.map(function (k) {
+      var c = CAND[k];
+      var chips = [["", c.hex, "預設"], ["", c.hover, "hover"], ["", c.active, "active"], ["dark", c.textDark, "暗色文字"], ["", c.hoverDark, "暗色 hover"]];
+      return '<div class="cand' + (c.pick ? " pick" : "") + '"><div class="cand-chip" style="background:' + c.hex + '"><b>送出申訴</b><span>' + c.hex + "</span></div>" +
+        '<div class="cand-body"><div class="cand-title"><h3>' + c.name + "</h3>" + (c.pick ? '<span class="tag pick">建議</span>' : "") + "</div>" +
+        '<span class="caption mono">L ' + c.L.toFixed(3) + " · C " + c.C.toFixed(3) + " · h " + c.h + "°</span>" +
+        '<div class="scale">' + chips.map(function (s) {
+          return "<div><i style=\"" + (s[0] === "dark" ? "background:var(--dark);color:" + s[1] : "background:" + s[1] + ";color:#FFFFFF") + '">Aa</i><span>' + s[2] + "</span></div>";
+        }).join("") + "</div>" +
+        '<dl class="checks"><div><dt>白字對比（預設）</dt><dd>' + c.white + ":1</dd></div><div><dt>白字對比（暗色 hover）</dt><dd" + (c.bad ? ' class="bad"' : "") + ">" + c.hoverDarkWhite + ":1" + (c.bad ? " ✕" : "") + "</dd></div></dl>" +
+        '<p class="cand-note">' + c.note + "</p></div></div>";
+    }).join("");
+  }
+
+  function renderPlot() {
+    var cx = 190, cy = 190, S = 140 / 0.21; // 每單位彩度的像素
+    function pt(h, C) { var a = h * Math.PI / 180; return [cx + Math.cos(a) * C * S, cy - Math.sin(a) * C * S]; }
+    function arc(r, h0, h1) {
+      var p0 = [cx + Math.cos(h0 * Math.PI / 180) * r, cy - Math.sin(h0 * Math.PI / 180) * r];
+      var p1 = [cx + Math.cos(h1 * Math.PI / 180) * r, cy - Math.sin(h1 * Math.PI / 180) * r];
+      var large = (h1 - h0) > 180 ? 1 : 0;
+      return "M" + p0[0].toFixed(1) + " " + p0[1].toFixed(1) + "A" + r + " " + r + " 0 " + large + " 0 " + p1[0].toFixed(1) + " " + p1[1].toFixed(1);
+    }
+    var out = [];
+    out.push('<line x1="' + (cx - 170) + '" y1="' + cy + '" x2="' + (cx + 170) + '" y2="' + cy + '" stroke="var(--border)" />');
+    out.push('<line x1="' + cx + '" y1="' + (cy - 170) + '" x2="' + cx + '" y2="' + (cy + 170) + '" stroke="var(--border)" />');
+    out.push('<circle cx="' + cx + '" cy="' + cy + '" r="' + (0.073 * S).toFixed(1) + '" fill="none" stroke="#3C857F" stroke-dasharray="3 4" opacity="0.7" />');
+    out.push('<circle cx="' + cx + '" cy="' + cy + '" r="' + (0.198 * S).toFixed(1) + '" fill="none" stroke="#EA484F" stroke-dasharray="3 4" opacity="0.7" />');
+    // 最大空缺：188° → 383°
+    out.push('<path d="' + arc(160, 188, 383) + '" fill="none" stroke="var(--text-4)" stroke-width="1.5" />');
+    var mid = pt(285.4, 160 / S);
+    out.push('<line x1="' + cx + '" y1="' + cy + '" x2="' + mid[0].toFixed(1) + '" y2="' + mid[1].toFixed(1) + '" stroke="var(--text-4)" stroke-dasharray="2 3" />');
+    var vivid = pt(285, 0.198), red = pt(23, 0.198), teal = pt(188, 0.073), pc = pt(285, 0.073), pa = pt(293, 0.092);
+    out.push('<g stroke="#705CE4" stroke-width="2.5" stroke-linecap="round"><line x1="' + (vivid[0] - 6) + '" y1="' + (vivid[1] - 6) + '" x2="' + (vivid[0] + 6) + '" y2="' + (vivid[1] + 6) + '" /><line x1="' + (vivid[0] + 6) + '" y1="' + (vivid[1] - 6) + '" x2="' + (vivid[0] - 6) + '" y2="' + (vivid[1] + 6) + '" /></g>');
+    out.push('<circle cx="' + red[0] + '" cy="' + red[1] + '" r="8" fill="#EA484F" />');
+    out.push('<circle cx="' + teal[0] + '" cy="' + teal[1] + '" r="8" fill="#3C857F" />');
+    out.push('<circle cx="' + pa[0] + '" cy="' + pa[1] + '" r="6" fill="#FFFFFF" stroke="#6E619C" stroke-width="2" />');
+    out.push('<circle cx="' + pc[0] + '" cy="' + pc[1] + '" r="8" fill="#676695" />');
+    out.push('<circle cx="' + cx + '" cy="' + cy + '" r="5" fill="#C0C0C0" />');
+    var T = function (x, y, s, anchor, color, weight) { return '<text x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" font-size="12" text-anchor="' + (anchor || "start") + '" fill="' + (color || "var(--text-2)") + '"' + (weight ? ' font-weight="' + weight + '"' : "") + ">" + s + "</text>"; };
+    out.push(T(red[0] - 12, red[1] - 14, "紅 23°", "middle", "var(--text-1)", 600));
+    out.push(T(teal[0] - 4, teal[1] - 14, "青綠 188°", "middle", "var(--text-1)", 600));
+    out.push(T(cx + 10, cy - 8, "灰", "start", "var(--text-3)"));
+    out.push(T(pc[0] - 14, pc[1] + 4, "B／C 285°", "end", "var(--text-1)", 600));
+    out.push(T(pa[0] + 12, pa[1] + 10, "現行 293°", "start", "var(--text-3)"));
+    out.push(T(vivid[0] + 12, vivid[1] + 4, "鮮紫（不採用）", "start", "var(--text-3)"));
+    out.push(T(30, 360, "最大空缺 195°，正中間 285°", "start", "var(--text-3)"));
+    $("plot").innerHTML = out.join("");
+  }
+
+  /* ── 04 試色 ── */
+  var GRAY = { neutral: "#C0C0C0", purple: "#C0BECD" };
+  var LIB = {
+    circle: { w: 100, h: 100, d: "M0 50a50 50 0 1 0 100 0a50 50 0 1 0 -100 0Z" },
+    semi: { w: 100, h: 50, d: "M0 50A50 50 0 0 1 100 50Z" },
+    arch: { w: 80, h: 100, d: "M0 100V40A40 40 0 0 1 80 40V100Z" },
+    star: { w: 100, h: 100, d: "M50 0C54 34 66 46 100 50C66 54 54 66 50 100C46 66 34 54 0 50C34 46 46 34 50 0Z" },
+    rect: { w: 100, h: 100, d: "M0 0H100V100H0Z" }
+  };
+  // [形狀, x, y, 寬, 高]（viewBox 1200×520，地面 y=520，全部在同一層、互相接觸往上堆）
+  var COMP = [
+    ["semi", 500, 420, 200, 100], ["circle", 545, 310, 110, 110],
+    ["rect", 700, 250, 160, 270], ["star", 690, 70, 180, 180],
+    ["arch", 860, 100, 200, 420], ["circle", 890, -40, 140, 140],
+    ["rect", 1060, 340, 180, 180], ["semi", 1060, 250, 180, 90], ["circle", 1090, 130, 120, 120]
+  ];
+  var PALETTES = {
+    current5: { label: "現行五色", colors: ["#D5AA89", "#F45930", "#06B070", "#F45930", "#8582C8", "#82D3C3", "#D5AA89", "#06B070", "#F45930"] },
+    ref3: { label: "參考三色", colors: ["gray", "red", "teal", "red", "gray", "teal", "teal", "gray", "red"] },
+    ref3p: { label: "參考三色＋紫", colors: ["gray", "red", "teal", "red", "purple", "teal", "gray", "teal", "red"] }
+  };
+  var state = { cand: "C", pal: "ref3p", gray: "neutral" };
+  var PRESETS = { current: { cand: "A", pal: "current5", gray: "neutral" }, proposed: { cand: "C", pal: "ref3p", gray: "neutral" } };
+  var BOOK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h6a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H4Z"/><path d="M20 5h-6a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h6Z"/></svg>';
+  var ARROW = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  var CHEVRON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+  var TICK = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>';
+
+  function colorOf(slot) {
+    if (slot === "gray") return GRAY[state.gray];
+    if (slot === "red") return "#EA484F";
+    if (slot === "teal") return "#3C857F";
+    if (slot === "purple") return CAND[state.cand].hex;
+    return slot;
+  }
+  function renderControls() {
+    $("presets").innerHTML = '<button type="button" class="preset" data-preset="current" aria-pressed="' + same(PRESETS.current) + '">現行</button>' +
+      '<button type="button" class="preset" data-preset="proposed" aria-pressed="' + same(PRESETS.proposed) + '">提案：C＋參考三色＋紫</button>';
+    $("controls").innerHTML =
+      seg("cand", "紫色", [["A", "A 現行"], ["B", "B 照公式"], ["C", "C 公式＋明度修正"]], state.cand) +
+      seg("pal", "主視覺色", [["current5", "現行五色"], ["ref3", "參考三色"], ["ref3p", "參考三色＋紫"]], state.pal) +
+      seg("gray", "灰色", [["neutral", "中性灰"], ["purple", "紫調灰"]], state.gray);
+  }
+  function same(p) { return p.cand === state.cand && p.pal === state.pal && p.gray === state.gray; }
+  function applyVars() {
+    var c = CAND[state.cand], root = document.documentElement.style;
+    root.setProperty("--p", c.hex); root.setProperty("--p-hover", c.hover); root.setProperty("--p-active", c.active);
+  }
+  function renderBanner() {
+    var cols = PALETTES[state.pal].colors;
+    var shapes = COMP.map(function (s, i) {
+      var L = LIB[s[0]];
+      return '<g transform="translate(' + s[1] + " " + s[2] + ") scale(" + (s[3] / L.w) + " " + (s[4] / L.h) + ')"><path d="' + L.d + '" fill="' + colorOf(cols[i]) + '"/></g>';
+    }).join("");
+    $("banner-mock").innerHTML =
+      '<div class="m-nav"><span class="m-brand"><span class="logo">' + BOOK + '</span>學生申訴協力系統</span>' +
+        '<span class="m-item">處理流程</span><span class="m-item">常見問題</span><span class="m-item">我的申訴</span><span class="btn primary m-cta">送出申訴</span></div>' +
+      '<div class="banner"><svg viewBox="0 0 1200 520" preserveAspectRatio="xMaxYMax slice" aria-hidden="true">' + shapes + "</svg>" +
+        '<div class="b-copy"><span class="b-eyebrow">國立清華大學學生會</span><h3 class="b-title">遇到校園問題<br>讓學生會陪你處理</h3>' +
+        '<p class="b-lead">填寫申訴表單後，你會收到案件編號與專屬查詢連結。學權幹部會在系統上回覆。</p>' +
+        '<div class="b-actions"><span class="btn primary lg">開始填寫申訴' + ARROW + '</span><span class="btn secondary lg">了解處理流程</span></div></div></div>';
+  }
+  function stat(c, t, text) { return '<span class="stat" style="color:' + t + '"><i style="background:' + c + '"></i>' + text + "</span>"; }
+  function renderUI() {
+    $("ui").innerHTML =
+      '<div class="ui-col">' +
+        '<div class="ui-head"><h4>填寫申訴</h4><p>描述遇到的狀況與希望的處理方式，送出後會收到案件連結。</p></div>' +
+        '<div class="field"><label>學校信箱</label><span class="input focus">name@gapp.nthu.edu.tw<span class="caret" style="margin-right:auto"></span></span></div>' +
+        '<div class="field"><label>申訴種類</label><span class="input">宿舍與生活' + CHEVRON + "</span></div>" +
+        '<div class="field"><span class="flabel">希望學生會怎麼處理</span>' +
+          '<span class="choice"><span class="radio on"></span>協助向校方反映</span><span class="choice"><span class="radio"></span>先讓學生會知道就好</span></div>' +
+        '<span class="choice"><span class="check on">' + TICK + "</span>同意學權幹部查看我附上的檔案</span>" +
+        '<span class="choice"><span class="switch on"></span>有新回覆時寄信通知我</span>' +
+        '<div class="ui-foot"><span class="link">看完整處理流程</span><span class="btn secondary">儲存草稿</span><span class="btn primary">送出申訴</span><span class="btn primary is-hover">送出申訴</span></div>' +
+        '<span class="caption">最右邊的按鈕是 hover 狀態。</span>' +
+      "</div>" +
+      '<div class="ui-col">' +
+        '<div class="ui-head"><h4>我的申訴</h4><p>點選案件查看幹部的回覆與處理進度。</p></div>' +
+        '<div class="tabs"><span class="tab on">全部</span><span class="tab">處理中</span><span class="tab">已結案</span></div>' +
+        '<div class="cases">' +
+          '<div class="case on"><div class="case-top"><b>宿舍網路中斷超過一週</b>' + stat("var(--info)", "var(--info-text)", "處理中") + '</div><span class="meta">A-0912 · 9/18 更新</span></div>' +
+          '<div class="case"><div class="case-top"><b>選課系統送出失敗</b>' + stat("var(--warning)", "var(--warning-text)", "待補件") + '</div><span class="meta">A-0911 · 9/17 更新</span></div>' +
+          '<div class="case"><div class="case-top"><b>獎學金撥款延遲</b>' + stat("var(--success)", "var(--success-text)", "已結案") + '</div><span class="meta">A-0907 · 9/12 更新</span></div>' +
+        "</div>" +
+        '<span class="link">查看全部 12 件</span>' +
+      "</div>";
+  }
+  function renderTokens() {
+    var c = CAND[state.cand];
+    var rows = [
+      ["primary", c.hex, "主要按鈕、連結、選取線、勾選；白字 " + c.white + ":1"],
+      ["primary-hover", c.hover, "hover；放在 surface-active 上的紫色文字"],
+      ["primary-active", c.active, "按下"],
+      ["primary-text-dark", c.textDark, "暗色模式的連結與選取線"],
+      ["primary-hover-dark", c.hoverDark, "暗色模式的按鈕 hover；白字 " + c.hoverDarkWhite + ":1" + (c.bad ? "，不及格" : "")]
+    ];
+    var used = {};
+    PALETTES[state.pal].colors.forEach(function (s) { used[colorOf(s)] = s; });
+    var shapeRows = Object.keys(used).map(function (hex) {
+      var s = used[hex], name = { gray: "shape-gray", red: "shape-red", teal: "shape-teal", purple: "（同 primary）" }[s] || "現行 shape-*";
+      return [name, hex, "主視覺色塊"];
+    });
+    $("tokens").innerHTML = '<div class="tok-row head"><span></span><span>Token</span><span>值</span><span>用途</span></div>' +
+      rows.concat(shapeRows).map(function (r) {
+        return '<div class="tok-row"><i style="background:' + r[1] + '"></i><code>' + r[0] + "</code><code>" + r[1] + '</code><span class="use">' + r[2] + "</span></div>";
+      }).join("");
+  }
+  function renderTry() { applyVars(); renderControls(); renderBanner(); renderUI(); renderTokens(); }
+
+  document.addEventListener("click", function (e) {
+    var p = e.target.closest("[data-preset]");
+    if (p) { state = Object.assign({}, PRESETS[p.getAttribute("data-preset")]); renderTry(); return; }
+    var b = e.target.closest("[data-action]");
+    if (!b) return;
+    state[b.getAttribute("data-action")] = b.getAttribute("data-value");
+    renderTry();
+  });
+
+  renderRef(); renderChroma(); renderCands(); renderPlot(); renderTry();
+})();
+</script>

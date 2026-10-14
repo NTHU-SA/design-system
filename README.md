@@ -7,6 +7,7 @@
 | [`DESIGN.md`](DESIGN.md) | 設計規格本體，採用 [DESIGN.md 格式](https://github.com/google-labs-code/design.md)：開頭 YAML 是 token，內文是規則與理由 |
 | [`lab/palette-lab.html`](lab/palette-lab.html) | 色彩測試頁：把主視覺色延伸成 8 色分類色與狀態色，放進產品畫面亮暗並排比較。直接用瀏覽器開啟 |
 | [`lab/hero-type-lab.html`](lab/hero-type-lab.html) | 字體與主視覺測試頁：比較系統字與 Noto Sans TC、中文字級、按鈕尺寸，以及首頁主視覺的各種組合 |
+| [`lab/brand-color-lab.html`](lab/brand-color-lab.html) | 品牌色票測試頁（白底）：量測參考海報的色票結構、診斷主視覺色為何濃烈、推導紫色，並放進主視覺與表單畫面比較 |
 | [`notes/berkeleytime-study.md`](notes/berkeleytime-study.md) | 研究筆記：從 Berkeleytime 原始碼萃取出的排版與元件設計，是這份規格的起點 |
 
 ## 檢查 DESIGN.md
