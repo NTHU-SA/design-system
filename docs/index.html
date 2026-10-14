@@ -23,17 +23,17 @@
 .task-cta { width: fit-content; }
 .lookup { display: grid; gap: 6px; }
 .lookup-row { display: flex; gap: 8px; }
-.lookup-row .input { flex: 1; min-width: 0; height: 44px; font-family: var(--mono); letter-spacing: 0.04em; }
+.lookup-row .input { flex: 1; min-width: 0; height: 44px; font-variant-numeric: tabular-nums; font-feature-settings: "zero"; }
 .facts { display: flex; flex-wrap: wrap; gap: 10px 28px; font-size: 14px; color: var(--text-3); }
 .facts li { display: inline-flex; align-items: center; gap: 8px; }
 .facts svg { color: var(--text-3); }
 .steps { display: grid; }
-.step { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 16px; padding: 18px 0; border-top: 1px solid var(--border); }
+.step { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; padding: 18px 0; border-top: 1px solid var(--border); }
 .step:first-child { border-top: 0; padding-top: 4px; }
-.step-no { width: 32px; height: 32px; border-radius: 9999px; background: var(--sunken); display: grid; place-items: center; font: 600 13px var(--mono); color: var(--text-2); }
-.step-body { display: grid; gap: 4px; }
+.step-no { width: 28px; height: 28px; border-radius: 9999px; background: var(--sunken); display: grid; place-items: center; font-size: 13px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; color: var(--text-2); }
+.step-body { display: grid; gap: 4px; padding-top: 3px; }
 .step-body p { font-size: 14px; color: var(--text-3); }
-.step-time { font-size: 12px; color: var(--text-3); font-family: var(--mono); }
+.step-time { font-size: 12px; color: var(--text-3); font-variant-numeric: tabular-nums; }
 .section-rule { border-top: 1px solid var(--border); }
 .closing { position: relative; border-top: 1px solid var(--border); }
 .closing-copy { position: absolute; z-index: 1; top: 56px; display: grid; gap: 12px; max-width: 420px; }
@@ -121,10 +121,10 @@
       <p class="muted">從送出到結案，幹部的正式回覆都會先經過部長審核，再寄給你。</p>
     </div>
     <ol class="steps">
-      <li class="step"><span class="step-no">1</span><div class="step-body"><b class="title-sm">填寫申訴表單</b><p>描述遇到的狀況與希望的處理方式，可以附上照片或檔案。</p><span class="step-time">約 5 分鐘</span></div></li>
-      <li class="step"><span class="step-no">2</span><div class="step-body"><b class="title-sm">收到案件連結</b><p>系統把案件編號與專屬查詢連結寄到你的信箱，之後隨時可以補充說明。</p><span class="step-time">送出後立即</span></div></li>
-      <li class="step"><span class="step-no">3</span><div class="step-body"><b class="title-sm">學權幹部處理</b><p>幹部了解狀況、向相關單位反映，回覆經部長審核後寄給你。</p><span class="step-time">3 個工作天內第一次回覆</span></div></li>
-      <li class="step"><span class="step-no">4</span><div class="step-body"><b class="title-sm">結案</b><p>問題處理完成，或你確認不需要再協助時結案。結案後 30 天內都可以重新開啟。</p></div></li>
+      <li class="step"><span class="step-no" aria-hidden="true">1</span><div class="step-body"><b class="title-sm">填寫申訴表單</b><p>描述遇到的狀況與希望的處理方式，可以附上照片或檔案。</p><span class="step-time">約 5 分鐘</span></div></li>
+      <li class="step"><span class="step-no" aria-hidden="true">2</span><div class="step-body"><b class="title-sm">收到案件連結</b><p>系統把案件編號與專屬查詢連結寄到你的信箱，之後隨時可以補充說明。</p><span class="step-time">送出後立即</span></div></li>
+      <li class="step"><span class="step-no" aria-hidden="true">3</span><div class="step-body"><b class="title-sm">學權幹部處理</b><p>幹部了解狀況、向相關單位反映，回覆經部長審核後寄給你。</p><span class="step-time">3 個工作天內第一次回覆</span></div></li>
+      <li class="step"><span class="step-no" aria-hidden="true">4</span><div class="step-body"><b class="title-sm">結案</b><p>問題處理完成，或你確認不需要再協助時結案。結案後 30 天內都可以重新開啟。</p></div></li>
     </ol>
   </section>
 

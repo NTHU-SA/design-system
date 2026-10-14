@@ -18,7 +18,7 @@
 .toolbar .count { font-size: 13px; color: var(--text-3); margin-right: auto; }
 .seg { display: inline-flex; gap: 2px; padding: 3px; border-radius: 9999px; background: var(--hover); max-width: 100%; overflow-x: auto; scrollbar-width: none; }
 .seg button { font: 500 14px/1 var(--font); color: var(--text-3); background: transparent; border: 0; padding: 7px 12px; border-radius: 9999px; cursor: pointer; white-space: nowrap; display: inline-flex; gap: 6px; align-items: center; transition: color 100ms ease-in-out; }
-.seg button span { font: 12px var(--mono); color: var(--text-3); }
+.seg button span { font-size: 12px; font-variant-numeric: tabular-nums; color: var(--text-3); }
 .seg button[aria-pressed="true"] { background: var(--surface); color: var(--text-1); box-shadow: var(--seg-shadow); }
 @media (hover: hover) { .seg button:hover { color: var(--text-1); } }
 .search { position: relative; width: 260px; }
@@ -30,7 +30,7 @@ th { text-align: left; font-size: 12px; font-weight: 500; color: var(--text-3); 
 td { padding: 12px; border-bottom: 1px solid var(--border); color: var(--text-1); white-space: nowrap; }
 td.subject { white-space: normal; min-width: 240px; }
 td.subject a { color: var(--text-1); text-decoration: none; font-weight: 500; }
-td.mono, td .mono { color: var(--text-3); font-size: 13px; }
+td.num, td .num, td.code, td .code { color: var(--text-3); font-size: 13px; }
 tbody tr { cursor: pointer; transition: background-color 100ms ease-in-out; }
 @media (hover: hover) { tbody tr:hover { background: var(--hover); } }
 .who-chip { display: inline-flex; align-items: center; gap: 8px; color: var(--text-2); }
@@ -128,10 +128,10 @@ tbody tr { cursor: pointer; transition: background-color 100ms ease-in-out; }
     }).join("");
     $("count").textContent = "共 " + list.length + " 件";
     $("rows").innerHTML = list.map(function (c) {
-      return '<tr data-href="case.html"><td class="mono">' + c[0] + '</td><td class="subject"><a href="case.html">' + esc(c[1]) + "</a></td><td>" + c[2] + "</td><td>" + stat(c[3]) + "</td><td>" + who(c[4]) + '</td><td class="mono">' + c[5] + "</td></tr>";
+      return '<tr data-href="case.html"><td class="code">' + c[0] + '</td><td class="subject"><a href="case.html">' + esc(c[1]) + "</a></td><td>" + c[2] + "</td><td>" + stat(c[3]) + "</td><td>" + who(c[4]) + '</td><td class="num">' + c[5] + "</td></tr>";
     }).join("");
     $("cards").innerHTML = list.map(function (c) {
-      return '<a class="card-row" href="case.html"><span class="card-top"><b>' + esc(c[1]) + "</b>" + stat(c[3]) + '</span><span class="meta"><span class="mono">' + c[0] + "</span> · " + c[2] + " · " + (c[4] ? c[4] + "同學" : "尚未指派") + " · " + c[5] + "</span></a>";
+      return '<a class="card-row" href="case.html"><span class="card-top"><b>' + esc(c[1]) + "</b>" + stat(c[3]) + '</span><span class="meta"><span class="code">' + c[0] + "</span> · " + c[2] + " · " + (c[4] ? c[4] + "同學" : "尚未指派") + " · " + c[5] + "</span></a>";
     }).join("");
     $("empty").hidden = list.length > 0;
   }
