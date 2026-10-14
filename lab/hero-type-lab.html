@@ -206,15 +206,141 @@ footer.foot { border-top: 1px solid var(--border); padding-top: 20px; color: var
 }
 .mock[data-motion="on"] .shape { animation: drift var(--dur, 12s) ease-in-out infinite; animation-delay: var(--delay, 0s); }
 @media (prefers-reduced-motion: reduce) { .mock[data-motion="on"] .shape { animation: none; } }
+
+/* ── 頁面切換 ── */
+[hidden] { display: none !important; }
+.page { display: grid; gap: 64px; }
+.page-tabs { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+/* ── Hero 強度 ── */
+.decision { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.decision-row { display: grid; grid-template-columns: 112px minmax(0, 1.3fr) minmax(0, 1.7fr); gap: 16px; padding: 12px 16px; border-top: 1px solid var(--border); align-items: start; font-size: 14px; line-height: 1.6; }
+.decision-row:first-child { border-top: 0; }
+.decision-row.head { background: var(--sunken); padding-block: 8px; font-size: 12px; font-weight: 500; color: var(--text-3); }
+.decision-row b { color: var(--text-1); font-weight: 600; }
+@media (max-width: 760px) { .decision-row { grid-template-columns: minmax(0, 1fr); gap: 4px; } .decision-row.head { display: none; } }
+.level { display: grid; gap: 14px; }
+.level-head { display: grid; gap: 4px; }
+.level-head h3 { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; font-size: 18px; }
+.level-tag { font: 600 12px var(--mono); color: var(--primary-text); }
+.pair2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 560px), 1fr)); gap: 20px; }
+.prod { display: grid; gap: 8px; min-width: 0; align-content: start; }
+.prod-label { font-size: 12px; font-weight: 500; color: var(--text-3); }
+.mock.imock { min-width: 560px; }
+.imock .m-nav { padding: 0 24px; height: 56px; }
+.imock .m-item { padding: 0 9px; }
+.avatar { width: 28px; height: 28px; border-radius: 9999px; background: var(--active); margin-left: 12px; display: inline-block; }
+.ihero { position: relative; overflow: hidden; isolation: isolate; background: #FFFFFF; }
+.ihero.full { height: 420px; }
+.ihero.band { height: 184px; border-bottom: 1px solid var(--border); }
+.icopy { position: absolute; left: 24px; z-index: 5; display: grid; gap: 12px; }
+.ihero.full .icopy { bottom: 28px; max-width: 400px; }
+.ihero.band .icopy { top: 50%; transform: translateY(-50%); max-width: 330px; gap: 6px; }
+.i-eyebrow { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: var(--text-2); }
+.i-display { font-size: 36px; font-weight: 600; line-height: 1.25; color: var(--text-1); }
+.i-title { font-size: 18px; font-weight: 600; line-height: 1.4; color: var(--text-1); }
+.i-lead { font-size: 16px; line-height: 1.6; color: var(--text-2); }
+.i-text { font-size: 14px; line-height: 1.6; color: var(--text-2); }
+.i-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.ihead { padding: 24px; border-bottom: 1px solid var(--border); background: var(--surface); display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; }
+.ihead-title { display: flex; gap: 12px; align-items: center; }
+.ihead-title .emblem { width: 36px; height: 36px; flex-shrink: 0; display: block; }
+.ihead h4 { font-size: 28px; font-weight: 500; line-height: 1.35; color: var(--text-1); }
+.ihead p { font-size: 15px; line-height: 1.6; color: var(--text-2); margin-top: 6px; max-width: 380px; }
+.ibody { padding: 20px 24px 24px; display: grid; gap: 14px; background: var(--bg); }
+.ifield { display: grid; gap: 6px; }
+.ifield label { font-size: 14px; font-weight: 500; color: var(--text-1); }
+.iinput { height: 36px; border: 1px solid var(--border); border-radius: 6px; padding: 0 12px; display: flex; align-items: center; font-size: 14px; color: var(--text-4); background: var(--surface); }
+.irow { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 16px; align-items: center; padding: 10px 0; border-top: 1px solid var(--border); font-size: 14px; }
+.irow b { color: var(--text-1); font-weight: 600; }
+.irow span { color: var(--text-3); font-size: 13px; font-family: var(--mono); }
+.itoolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 16px 24px; border-bottom: 1px solid var(--border); background: var(--surface); }
+.itoolbar .i-title { margin-right: auto; }
+.mini-seg { display: inline-flex; gap: 2px; padding: 3px; border-radius: 9999px; background: var(--hover); }
+.mini-seg span { font-size: 13px; font-weight: 500; color: var(--text-3); padding: 6px 10px; border-radius: 9999px; line-height: 1; }
+.mini-seg span.on { background: var(--surface); color: var(--text-1); box-shadow: var(--seg-shadow); }
+.itable { width: 100%; border-collapse: collapse; font-size: 14px; }
+.itable th { text-align: left; font-size: 12px; font-weight: 500; color: var(--text-3); padding: 10px 8px; border-bottom: 1px solid var(--border); }
+.itable td { padding: 11px 8px; border-bottom: 1px solid var(--border); color: var(--text-1); white-space: nowrap; }
+.itable td.mono { color: var(--text-3); font-size: 13px; }
+.istat { display: inline-flex; align-items: center; gap: 6px; font-weight: 500; }
+.istat i { width: 8px; height: 8px; border-radius: 9999px; display: inline-block; }
+.iweek { --row: 34px; display: grid; grid-template-columns: 36px repeat(5, minmax(0, 1fr)); padding: 0 24px 20px; background: var(--bg); }
+.iweek-head { padding: 10px 4px; font-size: 12px; font-weight: 500; color: var(--text-3); text-align: center; border-bottom: 1px solid var(--border); }
+.iweek-times { position: relative; height: calc(var(--row) * 7); }
+.iweek-times span { position: absolute; right: 6px; transform: translateY(-50%); font: 11px var(--mono); color: var(--text-4); }
+.iweek-col { position: relative; height: calc(var(--row) * 7); border-left: 1px solid var(--border); background-image: repeating-linear-gradient(to bottom, var(--border) 0 1px, transparent 1px var(--row)); }
+.iev { position: absolute; left: 3px; right: 3px; border-radius: 4px; padding: 4px 6px; color: #1F1F20; font-size: 12px; font-weight: 600; line-height: 1.3; overflow: hidden; }
+
+/* ── 四個系統並排 ── */
+.grid4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 560px), 1fr)); gap: 20px; }
+
+/* ── 形狀庫 ── */
+.lib { display: grid; gap: 28px; }
+.lib-family { display: grid; gap: 12px; }
+.lib-family-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.lib-family-head h3 { font-size: 16px; }
+.lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 12px; }
+.lib-item { border: 1px solid var(--border); border-radius: 8px; background: var(--surface); padding: 16px 10px 12px; display: grid; gap: 10px; justify-items: center; }
+.lib-item .art { width: 76px; height: 76px; display: grid; place-items: center; }
+.lib-item span { font-size: 13px; color: var(--text-2); }
+.lib-item code { font: 11px var(--mono); color: var(--text-3); }
+
+/* ── 落下動態 ── */
+.drop-hero.ihero.full { height: 500px; }
+.drop-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.drop-canvas.back { z-index: 1; }
+.drop-canvas.front { z-index: 6; cursor: grab; touch-action: none; }
+.drop-msg { position: absolute; right: 24px; top: 24px; z-index: 7; font-size: 13px; color: var(--text-3); }
 </style>
 
 <div class="wrap">
   <header class="top">
     <span class="eyebrow">DESIGN.md · 字體、按鈕與主視覺測試</span>
     <h1 class="page-h1">主視覺與字體實驗室</h1>
-    <p class="lead">對照目前 DESIGN.md 做出來的網站與幾個修改提案。字體、字級、按鈕可以逐項比較；最下方的模擬頁面可以自由切換主視覺的色票、底色、標題字重、構圖與動態。</p>
+    <p class="lead">對照目前 DESIGN.md 做出來的網站與幾個修改提案。「字體與主視覺」比較字體、字級、按鈕與首頁主視覺；「Hero 強度」示範四個系統在不同情境下該用多大的 Hero；「形狀與動態」是擴充的形狀庫與落下動畫。</p>
+    <div class="page-tabs" id="page-tabs"></div>
   </header>
 
+  <div class="page" id="page-intensity" hidden>
+    <section aria-labelledby="intensity-title">
+      <div class="section-head"><span class="eyebrow">Hero 強度</span><h2 class="sec" id="intensity-title">四種強度，用使用者決定</h2>
+        <p>要不要 Hero，不是看產品是「工具」還是「網站」，而是看使用者：第一次來、需要被引導的人，給完整的 Hero；每天打開來工作的人，直接給工作畫面。下面用學生會的四個系統示範：申訴、空間借用、投票、資訊。</p></div>
+      <div class="decision" id="decision"></div>
+    </section>
+    <div class="page" id="levels" style="gap:56px"></div>
+    <section aria-labelledby="family-title">
+      <div class="section-head"><span class="eyebrow">同家族，不重複</span><h2 class="sec" id="family-title">四個系統為什麼不會長得一樣</h2></div>
+      <ul class="notes">
+        <li><strong>每個系統一個代表形狀＋主色</strong>：申訴是「四角星＋紅橙」；空間借用是「拱門＋綠」，像一扇門；投票是「扇貝圓＋紫」，像一枚印章；資訊是「膠囊標籤＋薄荷」，像一張張分類標籤。代表形狀在每種強度裡都是最大、最醒目的那一個。</li>
+        <li><strong>形狀家族可以不同</strong>：申訴用海報系的尖角形狀，空間借用用堆疊系的圓弧形狀，投票與資訊混用堆疊系和柔軟系。同一個構圖裡最多混用兩個家族，畫面才不會散。</li>
+        <li><strong>構圖各排各的</strong>：四個系統共用形狀庫、色票與規則，但沒有共用任何一個構圖。</li>
+        <li><strong>標題只講這個系統唯一的工作</strong>：「遇到校園問題」「找到合適的空間」「你的一票」「校園大小事」天生就不會重複。</li>
+        <li><strong>強度越低，品牌越安靜</strong>：從完整 Hero 到頁首點綴，色塊越來越少；工作畫面只剩紫色與字體，資料的顏色是畫面上最鮮豔的東西。</li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="page" id="page-motion" hidden>
+    <section aria-labelledby="lib-title">
+      <div class="section-head"><span class="eyebrow">形狀庫</span><h2 class="sec" id="lib-title">三個形狀家族</h2>
+        <p>從三張參考圖各歸納出一個家族：海報系是尖角與直線，堆疊系是圓弧與半圓，柔軟系是有機的波浪邊。顏色仍然只用五個主視覺色。</p></div>
+      <div class="lib" id="shape-lib"></div>
+    </section>
+    <section aria-labelledby="drop-title">
+      <div class="section-head"><span class="eyebrow">落下動態</span><h2 class="sec" id="drop-title">色塊掉進來、堆起來</h2>
+        <p>「編排落下」的終點是設計好的構圖，色塊依序從上方掉進來，落地時輕微回彈後定位，每次播放結果都一樣。「物理堆疊」用物理引擎讓色塊自然掉落、互相堆疊，每次結果都不同；兩層色塊分別在文字的前後，同一層會互相碰撞，不同層會交疊。物理模式可以用滑鼠拖動、拋出色塊。</p></div>
+      <div class="controls" id="drop-controls"></div>
+      <div id="drop-stage"></div>
+      <ul class="notes">
+        <li><strong>落下的順序</strong>：位置越低的色塊越先落地，看起來像是一個一個堆上去。</li>
+        <li><strong>色塊只會堆在右側</strong>：左邊有一道看不見的牆，標題與按鈕的區域永遠保持乾淨。</li>
+        <li>系統若開啟「減少動態」的無障礙設定，會直接顯示最終構圖，不播放動畫。</li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="page" id="page-main">
   <section aria-labelledby="font-title">
     <div class="section-head"><span class="eyebrow">01 · 中文字體</span><h2 class="sec" id="font-title">為什麼中文看起來偏細</h2>
       <p>目前的字體設定只有 Inter，中文會改用作業系統內建的字體。內建字體通常只有三種粗細，所以設成 500 的字會被畫成 400，設成 580 的字會直接跳到 700。下面的數字在你現在的瀏覽器上即時量測。</p></div>
@@ -252,10 +378,12 @@ footer.foot { border-top: 1px solid var(--border); padding-top: 20px; color: var
       <li>色塊上的文字一律是深色字，白字在這些色塊上的對比都不到 3.5:1。</li>
     </ul>
   </section>
+  </div>
 
   <footer class="foot">頁面本身使用提案字體 Inter + Noto Sans TC（可變字體）。模擬頁面的「目前」選項使用 Inter + 系統字，還原目前網站的樣子。</footer>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 <script>
 (function () {
   "use strict";
@@ -419,8 +547,306 @@ footer.foot { border-top: 1px solid var(--border); padding-top: 20px; color: var
         "</div></div>";
   }
 
+  /* ── 形狀庫 ── */
+  function circlePath(cx, cy, r) { return "M" + (cx - r) + " " + cy + "a" + r + " " + r + " 0 1 0 " + (2 * r) + " 0a" + r + " " + r + " 0 1 0 " + (-2 * r) + " 0Z"; }
+  function polar(n, fn) { var pts = []; for (var i = 0; i < n; i++) { var t = i / n * Math.PI * 2, r = fn(t); pts.push([50 + r * Math.cos(t - Math.PI / 2), 50 + r * Math.sin(t - Math.PI / 2)]); } return pts; }
+  function polyPath(pts) { return "M" + pts.map(function (q) { return q[0].toFixed(2) + " " + q[1].toFixed(2); }).join("L") + "Z"; }
+  function roundedPoly(pts, r) {
+    var d = "";
+    for (var i = 0; i < pts.length; i++) {
+      var p0 = pts[(i - 1 + pts.length) % pts.length], p1 = pts[i], p2 = pts[(i + 1) % pts.length];
+      var v1 = [p0[0] - p1[0], p0[1] - p1[1]], v2 = [p2[0] - p1[0], p2[1] - p1[1]];
+      var l1 = Math.hypot(v1[0], v1[1]), l2 = Math.hypot(v2[0], v2[1]);
+      var a = [p1[0] + v1[0] / l1 * r, p1[1] + v1[1] / l1 * r], b = [p1[0] + v2[0] / l2 * r, p1[1] + v2[1] / l2 * r];
+      d += (i === 0 ? "M" : "L") + a[0].toFixed(2) + " " + a[1].toFixed(2) + "Q" + p1[0].toFixed(2) + " " + p1[1].toFixed(2) + " " + b[0].toFixed(2) + " " + b[1].toFixed(2);
+    }
+    return d + "Z";
+  }
+  function arcPts(cx, cy, r, a0, a1, n) { var out = []; for (var i = 0; i <= n; i++) { var a = a0 + (a1 - a0) * i / n; out.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]); } return out; }
+  function regular(n, r, rot) { var p = []; for (var i = 0; i < n; i++) { var a = rot + i / n * Math.PI * 2; p.push([50 + r * Math.cos(a), 50 + r * Math.sin(a)]); } return p; }
+  var PI = Math.PI;
+  var SQ = [[0, 0], [100, 0], [100, 100], [0, 100]];
+  var LIB = {
+    tri: { name: "三角形", fam: "poster", w: 100, h: 100, d: "M8 92L50 4L96 78Z", body: { pts: [[8, 92], [50, 4], [96, 78]] } },
+    star: { name: "四角星", fam: "poster", w: 100, h: 100, d: "M50 0C54 34 66 46 100 50C66 54 54 66 50 100C46 66 34 54 0 50C34 46 46 34 50 0Z", body: { circle: 0.55 } },
+    oct: { name: "八角形", fam: "poster", w: 100, h: 100, d: "M30 2H70L98 30V70L70 98H30L2 70V30Z", body: { pts: [[30, 2], [70, 2], [98, 30], [98, 70], [70, 98], [30, 98], [2, 70], [2, 30]] } },
+    flag: { name: "缺角方形", fam: "poster", w: 100, h: 100, d: "M0 0H100V64H58V100H0Z", body: { pts: [[0, 0], [100, 0], [100, 64], [58, 100], [0, 100]] } },
+    para: { name: "平行四邊形", fam: "poster", w: 100, h: 60, d: "M22 0H100L78 60H0Z", body: { pts: [[22, 0], [100, 0], [78, 60], [0, 60]] } },
+    ring: { name: "圓環", fam: "poster", w: 100, h: 100, d: circlePath(50, 50, 50) + circlePath(50, 50, 26), evenodd: true, body: { circle: 1 } },
+    circle: { name: "圓形", fam: "stack", w: 100, h: 100, d: circlePath(50, 50, 50), body: { circle: 1 } },
+    semi: { name: "半圓", fam: "stack", w: 100, h: 50, d: "M0 50A50 50 0 0 1 100 50Z", body: { pts: arcPts(50, 50, 50, PI, 2 * PI, 10) } },
+    arch: { name: "拱門", fam: "stack", w: 80, h: 100, d: "M0 100V40A40 40 0 0 1 80 40V100Z", body: { pts: [[0, 100]].concat(arcPts(40, 40, 40, PI, 2 * PI, 8), [[80, 100]]) } },
+    pill: { name: "膠囊", fam: "stack", w: 100, h: 40, d: "M20 0H80A20 20 0 0 1 80 40H20A20 20 0 0 1 20 0Z", body: { pts: arcPts(80, 20, 20, -PI / 2, PI / 2, 6).concat(arcPts(20, 20, 20, PI / 2, 1.5 * PI, 6)) } },
+    roundsq: { name: "圓角方形", fam: "stack", w: 100, h: 100, d: roundedPoly(SQ, 24), body: { pts: SQ } },
+    dshape: { name: "D 形", fam: "stack", w: 100, h: 100, d: "M0 0H50A50 50 0 0 1 50 100H0Z", body: { pts: [[0, 0]].concat(arcPts(50, 50, 50, -PI / 2, PI / 2, 8), [[0, 100]]) } },
+    quarter: { name: "四分之一圓", fam: "stack", w: 100, h: 100, d: "M0 100V0A100 100 0 0 1 100 100Z", body: { pts: [[0, 100]].concat(arcPts(0, 100, 100, -PI / 2, 0, 8)) } },
+    scallop: { name: "扇貝圓", fam: "soft", w: 100, h: 100, d: polyPath(polar(144, function (t) { return 45 + 5 * Math.cos(12 * t); })), body: { circle: 0.95 } },
+    clover: { name: "四葉形", fam: "soft", w: 100, h: 100, d: polyPath(polar(144, function (t) { return 39 + 11 * Math.cos(4 * t); })), body: { circle: 0.85 } },
+    flower: { name: "花形", fam: "soft", w: 100, h: 100, d: polyPath(polar(144, function (t) { return 41 + 9 * Math.cos(6 * t); })), body: { circle: 0.9 } },
+    rtri: { name: "圓角三角形", fam: "soft", w: 100, h: 100, d: roundedPoly([[50, 8], [96, 90], [4, 90]], 16), body: { pts: [[50, 8], [96, 90], [4, 90]] } },
+    rhex: { name: "圓角六邊形", fam: "soft", w: 100, h: 100, d: roundedPoly(regular(6, 50, 0), 14), body: { pts: regular(6, 50, 0) } },
+    plus: { name: "十字", fam: "soft", w: 100, h: 100, d: roundedPoly([[34, 0], [66, 0], [66, 34], [100, 34], [100, 66], [66, 66], [66, 100], [34, 100], [34, 66], [0, 66], [0, 34], [34, 34]], 8), body: { pts: [[16, 16], [84, 16], [84, 84], [16, 84]] } }
+  };
+  var FAMILIES = [
+    ["poster", "海報系", "尖角與直線，來自 WE MAKE A MORE BEAUTIFUL WORLD 海報"],
+    ["stack", "堆疊系", "圓弧與半圓，適合往上堆疊，來自 marui unite 的視覺"],
+    ["soft", "柔軟系", "有機的波浪邊，來自 Google Labs 的視覺"]
+  ];
+  var SP = PAL.poster;
+  var COLOR_ORDER = ["red", "green", "purple", "mint", "tan"];
+  function svgShape(k, color, label) {
+    var L = LIB[k];
+    return '<svg viewBox="0 0 ' + L.w + " " + L.h + '" width="100%" height="100%" aria-hidden="true"><path d="' + L.d + '" fill="' + color + '"' + (L.evenodd ? ' fill-rule="evenodd"' : "") + "/>" +
+      (label ? '<text x="' + L.w / 2 + '" y="' + L.h / 2 + '" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="500" fill="#1F1F20" font-family="Inter, Noto Sans TC, sans-serif">' + label + "</text>" : "") + "</svg>";
+  }
+  // [形狀, 色, 前後層, 位置, 寬, 高, 角度, 標籤]
+  function shapesHTML(list) {
+    return list.map(function (s) {
+      return '<span class="shape ' + s[2] + '" data-rot="' + (s[6] || 0) + '" style="' + s[3] + ";width:" + s[4] + "px;height:" + s[5] + "px;--rot:" + (s[6] || 0) + 'deg">' + svgShape(s[0], SP[s[1]], s[7]) + "</span>";
+    }).join("");
+  }
+  function renderLib() {
+    var i = 0;
+    $("shape-lib").innerHTML = FAMILIES.map(function (f) {
+      var items = Object.keys(LIB).filter(function (k) { return LIB[k].fam === f[0]; }).map(function (k) {
+        var L = LIB[k], s = 72 / Math.max(L.w, L.h), color = SP[COLOR_ORDER[i++ % COLOR_ORDER.length]];
+        return '<div class="lib-item"><span class="art"><span style="display:block;width:' + (L.w * s) + "px;height:" + (L.h * s) + 'px">' + svgShape(k, color) + "</span></span><span>" + L.name + "</span><code>" + k + "</code></div>";
+      }).join("");
+      return '<div class="lib-family"><div class="lib-family-head"><h3>' + f[1] + '</h3><span class="caption">' + f[2] + '</span></div><div class="lib-grid">' + items + "</div></div>";
+    }).join("");
+  }
+
+  /* ── 四個系統 ── */
+  var ICON = {
+    door: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/><path d="M3 21h18"/><path d="M14 12h.01"/></svg>',
+    vote: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8 12 3 3 5-6"/></svg>',
+    info: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10v4h3l6 4V6l-6 4Z"/><path d="M17 9a4 4 0 0 1 0 6"/></svg>'
+  };
+  var ST = { success: ["#5CC184", "#16884F"], warning: ["#E7C869", "#8D7102"], info: ["#67B5E1", "#2C7DA7"], muted: ["#8A8B8C", "#6C6C6D"] };
+  var TAGC = { coral: ["#FAEAE8", "#B85A4A"], mint: ["#F0FBF9", "#3D8175"], lavender: ["#EEEBF8", "#7A69BA"] };
+  function stat(key, text) { return '<span class="istat" style="color:' + ST[key][1] + '"><i style="background:' + ST[key][0] + '"></i>' + text + "</span>"; }
+  function tag(key, text) { return '<span class="badge" style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:13px;line-height:1.4;background:' + TAGC[key][0] + ";color:" + TAGC[key][1] + '">' + text + "</span>"; }
+  function table(head, rows) {
+    return '<div style="padding:0 24px 20px;background:var(--bg)"><table class="itable"><thead><tr>' + head.map(function (h) { return "<th>" + h + "</th>"; }).join("") + "</tr></thead><tbody>" +
+      rows.map(function (r) { return "<tr>" + r.map(function (c, i) { return '<td class="' + (i === 0 || i === r.length - 1 ? "mono" : "") + '">' + c + "</td>"; }).join("") + "</tr>"; }).join("") + "</tbody></table></div>";
+  }
+  var PRODUCTS = {
+    complaint: {
+      label: "申訴系統 · 四角星＋紅橙", short: "申訴", brand: "學生申訴協力系統", logo: BOOK, sig: "star", sigColor: "red", emblem: [36, 36],
+      nav: ["處理流程", "常見問題", "我的申訴"], cta: "送出申訴",
+      full: { shapes: [["star", "red", "back", "right:-30px;top:6px", 260, 260, 8], ["oct", "tan", "back", "left:46%;top:-44px", 116, 116, 15], ["tri", "purple", "back", "right:-24px;bottom:-46px", 150, 150, -12], ["para", "mint", "front", "left:-30px;top:28px", 130, 78, -18]],
+        eyebrow: "國立清華大學學生會", title: "遇到校園問題<br>讓學生會陪你處理", lead: "填寫申訴表單後，你會收到案件編號與專屬查詢連結。", primary: "開始填寫申訴", secondary: "了解處理流程" },
+      extras: [["ring", "green", "back", "", 120, 120, 0], ["flag", "red", "front", "", 96, 96, 0], ["star", "mint", "front", "", 96, 96, 0], ["tri", "tan", "back", "", 90, 90, 0], ["para", "green", "front", "", 110, 66, 0]],
+      band: { shapes: [["star", "red", "back", "right:44px;top:14px", 156, 156, 10], ["tri", "purple", "back", "right:-22px;bottom:-26px", 92, 92, -15], ["oct", "tan", "back", "right:212px;top:-22px", 62, 62, 0]],
+        overline: "我的申訴", title: "案件 A-0912 有新的回覆", text: "學權幹部在 9/18 回覆了你的申訴，你可以查看並補充資料。", action: "查看回覆" },
+      header: { title: "填寫申訴", desc: "描述遇到的狀況與希望的處理方式，送出後會收到案件連結。", action: "儲存草稿",
+        body: '<div class="ifield"><label>學校信箱</label><span class="iinput">name@gapp.nthu.edu.tw</span></div><div class="ifield"><label>申訴種類</label><span class="iinput">請選擇</span></div>' },
+      none: { brand: "申訴系統 · 幹部後台", nav: ["案件", "統計", "設定"], title: "案件", seg: ["全部", "處理中", "待審核"],
+        body: table(["編號", "主旨", "狀態", "更新"], [["A-0912", "宿舍網路中斷超過一週", stat("info", "處理中"), "9/18"], ["A-0911", "選課系統送出失敗", stat("warning", "待審核"), "9/17"], ["A-0907", "獎學金撥款延遲", stat("success", "已結案"), "9/12"]]) }
+    },
+    space: {
+      label: "空間借用系統 · 拱門＋綠", short: "空間借用", brand: "空間借用系統", logo: ICON.door, sig: "arch", sigColor: "green", emblem: [30, 38],
+      nav: ["場地一覽", "借用規範", "我的預約"], cta: "預約場地",
+      full: { shapes: [["arch", "green", "back", "right:40px;bottom:-8px", 200, 250, 0], ["semi", "purple", "back", "left:47%;top:-36px", 150, 75, 180], ["circle", "tan", "front", "right:256px;top:36px", 72, 72, 0], ["pill", "mint", "front", "right:-34px;top:34px", 160, 64, -20], ["quarter", "red", "back", "left:53%;bottom:-24px", 96, 96, 0]],
+        eyebrow: "學生會空間借用", title: "找到合適的空間<br>線上就能借用", lead: "查看會議室與活動場地的空檔，送出申請後即時收到審核結果。", primary: "開始借用", secondary: "查看場地" },
+      extras: [["semi", "red", "front", "", 130, 65, 0], ["circle", "purple", "back", "", 84, 84, 0], ["roundsq", "tan", "front", "", 88, 88, 0], ["dshape", "green", "back", "", 92, 92, 0], ["arch", "mint", "front", "", 80, 100, 0]],
+      band: { shapes: [["arch", "green", "back", "right:64px;bottom:-24px", 110, 138, 0], ["circle", "tan", "back", "right:206px;top:22px", 48, 48, 0], ["pill", "mint", "front", "right:-22px;top:18px", 104, 42, -14]],
+        overline: "我的預約", title: "9/20（五）18:00 已核准", text: "學生活動中心 202 會議室，請在使用前 10 分鐘到櫃台領取鑰匙。", action: "查看預約" },
+      header: { title: "預約場地", desc: "選擇日期與時段，系統會自動檢查是否和其他預約衝突。", action: "查看規範",
+        body: '<div class="ifield"><label>場地</label><span class="iinput">請選擇</span></div><div class="ifield"><label>日期與時段</label><span class="iinput" style="color:var(--text-1)">9/20（五）18:00–20:00</span></div>' },
+      none: { brand: "空間借用 · 管理後台", nav: ["預約", "場地", "設定"], title: "預約", seg: ["全部", "待審核", "已核准"],
+        body: table(["編號", "場地", "申請單位", "狀態", "日期"], [["R-1032", "學生活動中心 202", "熱舞社", stat("warning", "待審核"), "9/20"], ["R-1031", "綜二館 會議室", "學權部", stat("success", "已核准"), "9/19"], ["R-1029", "大禮堂", "學生會", stat("success", "已核准"), "9/18"]]) }
+    },
+    vote: {
+      label: "投票系統 · 扇貝圓＋紫", short: "投票", brand: "學生會投票系統", logo: ICON.vote, sig: "scallop", sigColor: "purple", emblem: [36, 36],
+      nav: ["候選人", "投票說明", "開票結果"], cta: "前往投票",
+      full: { shapes: [["scallop", "purple", "back", "right:-40px;top:-6px", 290, 290, 0], ["circle", "red", "front", "left:47%;top:30px", 80, 80, 0], ["semi", "green", "back", "right:36px;bottom:-2px", 180, 90, 0], ["roundsq", "tan", "front", "left:-26px;top:24px", 92, 92, 18], ["dshape", "mint", "back", "left:56%;bottom:-40px", 100, 100, 90]],
+        eyebrow: "第 35 屆學生會選舉", title: "你的一票<br>決定學生會的方向", lead: "用學號登入就能投票，投票截止後公開開票結果。", primary: "前往投票", secondary: "認識候選人" },
+      extras: [["circle", "green", "front", "", 72, 72, 0], ["scallop", "mint", "back", "", 110, 110, 0], ["roundsq", "red", "front", "", 80, 80, 0], ["semi", "tan", "back", "", 120, 60, 0], ["flower", "purple", "front", "", 90, 90, 0]],
+      band: { shapes: [["scallop", "purple", "back", "right:40px;top:12px", 160, 160, 0], ["circle", "red", "back", "right:224px;bottom:-14px", 52, 52, 0], ["semi", "green", "front", "right:-18px;bottom:-4px", 104, 52, 0]],
+        overline: "投票進行中", title: "會長選舉 10/15 18:00 截止", text: "你還沒有投票，整個流程大約需要 2 分鐘。", action: "前往投票" },
+      header: { title: "候選人", desc: "了解每一組候選人的政見與經歷。", action: "比較政見",
+        body: '<div><div class="irow"><b>1 號　王小明・李小華</b><span>會長・副會長</span><span>政見 6 項</span></div><div class="irow"><b>2 號　陳大文・林小美</b><span>會長・副會長</span><span>政見 5 項</span></div></div>' },
+      none: { brand: "投票系統 · 選委會後台", nav: ["選舉", "開票", "設定"], title: "開票結果", seg: ["會長", "學生議員"],
+        body: '<div style="padding:16px 24px 24px;background:var(--bg);display:grid;gap:14px">' + [["1 號　王小明・李小華", 52.4, "#9281D4"], ["2 號　陳大文・林小美", 40.8, "#E17E6D"], ["廢票", 6.8, "#8A8B8C"]].map(function (r) {
+          return '<div style="display:grid;gap:6px"><div style="display:flex;justify-content:space-between;font-size:14px"><b style="color:var(--text-1);font-weight:600">' + r[0] + '</b><span class="mono" style="color:var(--text-2)">' + r[1] + '%</span></div><div style="height:10px;border-radius:9999px;background:var(--sunken);overflow:hidden"><i style="display:block;height:100%;width:' + r[1] + "%;background:" + r[2] + ';border-radius:9999px"></i></div></div>';
+        }).join("") + '<span class="caption">投票率 38.6%（4,213 / 10,915）</span></div>' }
+    },
+    info: {
+      label: "資訊系統 · 膠囊標籤＋薄荷", short: "資訊", brand: "學生會資訊系統", logo: ICON.info, sig: "pill", sigColor: "mint", emblem: [46, 18],
+      nav: ["公告", "活動", "會議紀錄"], cta: "訂閱通知",
+      full: { shapes: [["pill", "mint", "back", "right:-24px;top:40px", 270, 108, -12, "最新公告"], ["pill", "red", "front", "right:44px;top:156px", 200, 80, 8, "社團活動"], ["flower", "purple", "back", "left:46%;top:-34px", 140, 140, 0], ["circle", "green", "back", "right:30px;bottom:-46px", 150, 150, 0], ["pill", "tan", "front", "right:-46px;bottom:86px", 190, 76, -24, "會議紀錄"]],
+        eyebrow: "學生會資訊中心", title: "校園大小事<br>都在這裡", lead: "公告、活動與會議紀錄集中在同一個地方，可以依類別訂閱。", primary: "查看最新公告", secondary: "訂閱通知" },
+      extras: [["pill", "green", "front", "", 160, 64, 0, "活動"], ["clover", "red", "back", "", 100, 100, 0], ["circle", "tan", "front", "", 80, 80, 0], ["pill", "purple", "back", "", 150, 60, 0, "公告"], ["flower", "mint", "front", "", 90, 90, 0]],
+      band: { shapes: [["pill", "mint", "back", "right:28px;top:28px", 180, 72, -8, "3 則新公告"], ["flower", "purple", "back", "right:226px;bottom:-30px", 92, 92, 0], ["circle", "red", "front", "right:8px;bottom:12px", 46, 46, 0]],
+        overline: "本週更新", title: "3 則新公告", text: "宿舍網路維修、社團博覽會報名、學權會議紀錄。", action: "查看公告" },
+      header: { title: "公告", desc: "依類別篩選學生會發布的公告與活動。", action: "訂閱分類",
+        body: '<div><div class="irow"><b>宿舍網路維修公告</b>' + tag("coral", "維修") + '<span>9/18</span></div><div class="irow"><b>社團博覽會報名開始</b>' + tag("mint", "活動") + '<span>9/17</span></div><div class="irow"><b>第 3 次學權會議紀錄</b>' + tag("lavender", "會議") + "<span>9/16</span></div></div>" },
+      none: { brand: "資訊系統 · 編輯後台", nav: ["文章", "分類", "設定"], title: "文章", seg: ["全部", "草稿", "已發布"],
+        body: table(["標題", "分類", "狀態", "更新"], [["宿舍網路維修公告", "維修", stat("success", "已發布"), "9/18"], ["社團博覽會報名開始", "活動", stat("info", "排程中"), "9/17"], ["第 3 次學權會議紀錄", "會議", stat("muted", "草稿"), "9/16"]]) }
+    }
+  };
+  var PRODUCT_KEYS = ["complaint", "space", "vote", "info"];
+  function inav(p, brand, items, cta) {
+    return '<div class="m-nav"><span class="m-brand"><span class="logo">' + p.logo + "</span>" + brand + "</span>" +
+      items.map(function (n) { return '<span class="m-item">' + n + "</span>"; }).join("") +
+      (cta ? '<span class="m-btn primary md m-cta">' + cta + "</span>" : '<span class="avatar" aria-hidden="true"></span>') + "</div>";
+  }
+  function fullCopy(f) {
+    return '<div class="icopy"><span class="i-eyebrow">' + f.eyebrow + '</span><h4 class="i-display">' + f.title + '</h4><p class="i-lead">' + f.lead + "</p>" +
+      '<div class="i-actions"><span class="m-btn primary lg">' + f.primary + ARROW + '</span><span class="m-btn secondary lg">' + f.secondary + "</span></div></div>";
+  }
+  var LEVELS = [
+    { tag: "強度 1", name: "完整 Hero", when: "公開入口、多數人第一次來、還沒登入",
+      render: function (p) { return inav(p, p.brand, p.nav, p.cta) + '<div class="ihero full">' + shapesHTML(p.full.shapes) + fullCopy(p.full) + "</div>"; } },
+    { tag: "強度 2", name: "橫幅", when: "登入後的首頁、偶爾使用的工具",
+      render: function (p) { var b = p.band;
+        return inav(p, p.brand, p.nav, null) + '<div class="ihero band">' + shapesHTML(b.shapes) +
+          '<div class="icopy"><span class="i-eyebrow">' + b.overline + '</span><h4 class="i-title">' + b.title + '</h4><p class="i-text">' + b.text + "</p>" +
+          '<div class="i-actions"><span class="m-btn primary md">' + b.action + "</span></div></div></div>"; } },
+    { tag: "強度 3", name: "頁首點綴", when: "一般內頁：表單、搜尋、說明、設定",
+      render: function (p) { var h = p.header;
+        return inav(p, p.brand, p.nav, null) + '<div class="ihead"><div><div class="ihead-title"><span class="emblem" style="width:' + p.emblem[0] + "px;height:" + p.emblem[1] + 'px">' + svgShape(p.sig, SP[p.sigColor]) + "</span><h4>" + h.title + "</h4></div><p>" + h.desc + "</p></div>" +
+          '<span class="m-btn secondary md">' + h.action + "</span></div>" + '<div class="ibody">' + h.body + "</div>"; } },
+    { tag: "強度 4", name: "不用 Hero", when: "每天使用的工作畫面：清單、後台、編輯器",
+      render: function (p) { var n = p.none;
+        return inav(p, n.brand, n.nav, null) + '<div class="itoolbar"><span class="i-title">' + n.title + '</span><span class="mini-seg">' +
+          n.seg.map(function (s, i) { return '<span class="' + (i === 0 ? "on" : "") + '">' + s + "</span>"; }).join("") + "</span></div>" + n.body; } }
+  ];
+  function renderIntensity() {
+    $("decision").innerHTML = '<div class="decision-row head"><span>強度</span><span>什麼情境</span><span>長什麼樣子</span></div>' + [
+      ["完整 Hero", "公開入口、多數人第一次來、還沒登入", "接近滿版，幾何色塊分散穿插，大標＋說明＋兩顆大按鈕"],
+      ["橫幅", "登入後的首頁、偶爾使用的工具", "約 180px 高的帶狀區，2～3 個色塊靠右，一句摘要＋一個主要行動"],
+      ["頁首點綴", "一般內頁：表單、搜尋、說明、設定", "一般的頁面標題列，標題旁邊放一個小小的代表形狀"],
+      ["不用 Hero", "每天使用的工作畫面：清單、後台、編輯器", "一打開就是工作狀態；品牌感只靠紫色與字體，資料色是畫面上最鮮豔的東西"]
+    ].map(function (r) { return '<div class="decision-row"><b>' + r[0] + "</b><span>" + r[1] + "</span><span>" + r[2] + "</span></div>"; }).join("");
+    $("levels").innerHTML = LEVELS.map(function (lv) {
+      return '<section class="level" aria-label="' + lv.name + '"><div class="level-head"><h3><span class="level-tag">' + lv.tag + "</span>" + lv.name + '</h3><span class="caption">' + lv.when + "</span></div>" +
+        '<div class="grid4">' + PRODUCT_KEYS.map(function (k) {
+          var p = PRODUCTS[k];
+          return '<div class="prod"><span class="prod-label">' + p.label + '</span><div class="mock-wrap"><div class="mock-scroll"><div class="mock imock" data-ui="proposed" data-theme="light">' + lv.render(p) + "</div></div></div></div>";
+        }).join("") + "</div></section>";
+    }).join("");
+  }
+
+  /* ── 落下動態 ── */
+  var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var drop = { product: "complaint", mode: "choreo", raf: 0, timers: [] };
+  function stopDrop() {
+    cancelAnimationFrame(drop.raf); drop.raf = 0;
+    drop.timers.forEach(clearTimeout); drop.timers = [];
+  }
+  function renderDrop() {
+    stopDrop();
+    $("drop-controls").innerHTML =
+      seg("drop-product", "系統", PRODUCT_KEYS.map(function (k) { return [k, PRODUCTS[k].short]; }), drop.product) +
+      seg("drop-mode", "動態", [["choreo", "編排落下"], ["physics", "物理堆疊"]], drop.mode) +
+      '<button type="button" class="preset" data-replay="1">重新播放</button>';
+    var p = PRODUCTS[drop.product];
+    var physics = drop.mode === "physics" && !reducedMotion;
+    $("drop-stage").innerHTML = '<div class="mock-wrap"><div class="mock-scroll"><div class="mock imock" data-ui="proposed" data-theme="light">' + inav(p, p.brand, p.nav, p.cta) +
+      '<div class="ihero full drop-hero" id="drop-hero">' +
+      (physics ? '<canvas class="drop-canvas back"></canvas><canvas class="drop-canvas front" aria-label="可以拖動的色塊"></canvas>' : shapesHTML(p.full.shapes)) +
+      fullCopy(p.full) + "</div></div></div></div>";
+    if (reducedMotion) return;
+    if (physics) startPhysics(p); else playChoreo();
+  }
+  function playChoreo() {
+    var hero = $("drop-hero");
+    var items = Array.prototype.map.call(hero.querySelectorAll(".shape"), function (el) { return { el: el, bottom: el.offsetTop + el.offsetHeight }; });
+    items.sort(function (a, b) { return b.bottom - a.bottom; });
+    items.forEach(function (o, i) {
+      var rot = parseFloat(o.el.getAttribute("data-rot")) || 0;
+      var dist = Math.max(o.bottom, 0) + 80;
+      var spin = (i % 2 ? 1 : -1) * (24 + (i * 13) % 30);
+      o.el.animate([
+        { transform: "translateY(" + (-dist) + "px) rotate(" + (rot + spin) + "deg)", easing: "cubic-bezier(.55,0,.9,.45)" },
+        { transform: "translateY(14px) rotate(" + (rot - spin * 0.08) + "deg)", offset: 0.6, easing: "cubic-bezier(.2,.7,.4,1)" },
+        { transform: "translateY(-6px) rotate(" + (rot + spin * 0.03) + "deg)", offset: 0.8, easing: "ease-in-out" },
+        { transform: "translateY(0) rotate(" + rot + "deg)" }
+      ], { duration: 1150, delay: 120 + i * 150, fill: "backwards" });
+    });
+    var copy = hero.querySelector(".icopy");
+    copy.animate([{ opacity: 0, transform: "translateY(8px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 500, delay: 80, easing: "ease-out", fill: "backwards" });
+  }
+  function startPhysics(p) {
+    var hero = $("drop-hero");
+    if (!window.Matter) { hero.insertAdjacentHTML("beforeend", '<span class="drop-msg">物理引擎載入失敗，請重新整理頁面。</span>'); return; }
+    var M = window.Matter, W = hero.clientWidth, H = hero.clientHeight, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var back = hero.querySelector(".drop-canvas.back"), front = hero.querySelector(".drop-canvas.front");
+    [back, front].forEach(function (c) { c.width = W * dpr; c.height = H * dpr; });
+    var engine = M.Engine.create({ enableSleeping: true });
+    var WALL = 1, A = 2, B = 4, leftX = W * 0.44;
+    var wall = { isStatic: true, collisionFilter: { category: WALL, mask: A | B } };
+    M.Composite.add(engine.world, [
+      M.Bodies.rectangle(W / 2, H + 40, W * 3, 80, wall),
+      M.Bodies.rectangle(W + 40, 0, 80, H * 4, wall),
+      M.Bodies.rectangle(leftX - 40, 0, 80, H * 4, wall)
+    ]);
+    var items = [];
+    function make(s) {
+      var L = LIB[s[0]], w = s[4], h = s[5], sx = w / L.w, sy = h / L.h, layer = s[2] === "front" ? B : A;
+      var opts = { restitution: 0.18, friction: 0.6, frictionStatic: 0.9, density: 0.0015, collisionFilter: { category: layer, mask: layer | WALL } };
+      var x = leftX + w / 2 + Math.random() * Math.max(10, W - leftX - w), y = -h, body, c;
+      if (L.body.circle) { body = M.Bodies.circle(x, y, Math.min(w, h) / 2 * L.body.circle, opts); c = { x: L.w / 2 * sx, y: L.h / 2 * sy }; }
+      else { var verts = L.body.pts.map(function (q) { return { x: q[0] * sx, y: q[1] * sy }; }); c = M.Vertices.centre(verts); body = M.Bodies.fromVertices(x, y, [verts], opts); }
+      M.Body.setAngle(body, (s[6] || 0) * Math.PI / 180 + (Math.random() - 0.5) * 0.9);
+      M.Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.06);
+      return { body: body, path: new Path2D(L.d), even: !!L.evenodd, sx: sx, sy: sy, c: c, color: SP[s[1]], label: s[7], layer: layer, L: L };
+    }
+    var specs = p.full.shapes.concat(p.extras);
+    specs.forEach(function (s, i) {
+      drop.timers.push(setTimeout(function () { var it = make(s); items.push(it); M.Composite.add(engine.world, it.body); }, 150 + i * 230));
+    });
+    var bctx = back.getContext("2d"), fctx = front.getContext("2d");
+    function draw(ctx, layer) {
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+      items.forEach(function (it) {
+        if (it.layer !== layer) return;
+        var b = it.body;
+        ctx.save(); ctx.translate(b.position.x, b.position.y); ctx.rotate(b.angle); ctx.translate(-it.c.x, -it.c.y); ctx.scale(it.sx, it.sy);
+        ctx.fillStyle = it.color; ctx.fill(it.path, it.even ? "evenodd" : "nonzero");
+        if (it.label) { ctx.fillStyle = "#1F1F20"; ctx.font = '500 11px "Inter", "Noto Sans TC", sans-serif'; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(it.label, it.L.w / 2, it.L.h / 2 + 0.5); }
+        ctx.restore();
+      });
+    }
+    function loop() { M.Engine.update(engine, 1000 / 60); draw(bctx, A); draw(fctx, B); drop.raf = requestAnimationFrame(loop); }
+    loop();
+    var grab = null;
+    front.addEventListener("pointerdown", function (e) {
+      var pt = { x: e.offsetX, y: e.offsetY };
+      var hits = M.Query.point(items.map(function (it) { return it.body; }), pt);
+      if (!hits.length) return;
+      var body = hits[hits.length - 1];
+      M.Sleeping.set(body, false);
+      grab = M.Constraint.create({ pointA: pt, bodyB: body, pointB: { x: pt.x - body.position.x, y: pt.y - body.position.y }, stiffness: 0.15, damping: 0.1, length: 0 });
+      M.Composite.add(engine.world, grab);
+      front.setPointerCapture(e.pointerId); front.style.cursor = "grabbing";
+    });
+    front.addEventListener("pointermove", function (e) { if (grab) grab.pointA = { x: e.offsetX, y: e.offsetY }; });
+    function release() { if (grab) { M.Composite.remove(engine.world, grab); grab = null; front.style.cursor = "grab"; } }
+    front.addEventListener("pointerup", release); front.addEventListener("pointercancel", release);
+  }
+
+  var PAGES = ["main", "intensity", "motion"];
+  var page = location.hash === "#intensity" ? "intensity" : location.hash === "#motion" ? "motion" : "main";
+  function renderPageTabs() {
+    $("page-tabs").innerHTML = seg("page", "頁面", [["main", "字體與主視覺"], ["intensity", "Hero 強度"], ["motion", "形狀與動態"]], page);
+    PAGES.forEach(function (k) { $("page-" + k).hidden = page !== k; });
+    if (page === "motion") renderDrop(); else stopDrop();
+  }
+
   /* ── 互動 ── */
   document.addEventListener("click", function (e) {
+    var tab = e.target.closest('[data-action="page"]');
+    if (tab) {
+      page = tab.getAttribute("data-value"); renderPageTabs();
+      try { history.replaceState(null, "", page === "main" ? location.pathname : "#" + page); } catch (err) {}
+      return;
+    }
+    if (e.target.closest("[data-replay]")) { renderDrop(); return; }
+    var dropBtn = e.target.closest('[data-action="drop-product"], [data-action="drop-mode"]');
+    if (dropBtn) { drop[dropBtn.getAttribute("data-action") === "drop-product" ? "product" : "mode"] = dropBtn.getAttribute("data-value"); renderDrop(); return; }
     var p = e.target.closest("[data-preset]");
     if (p) { hero = Object.assign({}, p.getAttribute("data-preset") === "current" ? CURRENT : PROPOSED); renderHeroControls(); renderMock(); return; }
     var b = e.target.closest("[data-action]");
@@ -430,6 +856,7 @@ footer.foot { border-top: 1px solid var(--border); padding-top: 20px; color: var
     hero[a] = v; renderHeroControls(); renderMock();
   });
 
+  renderLib(); renderIntensity(); renderPageTabs();
   renderFonts(false); renderScale(); renderButtons(); renderHeroControls(); renderMock();
   var loads = WEIGHTS.map(function (w) { return document.fonts.load(w + ' 32px "Noto Sans TC"', "處理流程常見問題"); });
   Promise.all(loads.concat([document.fonts.ready])).then(function () { renderFonts(true); }, function () { renderFonts(true); });
