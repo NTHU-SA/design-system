@@ -84,6 +84,15 @@
     tri: { w: 100, h: 92, d: "M50 0L100 92H0Z", pts: [[50, 0], [100, 92], [0, 92]] },
     star: { w: 100, h: 100, d: "M50 0C54 34 66 46 100 50C66 54 54 66 50 100C46 66 34 54 0 50C34 46 46 34 50 0Z", pts: [[50, 0], [100, 50], [50, 100], [0, 50]] }
   };
+  /* 炭黑圓形色塊上的線條圖示（24 格線、2px 筆畫），代表學生會的各個系統 */
+  var ICONS = Site.ICONS = {
+    chat: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z",
+    door: "M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M3 21h18M14 12h.01",
+    vote: "M7 4h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3ZM8 12l3 3 5-6",
+    megaphone: "M4 10v4h3l6 4V6l-6 4ZM17 9a4 4 0 0 1 0 6",
+    search: "M18 11a7 7 0 1 1-14 0a7 7 0 1 1 14 0ZM20 20l-4-4",
+    pin: "M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11ZM14.5 10a2.5 2.5 0 1 1-5 0a2.5 2.5 0 1 1 5 0Z"
+  };
   Site.shapeSVG = function (kind, color, size) {
     var L = LIB[kind];
     return '<svg viewBox="0 0 ' + L.w + " " + L.h + '" width="' + (size || L.w) + '" height="' + ((size || L.w) * L.h / L.w) + '" aria-hidden="true"><path d="' + L.d + '" fill="' + color + '"/></svg>';
@@ -138,7 +147,7 @@
           body = M.Bodies.fromVertices(x, y, [verts], o);
         }
         M.Body.setAngle(body, ((s[4] || 0) + (Math.random() - 0.5) * 24) * PI / 180);
-        return { body: body, path: new Path2D(L.d), sx: sx, sy: sy, c: c, color: s[1] };
+        return { body: body, path: new Path2D(L.d), sx: sx, sy: sy, c: c, color: s[1], w: w, h: h, icon: s[5] && L.circle ? new Path2D(ICONS[s[5]]) : null };
       }
       if (instant) {
         specs.forEach(function (s, i) { var it = make(s, i, -i * 90 * scale - 60); state.items.push(it); M.Composite.add(engine.world, it.body); });
@@ -161,6 +170,13 @@
         var b = it.body;
         ctx.save(); ctx.translate(b.position.x, b.position.y); ctx.rotate(b.angle); ctx.translate(-it.c.x, -it.c.y); ctx.scale(it.sx, it.sy);
         ctx.fillStyle = colorOf(it.color); ctx.fill(it.path); ctx.restore();
+        // 圖示只放在圓形上，而且永遠保持正向，不跟著色塊旋轉
+        if (it.icon) {
+          var g = it.w * 0.42;
+          ctx.save(); ctx.translate(b.position.x - g / 2, b.position.y - g / 2); ctx.scale(g / 24, g / 24);
+          ctx.strokeStyle = colorOf("--shape-glyph"); ctx.lineWidth = 2; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.stroke(it.icon);
+          ctx.restore();
+        }
       });
     }
     function loop() {

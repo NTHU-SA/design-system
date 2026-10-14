@@ -18,6 +18,7 @@
 .tasks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .task { border: 1px solid var(--border); border-radius: 8px; padding: 24px; display: grid; gap: 16px; align-content: space-between; background: var(--surface); }
 .task-text { display: grid; gap: 6px; }
+.task-icon { width: 44px; height: 44px; border-radius: 9999px; background: var(--shape-ink); color: var(--shape-glyph); display: grid; place-items: center; margin-bottom: 8px; }
 .task-text p { color: var(--text-2); }
 .task-cta { width: fit-content; }
 .lookup { display: grid; gap: 6px; }
@@ -78,12 +79,13 @@
   <section class="container intro" aria-labelledby="intro-title">
     <div class="intro-head">
       <span class="overline">國立清華大學學生會 · 學生權益部</span>
-      <h1 class="display" id="intro-title">遇到校園問題<br>讓學生會陪你處理<svg class="star" viewBox="0 0 100 100" aria-hidden="true"><path fill="var(--shape-red)" d="M50 0C54 34 66 46 100 50C66 54 54 66 50 100C46 66 34 54 0 50C34 46 46 34 50 0Z"/></svg></h1>
+      <h1 class="display" id="intro-title">遇到校園問題<br>讓學生會陪你處理<svg class="star" viewBox="0 0 100 100" aria-hidden="true"><path fill="var(--primary)" d="M50 0C54 34 66 46 100 50C66 54 54 66 50 100C46 66 34 54 0 50C34 46 46 34 50 0Z"/></svg></h1>
       <p class="body-lg">宿舍、課程、獎助學金、校園安全，任何讓你權益受損的事都可以在這裡提出。學權幹部會在 3 個工作天內第一次回覆你。</p>
     </div>
     <div class="tasks">
       <div class="task">
         <div class="task-text">
+          <span class="task-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg></span>
           <h2 class="title-lg">送出新申訴</h2>
           <p>大約 5 分鐘，手機也能填。送出後會收到案件編號與專屬查詢連結，不需要註冊帳號。</p>
         </div>
@@ -91,6 +93,7 @@
       </div>
       <div class="task">
         <div class="task-text">
+          <span class="task-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 11a7 7 0 1 1-14 0a7 7 0 1 1 14 0ZM20 20l-4-4"/></svg></span>
           <h2 class="title-lg">查詢案件進度</h2>
           <p>輸入案件編號，或直接點確認信裡的連結。</p>
         </div>
@@ -173,13 +176,13 @@
 <script>
 (function () {
   "use strict";
-  // 申訴系統的代表形狀是四角星＋紅；同一個構圖只混用海報系（星、三角）與堆疊系
+  // 品牌單色：炭黑約一半面積、紫只有代表形狀與一個圓；炭黑色塊帶白色圖示（學生會的各個系統）
   var SHAPES = [
-    ["star", "--shape-red", 170, 170, 0], ["arch", "--shape-teal", 134, 168, 0], ["semi", "--shape-gray", 206, 103, 0],
-    ["circle", "--primary", 108, 108, 0], ["roundsq", "--shape-gray", 116, 116, 8], ["tri", "--shape-teal", 134, 124, 0],
-    ["quarter", "--shape-red", 134, 134, 0], ["pill", "--shape-teal", 188, 76, 0], ["circle", "--shape-red", 86, 86, 0],
-    ["dshape", "--primary", 116, 116, 90], ["semi", "--shape-teal", 152, 76, 0], ["circle", "--shape-gray", 98, 98, 0],
-    ["arch", "--shape-red", 98, 124, 0], ["roundsq", "--primary", 90, 90, -6]
+    ["star", "--primary", 170, 170, 0], ["arch", "--shape-ink", 134, 168, 0], ["semi", "--shape-pale", 206, 103, 0],
+    ["circle", "--shape-ink", 108, 108, 0, "chat"], ["roundsq", "--shape-mist", 116, 116, 8], ["tri", "--shape-pale", 134, 124, 0],
+    ["quarter", "--shape-ink", 134, 134, 0], ["circle", "--shape-ink", 96, 96, 0, "door"], ["circle", "--primary", 86, 86, 0],
+    ["dshape", "--shape-mist", 116, 116, 90], ["pill", "--shape-ink", 188, 76, 0], ["semi", "--shape-pale", 152, 76, 0],
+    ["circle", "--shape-ink", 98, 98, 0, "vote"], ["arch", "--shape-mist", 98, 124, 0]
   ];
   document.addEventListener("DOMContentLoaded", function () {
     Site.pile(document.getElementById("footer-pile"), {

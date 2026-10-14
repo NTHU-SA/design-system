@@ -1,4 +1,4 @@
-/* 學生申訴協力系統：示範網站共用樣式。token 對應 DESIGN.md；色票採用品牌色票實驗室的提案 C＋參考三色＋紫＋中性灰 */
+/* 學生申訴協力系統：示範網站共用樣式。token 對應 DESIGN.md；色票試用「品牌單色」：主視覺只用原始色票的炭黑、紫、淡紫灰，加上白色圖示 */
 :root {
   color-scheme: light;
   --bg: #FFFFFF;
@@ -11,20 +11,22 @@
   --text-2: #4D4D4E;
   --text-3: #6C6C6D;
   --text-4: #8A8B8C;
-  --primary: #676695;
-  --primary-hover: #565482;
-  --primary-active: #474471;
-  --primary-text: #676695;
+  --primary: #6E619C;
+  --primary-hover: #5D4F8B;
+  --primary-active: #4D4076;
+  --primary-text: #6E619C;
   --on-primary: #FFFFFF;
   --success: #5CC184; --success-text: #16884F; --success-tint: #E5F5EB;
   --warning: #E7C869; --warning-text: #8D7102; --warning-tint: #FBF6E7;
   --danger: #E17E6D; --danger-text: #B85A4A; --danger-hover: #A44839; --danger-tint: #FAEAE8;
   --info: #67B5E1; --info-text: #2C7DA7; --info-tint: #E7F3FA;
   --highlight: #9281D4; --highlight-text: #7A69BA; --highlight-tint: #EEEBF8;
-  --shape-red: #EA484F;
-  --shape-teal: #3C857F;
-  --shape-gray: #C0C0C0;
-  --footer-bg: #222234;
+  /* 主視覺色塊：炭黑是主角（約一半面積），紫只占一成多，淡紫灰與霧紫負責襯托；炭黑色塊上放白色圖示 */
+  --shape-ink: #2D2D2D;
+  --shape-mist: #ACA6C2;
+  --shape-pale: #DCDBE6;
+  --shape-glyph: #FFFFFF;
+  --footer-bg: #2D2D2D;
   --footer-text: #F1F3F5;
   --footer-text-2: #D1D1D2;
   --footer-text-3: #A4A4A6;
@@ -49,15 +51,20 @@
   --text-2: #D1D1D2;
   --text-3: #A4A4A6;
   --text-4: #717173;
-  --primary-hover: #7371A1;
-  --primary-active: #7371A1;
-  --primary-text: #9393C4;
+  --primary-hover: #796DA8;
+  --primary-active: #796DA8;
+  --primary-text: #9A8FC8;
   --success-text: #5CC184; --success-tint: #24392F;
   --warning-text: #E7C869; --warning-tint: #423B29;
   --danger-text: #E17E6D; --danger-tint: #412B2A;
   --info-text: #67B5E1; --info-tint: #263743;
   --highlight-text: #9281D4; --highlight-tint: #302B41;
-  --footer-bg: #1C1B26;
+  /* 暗色模式：明暗對調，炭黑色塊變成淡紫灰、圖示變成炭黑 */
+  --shape-ink: #E0DDE8;
+  --shape-mist: #646076;
+  --shape-pale: #3D3C43;
+  --shape-glyph: #2D2D2D;
+  --footer-bg: #222224;
   --shadow-2: 0 12px 24px rgb(0 0 0 / 50%), 0 0 0 1px rgb(255 255 255 / 8%);
   --seg-shadow: 0 3px 2px rgb(0 0 0 / 20%), 0 3px 8px rgb(0 0 0 / 40%), 0 0 1px rgb(0 0 0 / 15%);
 }
